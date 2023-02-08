@@ -1,5 +1,3 @@
-# yandex_django
-
 # Pipeline status
 - ![Main branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=main) - main
 - ![Master branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=master) - master

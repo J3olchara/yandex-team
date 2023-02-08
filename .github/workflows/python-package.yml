@@ -33,10 +33,6 @@ jobs:
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-<<<<<<< HEAD
         flake8 . --count --show-source --statistics --require-plugins pep8-naming, flake8-import-order, flake8-quotes
-=======
-        flake8 . --count --show-source --statistics --require-plugins [pep8-naming, flake8-import-order, flake8-quotes]
->>>>>>> 370e1355c7725037d03f5ebb0c50ef01421bd3bb
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics

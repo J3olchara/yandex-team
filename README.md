@@ -1,5 +1,11 @@
 # yandex_django
 
+# Pipeline status
+- ![Main branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=main) - main
+- ![Master branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=master) - master
+- ![q3 branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=q3) - q3
+
+# How to run
 To run this project in dev on windows you need to run:
 - git clone https://github.com/J3olchara/yandex_django
 - cd C:\Path\To\Project

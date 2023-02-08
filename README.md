@@ -2,7 +2,7 @@
 
 To run this project in dev on windows you need to:
 - git clone https://github.com/J3olchara/yandex_django
-- move to project directory(cd C:\Path\To\Project)
+- cd yandex_django
 - python -m venv venv
 - venv\scripts\activate
 - python pip install -r requirements.txt

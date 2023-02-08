@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
-from dotenv import load_dotenv
-from pathlib import Path
-
 import os
 import sys
+
+from dotenv import load_dotenv
+from pathlib import Path
 
 
 def main():

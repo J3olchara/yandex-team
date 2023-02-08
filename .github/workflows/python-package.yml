@@ -5,9 +5,9 @@ name: Python package
 
 on:
   push:
-    branches: [ "main", "master", "q3" ]
+    branches: [ "main", "master", "q3", "test" ]
   pull_request:
-    branches: [ "main", "master", "q3" ]
+    branches: [ "main", "master", "q3", "test" ]
 
 jobs:
   build:
@@ -27,12 +27,19 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install black flake8 flake8-import-order flake8-quotes pep8-naming
         python -m pip install -r requirements_dev.txt
-        python -m black . -S --skip-string-normalization
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --show-source --statistics --require-plugins pep8-naming 
-        flake8 . --count --show-source --statistics --require-plugins flake8-import-order
-        flake8 . --count --show-source --statistics --require-plugins flake8-quotes
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        python -m black .
+  flake8-lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          max-line-length: "79"
+          plugins: "pep8-naming flake8-import-order flake8-quotes"

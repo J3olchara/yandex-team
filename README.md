@@ -21,7 +21,9 @@ or if you want to run it in production you need to run:
 - python pip install -r requirements_prod.txt
 
 Get a secret key for your application:
-- python get_key.py
+- create .env file with example.env variables. Come up with your own value for varibales. (!!! IMPORTANT !!!)
+
+Prevent third parties from getting values of your .env variables
 
 finally run it by this command:
 - python lyceum\manage.py runserver localhost:80

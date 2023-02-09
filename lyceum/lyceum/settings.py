@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from typing import Union, Optional
+from typing import Union
 
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent

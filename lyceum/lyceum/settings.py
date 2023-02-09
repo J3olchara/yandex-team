@@ -1,27 +1,30 @@
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+from typing import Union, Optional
 
-SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = []
+SECRET_KEY: Union[None, str] = os.getenv('SECRET_KEY')
 
-INSTALLED_APPS = [
-    'about.apps.AboutConfig',
-    'catalog.apps.CatalogConfig',
-    'homepage.apps.HomepageConfig',
+DEBUG: bool = True
+
+ALLOWED_HOSTS: list[str] = []
+
+INSTALLED_APPS: list[str] = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'about.apps.AboutConfig',
+    'catalog.apps.CatalogConfig',
+    'homepage.apps.HomepageConfig',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE: list[str] = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -31,9 +34,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'lyceum.urls'
+ROOT_URLCONF: str = 'lyceum.urls'
 
-TEMPLATES = [
+TEMPLATES: list[dict[str, Union[str, list, bool, dict[str, list[str]]]]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -49,16 +52,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'lyceum.wsgi.application'
+WSGI_APPLICATION: str = 'lyceum.wsgi.application'
 
-DATABASES = {
+DATABASES: dict[str, dict[str, str | Path]] = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-AUTH_PASSWORD_VALIDATORS = [
+AUTH_PASSWORD_VALIDATORS: list[dict[str, str]] = [
     {
         'NAME': 'django.contrib.auth.' +
                 'password_validation.' +
@@ -81,16 +84,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE: str = 'ru-ru'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE: str = 'Europe/Moscow'
 
-USE_I18N = True
+USE_I18N: bool = True
 
-USE_L10N = True
+USE_L10N: bool = True
 
-USE_TZ = True
+USE_TZ: bool = True
 
-STATIC_URL = '/static/'
+STATIC_URL: str = '/static/'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD: str = 'django.db.models.BigAutoField'

@@ -27,4 +27,4 @@ Get a secret key for your application:
 finally run it by this command:
 > python lyceum\manage.py runserver localhost:80
 
->>Then the application will start on http://localhost:80
+Then the application will start on http://localhost:80

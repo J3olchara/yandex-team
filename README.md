@@ -5,24 +5,28 @@
 
 # How to run
 To run this application in dev on windows you need to run:
+1. Clone this repo and prepare workplace
 > - git clone https://github.com/J3olchara/yandex_django
 > - cd yandex_django
 > - python -m venv venv
 > - venv\scripts\activate
 
-if you want to make some tests you need to run:
+2. Download application dependencies:
+> - if you want to make some tests you need to run:
+>
 > python pip install -r requirements_test.txt
-
-if you want to develop some features you need to run:
+> - if you want to develop some features you need to run:
+> 
 > python pip install -r requirements_dev.txt
-
-or if you want to run it in production you need to run:
+>
+> - or if you want to run it in production you need to run:
+>
 > python pip install -r requirements_prod.txt
 
-Get a secret key for your application:
-> create .env file with example.env variables. 
-> 
-> Prevent third parties from getting values of your .env variables
+3. Get a secret variables for your application:
+  > create .env file with example.env variables. 
+
+Prevent third parties from getting values of your .env variables
 
 finally run it by this command:
 > python lyceum\manage.py runserver localhost:80

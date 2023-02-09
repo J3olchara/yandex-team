@@ -28,7 +28,7 @@ To run this application in dev on windows you need to run:
 
 Prevent third parties from getting values of your .env variables
 
-finally run it by this command:
+4. finally run it by this command:
 > python lyceum\manage.py runserver localhost:80
 
 Then the application will start on http://localhost:80

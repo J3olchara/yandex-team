@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-from typing import (Any, Dict, List, Optional, Union)
 from dotenv import load_dotenv
+from typing import (Any, Dict, List, Optional, Union)
 
 
 if not load_dotenv(Path(r'..\.env')):

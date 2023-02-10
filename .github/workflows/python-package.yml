@@ -30,7 +30,7 @@ jobs:
         python -m black .
   flake8-lint:
     runs-on: ubuntu-latest
-    name: Lint
+    name: flake8 pep8 check
     steps:
       - name: Check out source repository
         uses: actions/checkout@v3
@@ -43,3 +43,18 @@ jobs:
         with:
           max-line-length: "79"
           plugins: "pep8-naming flake8-import-order flake8-quotes"
+  mypy-lint:
+    runs-on: ubuntu-latest
+    name: MyPy annotation check
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: MyPy Lint
+        uses: py-actions/mypy@v2
+        with:
+          max-line-length: "79"
+          config-file: ".\mypy.ini"

@@ -1,18 +1,23 @@
 import os
 from pathlib import Path
 
-from typing import Union
+from typing import Union, Optional, List, Dict, Any
 
+from dotenv import load_dotenv
+
+
+if not load_dotenv(Path(r'..\.env')):
+    load_dotenv(Path(r'.env'))
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
-SECRET_KEY: Union[None, str] = os.getenv('SECRET_KEY')
+SECRET_KEY: Optional[str] = os.getenv('SECRET_KEY')
 
-DEBUG: bool = True
+DEBUG: Optional[bool] = os.getenv("DJANGO_DEBUG", 'False').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS: list[str] = []
+ALLOWED_HOSTS: List[str] = str(os.getenv("DJANGO_HOSTS")).split()
 
-INSTALLED_APPS: list[str] = [
+INSTALLED_APPS: List[str] = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -24,7 +29,7 @@ INSTALLED_APPS: list[str] = [
     'homepage.apps.HomepageConfig',
 ]
 
-MIDDLEWARE: list[str] = [
+MIDDLEWARE: List[str] = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -36,7 +41,7 @@ MIDDLEWARE: list[str] = [
 
 ROOT_URLCONF: str = 'lyceum.urls'
 
-TEMPLATES: list[dict[str, Union[str, list, bool, dict[str, list[str]]]]] = [
+TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -54,14 +59,14 @@ TEMPLATES: list[dict[str, Union[str, list, bool, dict[str, list[str]]]]] = [
 
 WSGI_APPLICATION: str = 'lyceum.wsgi.application'
 
-DATABASES: dict[str, dict[str, str | Path]] = {
+DATABASES: Dict[str, Dict[str, Union[str, Path]]] = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-AUTH_PASSWORD_VALIDATORS: list[dict[str, str]] = [
+AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
     {
         'NAME': 'django.contrib.auth.' +
                 'password_validation.' +

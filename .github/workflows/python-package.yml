@@ -55,6 +55,3 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: MyPy Lint
         uses: py-actions/mypy@v2
-        with:
-          max-line-length: "79"
-          config-file: ".\mypy.ini"

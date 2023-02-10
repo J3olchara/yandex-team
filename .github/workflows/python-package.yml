@@ -37,7 +37,7 @@ jobs:
           python-version: 3.8
       - uses: isort/isort-action@master
         with:
-          requirementsFiles: "requirements.txt requirements-test.txt"
+          requirementsFiles: "requirements_dev.txt"
   flake8-lint:
     runs-on: ubuntu-latest
     name: flake8 pep8 check

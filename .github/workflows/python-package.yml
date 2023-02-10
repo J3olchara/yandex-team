@@ -25,16 +25,27 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install black flake8 flake8-import-order flake8-quotes pep8-naming
+        python -m pip install black flake8-import-order flake8-quotes pep8-naming
         python -m pip install -r requirements_dev.txt
         python -m black .
-    - uses: isort/isort-action@master
-      with:
+  isort:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - uses: isort/isort-action@master
+        with:
           requirementsFiles: "requirements.txt requirements-test.txt"
   flake8-lint:
     runs-on: ubuntu-latest
     name: flake8 pep8 check
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
       - name: flake8 Lint
         uses: py-actions/flake8@v2
         with:
@@ -44,5 +55,9 @@ jobs:
     runs-on: ubuntu-latest
     name: MyPy annotation check
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
       - name: MyPy Lint
         uses: sasanquaneuf/mypy-github-action@releases/v1

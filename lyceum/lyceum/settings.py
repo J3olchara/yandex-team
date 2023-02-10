@@ -1,7 +1,13 @@
 import os
 from pathlib import Path
 
-from typing import Union, Optional, List, Dict, Any
+from typing import (
+    Union,
+    Optional,
+    List,
+    Dict,
+    Any
+)
 
 from dotenv import load_dotenv
 

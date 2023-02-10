@@ -1,12 +1,8 @@
 import os
 from pathlib import Path
 
-from typing import (
-    Any, Dict, List, Optional, Union
-)
-
+from typing import Any, Dict, List, Optional, Union
 from dotenv import load_dotenv
-
 
 if not load_dotenv(Path(r'..\.env')):
     load_dotenv(Path(r'.env'))

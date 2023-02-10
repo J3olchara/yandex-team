@@ -2,5 +2,8 @@
 line-length = 80
 skip-string-normalization = true
 
+[tool.isort]
+profile = "black"
+
 [tool.django-stubs]
 django_settings_module = "lyceum.lyceum.settings"

@@ -25,19 +25,10 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install black flake8-import-order flake8-quotes pep8-naming
+        python -m pip install black isort flake8-import-order flake8-quotes pep8-naming
         python -m pip install -r requirements_dev.txt
         python -m black .
-  isort:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - uses: isort/isort-action@master
-        with:
-          requirementsFiles: "requirements_dev.txt"
+        python -m isort .
   flake8-lint:
     runs-on: ubuntu-latest
     name: flake8 pep8 check

@@ -1,3 +1,4 @@
+"""Django settings for lyceum project."""
 import os
 from pathlib import Path
 

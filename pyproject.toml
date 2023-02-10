@@ -21,4 +21,8 @@ max-line-length = "79"
 plugins = "pep8-naming flake8-import-order flake8-quotes"
 
 [tool.pylint]
+<<<<<<< HEAD
 ignore = ["__init__.py"]
+=======
+disable = ["C0415"]
+>>>>>>> 60311dccc663df8cac8477921348c0592aa7600c

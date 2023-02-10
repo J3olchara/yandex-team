@@ -1,7 +1,4 @@
-﻿Django==3.2.15
+Django==3.2.15
 python-dotenv==0.21.1
 mypy==1.0.0
 django-stubs==1.13.0
-pylint==2.16.1
-black==23.1.0
-flake8==5.0.4

@@ -1,28 +1,34 @@
 import os
 from pathlib import Path
 
+from typing import Any, Dict, List, Optional, Union
+from dotenv import load_dotenv
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+if not load_dotenv(Path(r'..\.env')):
+    load_dotenv(Path(r'.env'))
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
-DEBUG = True
+SECRET_KEY: Optional[str] = os.getenv('SECRET_KEY')
 
-ALLOWED_HOSTS = []
+DEBUG: Optional[bool] = \
+    os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
 
-INSTALLED_APPS = [
-    'about.apps.AboutConfig',
-    'catalog.apps.CatalogConfig',
-    'homepage.apps.HomepageConfig',
+ALLOWED_HOSTS: List[str] = str(os.getenv('DJANGO_HOSTS')).split()
+
+INSTALLED_APPS: List[str] = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'about.apps.AboutConfig',
+    'catalog.apps.CatalogConfig',
+    'homepage.apps.HomepageConfig',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE: List[str] = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -32,9 +38,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'lyceum.urls'
+ROOT_URLCONF: str = 'lyceum.urls'
 
-TEMPLATES = [
+TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
@@ -50,16 +56,16 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'lyceum.wsgi.application'
+WSGI_APPLICATION: str = 'lyceum.wsgi.application'
 
-DATABASES = {
+DATABASES: Dict[str, Dict[str, Union[str, Path]]] = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-AUTH_PASSWORD_VALIDATORS = [
+AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
     {
         'NAME': 'django.contrib.auth.' +
                 'password_validation.' +
@@ -82,16 +88,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE: str = 'ru-ru'
 
-TIME_ZONE = 'Europe/Moscow'
+TIME_ZONE: str = 'Europe/Moscow'
 
-USE_I18N = True
+USE_I18N: bool = True
 
-USE_L10N = True
+USE_L10N: bool = True
 
-USE_TZ = True
+USE_TZ: bool = True
 
-STATIC_URL = '/static/'
+STATIC_URL: str = '/static/'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD: str = 'django.db.models.BigAutoField'

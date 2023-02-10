@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
 import os
 import sys
 from pathlib import Path
@@ -7,10 +6,11 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
-def main():
+def main() -> None:
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lyceum.settings')
-    load_dotenv(Path(r'..\.env'))
+    if not load_dotenv(Path(r'..\.env')):
+        load_dotenv(Path(r'.env'))
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

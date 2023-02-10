@@ -19,6 +19,9 @@ django_settings_module = "lyceum.settings"
 [tool.flake8]
 max-line-length = "79"
 plugins = "pep8-naming flake8-import-order flake8-quotes"
+<<<<<<< HEAD
 
 [tool.pylint]
 ignore = ["__init__.py"]
+=======
+>>>>>>> e96540ab8d1167c09bbab3e849053b21f7e6a121

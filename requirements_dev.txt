@@ -1,3 +1,7 @@
-﻿Django==3.2.15
+Django==3.2.15
 python-dotenv==0.21.1
+<<<<<<< HEAD
+=======
+mypy==1.0.0
+>>>>>>> e96540ab8d1167c09bbab3e849053b21f7e6a121
 django-stubs==1.13.0

@@ -23,12 +23,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
-      run: |
+      run:
         python -m pip install --upgrade pip
         python -m pip install black isort flake8 flake8-import-order flake8-quotes pep8-naming
         python -m pip install -r requirements_dev.txt
+    - name: black
         python -m black .
+    - name: isort
         python -m isort .
+    - name: flake8
         python -m flake8 .
   mypy-lint:
     runs-on: ubuntu-latest

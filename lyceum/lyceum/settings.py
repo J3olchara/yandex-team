@@ -1,8 +1,8 @@
 """Django settings for lyceum project."""
 import os
 from pathlib import Path
-
 from typing import Any, Dict, List, Optional, Union
+
 from dotenv import load_dotenv
 
 if not load_dotenv(Path(r'..\.env')):
@@ -10,12 +10,11 @@ if not load_dotenv(Path(r'..\.env')):
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
-SECRET_KEY: Optional[str] = os.getenv('SECRET_KEY')
+SECRET_KEY: str = os.getenv('SECRET_KEY', 'not_secret_key')
 
-DEBUG: Optional[bool] = \
-    os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
+DEBUG: bool = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS: List[str] = str(os.getenv('DJANGO_HOSTS')).split()
+ALLOWED_HOSTS: List[str] = str(os.getenv('DJANGO_HOSTS', '*')).split()
 
 INSTALLED_APPS: List[str] = [
     'django.contrib.admin',
@@ -68,24 +67,24 @@ DATABASES: Dict[str, Dict[str, Union[str, Path]]] = {
 
 AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
     {
-        'NAME': 'django.contrib.auth.' +
-                'password_validation.' +
-                'UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.'
+        + 'password_validation.'
+        + 'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.' +
-                'password_validation.' +
-                'MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.'
+        + 'password_validation.'
+        + 'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.' +
-                'password_validation.' +
-                'CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.'
+        + 'password_validation.'
+        + 'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.' +
-                'password_validation.' +
-                'NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.'
+        + 'password_validation.'
+        + 'NumericPasswordValidator',
     },
 ]
 

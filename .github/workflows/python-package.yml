@@ -27,25 +27,17 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install black isort pylint flake8 flake8-import-order flake8-quotes pep8-naming
         python -m pip install -r requirements_dev.txt
-    - name: black
-      run:
-        python -m black .
-    - name: isort
-      run:
-        python -m isort .
     - name: flake8
       run:
-        python -m flake8 .
+        python -m flake8 . --count --show-source --statistics
+    - name: MyPy
+      uses: sasanquaneuf/mypy-github-action@releases/v1
+    - name: black
+      uses: psf/black@stable
+    - name: isort
+      uses: isort/isort-action@master
     - name: pylint
       run:
         python -m pylint --recursive=y lyceum
-  mypy-lint:
-    runs-on: ubuntu-latest
-    name: MyPy annotation check
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-      - name: MyPy Lint
-        uses: sasanquaneuf/mypy-github-action@releases/v1
+  isort:
+

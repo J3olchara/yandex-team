@@ -1,6 +1,0 @@
-Django==3.2.15
-python-dotenv==0.21.1
-django-stubs==1.13.0
-isort==5.11.5
-black==23.0.0
-flake8==5.11.5

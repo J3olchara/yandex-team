@@ -12,7 +12,11 @@ BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
 SECRET_KEY: str = os.getenv('SECRET_KEY', 'not_secret_key')
 
-DEBUG: bool = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 't')
+DEBUG: Optional[bool] = os.getenv('DJANGO_DEBUG', 'False').lower() in (
+    'true',
+    '1',
+    't',
+)
 
 ALLOWED_HOSTS: List[str] = str(os.getenv('DJANGO_HOSTS', '*')).split()
 

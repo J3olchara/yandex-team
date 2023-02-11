@@ -37,9 +37,7 @@ jobs:
     - name: isort
       uses: isort/isort-action@master
     - name: pylint
-      uses: fylein/python-pylint-github-action@v1
-      with:
-        recursive: y
-        directory_name: lyceum
+      run:
+        python -m pylint --recursive=y lyceum
   isort:
 

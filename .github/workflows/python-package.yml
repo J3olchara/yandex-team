@@ -37,5 +37,4 @@ jobs:
       uses: isort/isort-action@master
     - name: pylint
       run:  python -m pylint --recursive=y lyceum
-  isort:
 

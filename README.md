@@ -13,14 +13,14 @@
 2. Download application dependencies:
 > - if you want to make some tests you need to run:
 >
-> python pip install -r requirements_test.txt
+> python pip install -r requirements\test.txt
 > - if you want to develop some features you need to run:
 > 
-> python pip install -r requirements_dev.txt
+> python pip install -r requirements\dev.txt
 >
 > - or if you want to run it in production you need to run:
 >
-> python pip install -r requirements_prod.txt
+> python pip install -r requirements\prod.txt
 
 3. Get a secret variables for your application:
   > create .env file with example.env variables. 
@@ -44,14 +44,14 @@ Then the application will start on http://localhost:80
 2. Download application dependencies:
   > - if you want to make some tests you need to run:
   >
-  > python3 -m pip3 install -r requirements_test.txt
+  > python3 -m pip3 install -r requirements/test.txt
   > - if you want to develop some features you need to run:
   > 
-  > python3 -m pip3 install -r requirements_dev.txt
+  > python3 -m pip3 install -r requirements/dev.txt
   >
   > - or if you want to run it in production you need to run:
   >
-  > python3 -m pip3 install -r requirements_prod.txt
+  > python3 -m pip3 install -r requirements/prod.txt
 
 3. Get a secret variables for your application:
   > create .env file with example.env variables. 
@@ -59,6 +59,6 @@ Then the application will start on http://localhost:80
 Prevent third parties from getting values of your .env variables
 
 4. finally run it by this command:
-  > python3 lyceum\manage.py runserver localhost:80
+  > python3 lyceum/manage.py runserver localhost:80
 
 Then the application will start on http://localhost:80

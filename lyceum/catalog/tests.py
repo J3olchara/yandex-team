@@ -1,3 +1,4 @@
+"""CATALOG app tests"""
 from django.test import Client, TestCase
 
 

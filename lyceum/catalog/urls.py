@@ -7,5 +7,5 @@ from . import views
 
 urlpatterns: List[resolvers.URLPattern] = [
     path('', views.item_list),
-    path('<int:pk>/', views.item_detail),
+    path('<int:item_id>/', views.item_detail),
 ]

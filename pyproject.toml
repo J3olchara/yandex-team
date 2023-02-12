@@ -12,6 +12,7 @@ disallow_untyped_defs = true
 exclude = "env.*|venv.*|migrations.*"
 plugins = "mypy_django_plugin.main"
 strict = true
+ignore_missing_imports = true
 
 [tool.django-stubs]
 django_settings_module = "lyceum.settings"

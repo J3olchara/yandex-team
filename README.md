@@ -39,7 +39,7 @@ Then the application will start on http://localhost:80
   > - git clone https://github.com/J3olchara/yandex_django
   > - cd yandex_django
   > - python3 -m venv venv
-  > - venv\bin\activate
+  > - venv/bin/activate
 
 2. Download application dependencies:
   > - if you want to make some tests you need to run:

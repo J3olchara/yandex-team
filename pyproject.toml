@@ -20,6 +20,7 @@ django_settings_module = "lyceum.settings"
 [tool.flake8]
 max-line-length = "79"
 plugins = "pep8-naming flake8-import-order flake8-quotes"
+exclude = "venv"
 
 [tool.pylint]
 disable = ["C0415"]

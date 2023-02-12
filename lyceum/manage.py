@@ -12,6 +12,7 @@ def main() -> None:
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lyceum.settings')
     if not load_dotenv(Path(r'..\.env')):
         load_dotenv(Path(r'.env'))
+    sys.path.append('.')
     try:
         from django.core.management import (
             execute_from_command_line,  # pylint: disable=C0415

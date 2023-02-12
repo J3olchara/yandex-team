@@ -28,4 +28,4 @@ jobs:
     - name: Run tests
       run: |
         cd lyceum
-        python -m manage.py test
+        python -m manage test

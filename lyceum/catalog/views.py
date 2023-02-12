@@ -7,5 +7,5 @@ def item_list(request: WSGIRequest) -> HttpResponse:
     return HttpResponse('<body>Catalog item list</body>', request)
 
 
-def item_detail(request: WSGIRequest, pk: int) -> HttpResponse:
-    return HttpResponse(f'<body>Item {pk} detail</body>', request)
+def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
+    return HttpResponse(f'<body>Item {item_id} detail</body>', request)

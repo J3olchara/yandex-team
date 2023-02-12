@@ -5,4 +5,4 @@ from django.shortcuts import HttpResponse
 
 def description(request: WSGIRequest) -> HttpResponse:
     """returns project description page"""
-    return HttpResponse('<body>About</body>')
+    return HttpResponse('<body>About</body>', request)

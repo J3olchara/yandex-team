@@ -30,7 +30,7 @@ jobs:
     - name: isort
       uses: isort/isort-action@master
     - name: flake8
-      run:  python -m flake8 . --count --show-source --statistics
+      run:  python -m flake8 .\lyceum --count --show-source --statistics
     - name: MyPy
       uses: sasanquaneuf/mypy-github-action@releases/v1
     - name: black

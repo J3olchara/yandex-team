@@ -32,7 +32,7 @@ class HomepageURLTests(TestCase):
         for item_id_req in test_paths_200:
             response = Client().get(f'{test_path}{item_id_req}/')
             self.assertEqual(response.status_code, 200, item_id_req)
-            self.assertIn(bytes('regexp', 'utf-8'), response.content)
+            self.assertIn(str(item_id_req).encode(), response.content)
         for item_id_req in test_paths_404:
             response = Client().get(f'{test_path}{item_id_req}/')
             self.assertEqual(response.status_code, 404, item_id_req)

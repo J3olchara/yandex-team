@@ -1,7 +1,8 @@
+import json
+
 from django.shortcuts import HttpResponse
 
 from . import settings
-import json
 
 
 class CoffeeTime:

@@ -1,8 +1,4 @@
-import json
-
 from django.shortcuts import HttpResponse
-
-from . import settings
 
 
 class CoffeeTime:

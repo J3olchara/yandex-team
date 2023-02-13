@@ -40,7 +40,8 @@ def regular_item(request: WSGIRequest) -> HttpResponse:
 
 
 def converter_item(request: WSGIRequest, item_id: int) -> HttpResponse:
-    """returns item $item_id description that was got by self written converter"""
+    """returns item $item_id description that was got"""
+    """by self written converter"""
     response: HttpResponse = render(
         request,
         r'catalog/item_page.html',

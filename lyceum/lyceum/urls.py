@@ -2,7 +2,7 @@
 from typing import List
 
 from django.contrib import admin
-from django.urls import include, path, register_converter, resolvers
+from django.urls import include, path, resolvers
 
 from . import settings
 

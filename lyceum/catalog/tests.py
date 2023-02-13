@@ -1,8 +1,6 @@
 """CATALOG app tests"""
 from django.test import Client, TestCase
 
-from .urls import urlpatterns
-
 
 class HomepageURLTests(TestCase):
     """CATALOG app test cases"""

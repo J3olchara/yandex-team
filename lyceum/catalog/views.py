@@ -13,7 +13,9 @@ def item_list(request: WSGIRequest) -> HttpResponse:
 
 def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
     """returns item $item_id description"""
-    response: HttpResponse = render(request, r'catalog/item_page.html')
+    response: HttpResponse = render(request, r'catalog/item_page.html', {
+        'item_id': item_id
+    })
     return response
 
 

@@ -1,8 +1,9 @@
 """ABOUT app html views"""
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, render
 
 
 def description(request: WSGIRequest) -> HttpResponse:
     """returns project description page"""
-    return HttpResponse('<body>About</body>', request)
+    response: HttpResponse = render(request, r'homepage\teapot.html')
+    return response

@@ -21,9 +21,6 @@ DEBUG: Optional[bool] = os.getenv('DJANGO_DEBUG', 'False').lower() in (
 ALLOWED_HOSTS: List[str] = str(os.getenv('DJANGO_HOSTS', '*')).split()
 
 INSTALLED_APPS: List[str] = [
-    'about.apps.AboutConfig',
-    'catalog.apps.CatalogConfig',
-    'homepage.apps.HomepageConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,6 +28,9 @@ INSTALLED_APPS: List[str] = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'about.apps.AboutConfig',
+    'catalog.apps.CatalogConfig',
+    'homepage.apps.HomepageConfig',
 ]
 
 MIDDLEWARE: List[str] = [
@@ -41,8 +41,17 @@ MIDDLEWARE: List[str] = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+
+if os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
+    'true',
+    '1',
+    't',
+):
+    MIDDLEWARE += ('lyceum.middlewares.CoffeeTime',)
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -50,10 +59,15 @@ INTERNAL_IPS = [
 
 ROOT_URLCONF: str = 'lyceum.urls'
 
+
 TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / r'\homepage\templates',
+            BASE_DIR / r'\about\templates',
+            BASE_DIR / r'\catalog\templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

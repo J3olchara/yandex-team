@@ -22,7 +22,7 @@ class HomepageURLTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_re_path(self):
+    def test_re_path(self) -> None:
         """testing regular expression path from catalog"""
         test_path = self.APP_DIR + 're/'
         test_paths_200 = [10, 1]
@@ -35,7 +35,7 @@ class HomepageURLTests(TestCase):
             response = Client().get(f'{test_path}{item_id_req}/')
             self.assertEqual(response.status_code, 404, item_id_req)
 
-    def test_natnum_converter(self):
+    def test_natnum_converter(self) -> None:
         """tests self written converter for /catalog/converters/<natnum>"""
         test_path = self.APP_DIR + 'converter/'
         test_paths_200 = [10, 1]

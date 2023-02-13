@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.shortcuts import HttpResponse
 
 
@@ -10,10 +12,10 @@ class CoffeeTime:
 
     times = 0
 
-    def __init__(self, get_response) -> None:
+    def __init__(self, get_response: Any) -> None:
         self.get_response = get_response
 
-    def __call__(self, request) -> HttpResponse:
+    def __call__(self, request: Any) -> HttpResponse:
         response: HttpResponse = self.get_response(request)
         if self.times % 10 == 0:
             content: str = response.content.decode()

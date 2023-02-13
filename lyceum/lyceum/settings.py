@@ -59,14 +59,14 @@ INTERNAL_IPS = [
 
 ROOT_URLCONF: str = 'lyceum.urls'
 
-
 TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / r'\homepage\templates',
-            BASE_DIR / r'\about\templates',
-            BASE_DIR / r'\catalog\templates',
+            fr'{BASE_DIR}\lyceum\templates',
+            fr'{BASE_DIR}\homepage\templates',
+            fr'{BASE_DIR}\about\templates',
+            fr'{BASE_DIR}\catalog\templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

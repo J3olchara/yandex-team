@@ -23,7 +23,7 @@ class ReverseMiddlewareTests(TestCase):
         self.assertEqual(
             len(contents_unique),
             2,
-            f'CoffeeTime is not working\n{contents_unique[0]}',
+            f'CoffeeTime is not working\n{contents_unique[0].decode()}',
         )
         self.assertEqual(
             contents_unique[0],

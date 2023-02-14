@@ -6,7 +6,10 @@ from typing import Any, Dict, List, Optional, Union
 from dotenv import load_dotenv
 
 if not load_dotenv(Path(r'..\.env')):
-    load_dotenv(Path(r'.env'))
+    if not load_dotenv(Path(r'.env')):
+        if not load_dotenv(Path(r'example.env')):
+            load_dotenv(Path(r'..\example.env'))
+
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
 

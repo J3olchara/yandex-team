@@ -21,7 +21,10 @@ django_settings_module = "lyceum.settings"
 max-line-length = "79"
 plugins = "pep8-naming flake8-import-order flake8-quotes"
 exclude = "venv"
-ignore = "E203"
+ignore = "E203,E121,E123,E126,E226,E24,E704,W503,W504"
+count = true
+show-source = true
+statistics = true
 
 [tool.pylint]
 disable = ["C0415"]

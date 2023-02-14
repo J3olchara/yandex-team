@@ -41,17 +41,18 @@ MIDDLEWARE: List[str] = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'lyceum.middlewares.CoffeeTime',
 ]
 
 if DEBUG:
     MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
-if os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
+if not os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
     'true',
     '1',
     't',
 ):
-    MIDDLEWARE += ('lyceum.middlewares.CoffeeTime',)
+    MIDDLEWARE.remove('lyceum.middlewares.CoffeeTime')
 
 INTERNAL_IPS = [
     '127.0.0.1',

@@ -1,7 +1,7 @@
 """MIDDLEWARE tests"""
-from django.test import RequestFactory, TestCase  # isort:skip
+from typing import List
 
-from mock import MagicMock
+from django.test import RequestFactory, TestCase
 
 from . import middlewares
 
@@ -15,12 +15,12 @@ class ReverseMiddlewareTests(TestCase):
 
     def test_middleware_reverser(self) -> None:
         """test reversing middleware work"""
-        get_response = MagicMock()
-        request = self.factory.get('/')
-        middleware = middlewares.CoffeeTime(get_response)
-        response = middleware(request)
+        contents: List[bytes] = []
+        for _ in range(11):
+            request = self.client.get('/')
+            contents.append(request.content)
+        contents_unique = list(set(contents))
         self.assertEqual(
-            get_response.return_value,
-            response,
-            'CoffeeTime MIDDLEWARE is not working',
+            contents_unique[0],
+            middlewares.CoffeeTime.reverse_words(contents_unique[1]),
         )

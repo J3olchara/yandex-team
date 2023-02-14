@@ -15,21 +15,21 @@ class CoffeeTime:
 
     __enable = 10
 
-    def reverse_words(self, content_data: bytes) -> bytes:
+    @staticmethod
+    def reverse_words(content_data: bytes) -> bytes:
         """reverses all russian words"""
         content: str = content_data.decode()
         cont: str = ''
         i: int = 0
         while i < len(content):
-            while i < len(content) and content[i] not in self.__alphabet:
+            while i < len(content) and content[i] not in CoffeeTime.__alphabet:
                 cont += content[i]
                 i += 1
             tmp = ''
-            while i < len(content) and content[i] in self.__alphabet:
+            while i < len(content) and content[i] in CoffeeTime.__alphabet:
                 tmp += content[i]
                 i += 1
             cont += tmp[::-1]
-        self.__times = 0
         return cont.encode()
 
     def __init__(self, get_response: Any) -> None:
@@ -44,5 +44,6 @@ class CoffeeTime:
         response: HttpResponse = self.__get_response(request)
         if self.__times % self.__enable == 0 and self.__times != 0:
             response.content = self.reverse_words(response.content)
+            self.__times = 0
         self.__times += 1
         return response

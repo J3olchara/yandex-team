@@ -63,10 +63,6 @@ TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / Path(r'\lyceum\templates'),
-            BASE_DIR / Path(r'\homepage\templates'),
-            BASE_DIR / Path(r'\about\templates'),
-            BASE_DIR / Path(r'\catalog\templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

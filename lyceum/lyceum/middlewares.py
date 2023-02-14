@@ -13,6 +13,8 @@ class CoffeeTime:
 
     __times: int = 0
 
+    __enable = 10
+
     def reverse_words(self, content_data: bytes) -> bytes:
         """reverses all russian words"""
         content: str = content_data.decode()
@@ -40,7 +42,7 @@ class CoffeeTime:
         reverses all russian words every 10 request
         """
         response: HttpResponse = self.__get_response(request)
-        if self.__times % 10 == 0:
+        if self.__times % self.__enable == 0 and self.__times != 0:
             response.content = self.reverse_words(response.content)
         self.__times += 1
         return response

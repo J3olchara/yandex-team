@@ -17,4 +17,8 @@ class HomepageURLTests(TestCase):
         test_path = self.APP_DIR + 'coffee/'
         response = Client().get(test_path)
         self.assertEqual(response.status_code, 418)
-        self.assertIn(bytes('Я чайник', 'utf-8'), response.content)
+        self.assertIn(
+            bytes('Я чайник', 'utf-8'),
+            response.content,
+            response.content.decode(),
+        )

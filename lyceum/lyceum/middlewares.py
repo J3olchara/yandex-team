@@ -45,6 +45,6 @@ class CoffeeTime:
         if self.__times % self.__enable == 0 and self.__times != 0:
             response.content = self.reverse_words(response.content)
             self.__times = 0
-        print(self.__times)
+        print(self.__times)  # test
         self.__times += 1
         return response

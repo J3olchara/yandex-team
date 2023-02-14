@@ -30,7 +30,6 @@ INSTALLED_APPS: List[str] = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'about.apps.AboutConfig',
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
@@ -49,6 +48,7 @@ MIDDLEWARE: List[str] = [
 
 if DEBUG:
     MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+    INSTALLED_APPS += ('debug_toolbar',)
 
 if not os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
     'true',

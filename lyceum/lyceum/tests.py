@@ -1,6 +1,5 @@
 """MIDDLEWARE tests"""
 from django.test import RequestFactory, TestCase
-
 from mock import MagicMock
 
 from . import middlewares

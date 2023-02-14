@@ -26,7 +26,7 @@ class CoffeeTime:
         start: int = 0
         end: int = len(content)
         for word in iterator:
-            cont += content[start: word.start(0)]
+            cont += content[start : word.start(0)]
             cont += word.group(0)[::-1]
             start = word.end(0)
         cont += content[start:end]

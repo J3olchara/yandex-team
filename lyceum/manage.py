@@ -14,7 +14,7 @@ def main() -> None:
         load_dotenv(Path(r'.env'))
     sys.path.append('.')
     try:
-        from django.core.management import (  # pylint: disable=C0415; pylint: disable=C0415
+        from django.core.management import (  # pylint: disable=C0415
             execute_from_command_line,
         )
     except ImportError as exc:

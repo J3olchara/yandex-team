@@ -35,7 +35,8 @@ class CoffeeTime:
         self.__get_response = get_response
 
     def __call__(self, request: Any) -> HttpResponse:
-        """checks every request and reversing all russian words every 10 request"""
+        """checks every request and reversing all"""
+        """russian words every 10 request"""
         response: HttpResponse = self.__get_response(request)
         if self.__times % 10 == 0:
             response.content = self.reverse_words(response.content)

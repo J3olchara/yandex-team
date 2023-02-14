@@ -1,6 +1,6 @@
 """MIDDLEWARE tests"""
+import mock
 from django.test import RequestFactory, TestCase
-from mock import MagicMock
 
 from . import middlewares
 
@@ -14,7 +14,7 @@ class ReverseMiddlewareTests(TestCase):
 
     def test_middleware_reverser(self) -> None:
         """test reversing middleware work"""
-        get_response = MagicMock()
+        get_response = mock.MagicMock()
         request = self.factory.get('/')
         middleware = middlewares.CoffeeTime(get_response)
         response = middleware(request)

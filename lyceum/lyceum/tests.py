@@ -28,5 +28,5 @@ class ReverseMiddlewareTests(TestCase):
         self.assertEqual(
             contents_unique[0],
             middlewares.CoffeeTime.reverse_words(contents_unique[1]),
-            "CoffeeTime doesnt reversing an str",
+            'CoffeeTime doesnt reversing an str',
         )

@@ -1,5 +1,4 @@
 """MIDDLEWARE tests"""
-from typing import List
 
 from django.test import RequestFactory, TestCase
 
@@ -15,18 +14,16 @@ class ReverseMiddlewareTests(TestCase):
 
     def test_middleware_reverser(self) -> None:
         """test reversing middleware work"""
-        contents: List[bytes] = []
-        for _ in range(20):
-            request = self.client.get('/')
-            contents.append(request.content)
-        contents_unique = list(set(contents))
-        self.assertEqual(
-            len(contents_unique),
-            2,
-            f'CoffeeTime is not working\n{contents_unique[0].decode()}',
-        )
-        self.assertEqual(
-            contents_unique[0],
-            middlewares.CoffeeTime.reverse_words(contents_unique[1]),
-            'CoffeeTime doesnt reversing an str',
-        )
+        middlewares.CoffeeTime.enable = 0
+        tests = [
+            ('hello world!', 'hello world!'),
+            ('Привет world', 'тевирП world'),
+            ('Helпривет мorld', 'Helпривет мorld'),
+            ('Привет мир', 'тевирП рим'),
+            ('Да', 'аД'),
+            ('Привет, друг', 'тевирП, гурд'),
+        ]
+        for test, ans in tests:
+            request = self.client.get(f'/test/?{test=}')
+            self.assertIn(ans, request.content.decode())
+        middlewares.CoffeeTime.enable = 10

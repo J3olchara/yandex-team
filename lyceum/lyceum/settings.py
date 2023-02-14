@@ -5,7 +5,6 @@ from typing import Any, Dict, List, Optional, Union
 
 from dotenv import load_dotenv
 
-
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
 
@@ -55,7 +54,6 @@ if not os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
     '1',
     't',
 ):
-    print(os.getenv('MIDDLEWARE_REVERSE'), "middleware removed")
     MIDDLEWARE.remove('lyceum.middlewares.CoffeeTime')
 
 INTERNAL_IPS = [

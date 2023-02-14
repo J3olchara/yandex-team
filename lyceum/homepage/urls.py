@@ -8,4 +8,5 @@ from . import views
 urlpatterns: List[resolvers.URLPattern] = [
     path('', views.home),
     path('coffee/', views.coffee),
+    path('test/', views.test),
 ]

@@ -20,7 +20,9 @@ class ReverseMiddlewareTests(TestCase):
             request = self.client.get('/')
             contents.append(request.content)
         contents_unique = list(set(contents))
+        self.assertEqual(len(contents_unique), 2, 'CoffeeTime is not working')
         self.assertEqual(
             contents_unique[0],
             middlewares.CoffeeTime.reverse_words(contents_unique[1]),
+            "CoffeeTime doesnt reversing an str"
         )

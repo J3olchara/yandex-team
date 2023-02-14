@@ -27,9 +27,9 @@ def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
 def regular_item(request: WSGIRequest) -> HttpResponse:
     """returns item $item_id description that was got from regexp"""
     pattern: str = r'.*/re/([1-9]\d*)/'
-    gr = re.search(pattern, request.path)
-    if gr:
-        item_id: int = int(gr.group(1))
+    regexp = re.search(pattern, request.path)
+    if regexp:
+        item_id: int = int(regexp.group(1))
         response: HttpResponse = render(
             request,
             r'catalog/item_page.html',
@@ -43,7 +43,6 @@ def regular_item(request: WSGIRequest) -> HttpResponse:
 
 def converter_item(request: WSGIRequest, item_id: int) -> HttpResponse:
     """returns item $item_id description that was got"""
-    """by self written converter"""
     response: HttpResponse = render(
         request,
         r'catalog/item_page.html',

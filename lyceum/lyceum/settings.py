@@ -55,6 +55,7 @@ if not os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
     '1',
     't',
 ):
+    print(os.getenv('MIDDLEWARE_REVERSE'), "middleware removed")
     MIDDLEWARE.remove('lyceum.middlewares.CoffeeTime')
 
 INTERNAL_IPS = [

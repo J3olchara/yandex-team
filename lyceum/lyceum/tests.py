@@ -16,7 +16,7 @@ class ReverseMiddlewareTests(TestCase):
     def test_middleware_reverser(self) -> None:
         """test reversing middleware work"""
         contents: List[bytes] = []
-        for _ in range(11):
+        for _ in range(20):
             request = self.client.get('/')
             contents.append(request.content)
         contents_unique = list(set(contents))

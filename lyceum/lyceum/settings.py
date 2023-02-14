@@ -10,7 +10,6 @@ BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
 
 if not load_dotenv(BASE_DIR.parent / Path(r'.env')):
-    # print(BASE_DIR.parent / Path(r'.env'), BASE_DIR.parent / Path(r'example.env'))
     load_dotenv(BASE_DIR.parent / Path(r'example.env'))
 
 

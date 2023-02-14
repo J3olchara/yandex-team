@@ -5,13 +5,14 @@ from typing import Any, Dict, List, Optional, Union
 
 from dotenv import load_dotenv
 
-if not load_dotenv(Path(r'..\.env')):
-    if not load_dotenv(Path(r'.env')):
-        if not load_dotenv(Path(r'example.env')):
-            load_dotenv(Path(r'..\example.env'))
-
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
+
+
+if not load_dotenv(BASE_DIR.parent / Path(r'.env')):
+    # print(BASE_DIR.parent / Path(r'.env'), BASE_DIR.parent / Path(r'example.env'))
+    load_dotenv(BASE_DIR.parent / Path(r'example.env'))
+
 
 SECRET_KEY: str = os.getenv('SECRET_KEY', 'not_secret_key')
 

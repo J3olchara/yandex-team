@@ -1,5 +1,6 @@
 """HOMEPAGE app tests"""
 from django.test import Client, TestCase
+from django.urls import reverse
 
 
 class HomepageURLTests(TestCase):
@@ -9,12 +10,12 @@ class HomepageURLTests(TestCase):
 
     def test_homepage_endpoint(self) -> None:
         """test getting response from app dir"""
-        response = Client().get(self.APP_DIR)
+        response = Client().get(reverse('home'))
         self.assertEqual(response.status_code, 200)
 
     def test_coffee_django(self) -> None:
         """test getting response from app dir"""
-        test_path = self.APP_DIR + 'coffee/'
+        test_path = reverse('coffee')
         response = Client().get(test_path)
         self.assertEqual(response.status_code, 418)
         self.assertIn(

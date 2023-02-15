@@ -1,11 +1,12 @@
 """CATALOG app tests"""
 from django.test import Client, TestCase
+from django.urls import reverse
 
 
 class HomepageURLTests(TestCase):
     """CATALOG app test cases"""
 
-    APP_DIR = '/catalog/'
+    APP_DIR = reverse('catalog')
 
     def test_catalog_endpoint(self) -> None:
         """test getting response from app dir"""

@@ -2,19 +2,18 @@
 import re
 from typing import Any
 
+from django.conf import settings
 from django.shortcuts import HttpResponse
+
+from . import settings as settings_file
 
 
 class CoffeeTime:
     """middleware that reverses russian words every 10 times"""
 
-    alphabet: str = (
-        'абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
-    )
+    enable = settings_file.REVERSER_MIDDLEWARE_ENABLE
 
     __times: int = 0
-
-    enable = 10
 
     @staticmethod
     def reverse_words(content_data: bytes) -> bytes:
@@ -39,13 +38,13 @@ class CoffeeTime:
     def __call__(self, request: Any) -> HttpResponse:
         """checks every request
 
-        reverses all russian words every 10 request
+        reverses all russian words every
+        settings.REVERSER_MIDDLEWARE_enable request
         """
         response: HttpResponse = self.__get_response(request)
-        if self.enable == 0 or (
-            self.__times % self.enable == 0 and self.__times != 0
-        ):
-            response.content = self.reverse_words(response.content)
-            self.__times = 0
-        self.__times += 1
+        if settings.REVERSER_MIDDLEWARE:
+            self.__times += 1
+            if self.enable == 0 or (self.__times % self.enable == 0):
+                response.content = self.reverse_words(response.content)
+                self.__times = 0
         return response

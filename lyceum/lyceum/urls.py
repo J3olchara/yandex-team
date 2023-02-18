@@ -7,7 +7,7 @@ from django.urls import include, path, resolvers
 from . import settings
 
 urlpatterns: List[resolvers.URLResolver] = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', include('homepage.urls')),
     path('catalog/', include('catalog.urls')),
     path('about/', include('about.urls')),

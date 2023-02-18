@@ -13,14 +13,14 @@
 2. Download application dependencies:
 > - if you want to make some tests you need to run:
 >
-> python pip install -r requirements\test.txt
+> python -m pip install -r requirements\test.txt
 > - if you want to develop some features you need to run:
 > 
-> python pip install -r requirements\dev.txt
+> python -m pip install -r requirements\dev.txt
 >
 > - or if you want to run it in production you need to run:
 >
-> python pip install -r requirements\prod.txt
+> python -m pip install -r requirements\prod.txt
 
 3. Get a secret variables for your application:
   > create .env file with example.env variables. 

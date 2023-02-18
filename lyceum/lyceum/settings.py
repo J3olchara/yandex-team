@@ -5,10 +5,14 @@ from typing import Any, Dict, List, Optional, Union
 
 from dotenv import load_dotenv
 
-if not load_dotenv(Path(r'..\.env')):
-    load_dotenv(Path(r'.env'))
-
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
+
+if not load_dotenv(BASE_DIR.parent / Path(r'.env')):
+    load_dotenv(BASE_DIR.parent / Path(r'example.env'))
+
+# --------------------------------------------------------------------
+# ------------------------Project Parameters Section------------------
+# --------------------------------------------------------------------
 
 SECRET_KEY: str = os.getenv('SECRET_KEY', 'not_secret_key')
 
@@ -20,20 +24,35 @@ DEBUG: Optional[bool] = os.getenv('DJANGO_DEBUG', 'False').lower() in (
 
 ALLOWED_HOSTS: List[str] = str(os.getenv('DJANGO_HOSTS', '*')).split()
 
+REVERSER_MIDDLEWARE = os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
+    'true',
+    '1',
+    't',
+)
+
+# --------------------------------------------------------------------
+# ----------------------------Apps Section----------------------------
+# --------------------------------------------------------------------
+
 INSTALLED_APPS: List[str] = [
-    'about.apps.AboutConfig',
-    'catalog.apps.CatalogConfig',
-    'homepage.apps.HomepageConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'debug_toolbar',
+    'about.apps.AboutConfig',
+    'catalog.apps.CatalogConfig',
+    'homepage.apps.HomepageConfig',
 ]
 
-MIDDLEWARE: List[str] = [
+# --------------------------------------------------------------------
+# --------------------------Middleware Section------------------------
+# --------------------------------------------------------------------
+
+MIDDLEWARE: List[str] = []
+
+COMMON_MIDDLEWARES: List[str] = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -41,19 +60,39 @@ MIDDLEWARE: List[str] = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+OTHER_MIDDLEWARES: List[str] = []
+
+if DEBUG:
+    OTHER_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+    INSTALLED_APPS += ('debug_toolbar',)
+    INTERNAL_IPS = [
+        '127.0.0.1',
+    ]
+
+if REVERSER_MIDDLEWARE:
+    OTHER_MIDDLEWARES += ('lyceum.middlewares.CoffeeTime',)
+
+REVERSER_MIDDLEWARE_ENABLE = 10
+
+MIDDLEWARE += COMMON_MIDDLEWARES
+MIDDLEWARE += OTHER_MIDDLEWARES
 
 ROOT_URLCONF: str = 'lyceum.urls'
+
+# -----------------------------------------------------------------------
+# ---------------------------Templates Section---------------------------
+# -----------------------------------------------------------------------
 
 TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / Path(r'\homepage\templates'),
+            BASE_DIR / Path(r'\about\templates'),
+            BASE_DIR / Path(r'\catalog\templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +107,10 @@ TEMPLATES: List[Dict[str, Any]] = [
 
 WSGI_APPLICATION: str = 'lyceum.wsgi.application'
 
+# -----------------------------------------------------------------------
+# ----------------------------Database Section---------------------------
+# -----------------------------------------------------------------------
+
 DATABASES: Dict[str, Dict[str, Union[str, Path]]] = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -75,28 +118,32 @@ DATABASES: Dict[str, Dict[str, Union[str, Path]]] = {
     }
 }
 
+# -----------------------------------------------------------------------
+# --------------------------Validators Section---------------------------
+# -----------------------------------------------------------------------
+
 AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
     {
-        'NAME': 'django.contrib.auth.'
-        + 'password_validation.'
+        'NAME': 'django.contrib.auth.password_validation.'
         + 'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.'
-        + 'password_validation.'
+        'NAME': 'django.contrib.auth.password_validation.'
         + 'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.'
-        + 'password_validation.'
+        'NAME': 'django.contrib.auth.password_validation.'
         + 'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.'
-        + 'password_validation.'
+        'NAME': 'django.contrib.auth.password_validation.'
         + 'NumericPasswordValidator',
     },
 ]
+
+# -----------------------------------------------------------------------
+# -------------------------Client settings Section-----------------------
+# -----------------------------------------------------------------------
 
 LANGUAGE_CODE: str = 'ru-ru'
 
@@ -108,6 +155,14 @@ USE_L10N: bool = True
 
 USE_TZ: bool = True
 
+# -----------------------------------------------------------------------
+# ----------------------Static/Media Files Section-----------------------
+# -----------------------------------------------------------------------
+
 STATIC_URL: str = '/static/'
+
+# -----------------------------------------------------------------------
+# ------------------------------Other Section----------------------------
+# -----------------------------------------------------------------------
 
 DEFAULT_AUTO_FIELD: str = 'django.db.models.BigAutoField'

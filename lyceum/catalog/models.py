@@ -2,6 +2,7 @@
 from typing import Any
 
 import core
+
 from django.db import models
 
 

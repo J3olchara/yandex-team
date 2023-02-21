@@ -1,7 +1,8 @@
 """CATALOG app database models"""
 from typing import Any
 
-import core  # noqa: I201
+import core  # isort: skip
+
 from django.db import models
 
 

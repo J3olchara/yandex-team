@@ -3,7 +3,7 @@
 from typing import List
 
 from django.conf import settings
-from django.test import TestCase, modify_settings
+from django.test import TestCase, modify_settings, override_settings
 from django.urls import reverse
 
 from . import middlewares
@@ -15,6 +15,7 @@ from . import middlewares
         'remove': settings.COMMON_MIDDLEWARES,
     }
 )
+@override_settings(REVERSER_MIDDLEWARE=True)
 class ReverseMiddlewareTests(TestCase):
     """tests reversing middleware"""
 
@@ -77,16 +78,6 @@ class ReverseMiddlewareTests(TestCase):
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
 
-        with self.settings(REVERSER_MIDDLEWARE=True):
-            request = self.client.get(
-                reverse('test'), data={'test': test_string}
-            )
-            self.assertEqual(
-                request.content.decode(),
-                rev_string,
-                settings.REVERSER_MIDDLEWARE,
-            )
-
         with self.settings(REVERSER_MIDDLEWARE=False):
             request = self.client.get(
                 reverse('test'), data={'test': test_string}
@@ -94,6 +85,16 @@ class ReverseMiddlewareTests(TestCase):
             self.assertEqual(
                 request.content.decode(),
                 test_string,
+                settings.REVERSER_MIDDLEWARE,
+            )
+
+        with self.settings(REVERSER_MIDDLEWARE=True):
+            request = self.client.get(
+                reverse('test'), data={'test': test_string}
+            )
+            self.assertEqual(
+                request.content.decode(),
+                rev_string,
                 settings.REVERSER_MIDDLEWARE,
             )
         middlewares.CoffeeTime.enable = tmp_enable

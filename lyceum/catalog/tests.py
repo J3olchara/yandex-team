@@ -1,9 +1,14 @@
 """CATALOG app tests"""
+
+from django.core import exceptions
+from django.db import utils
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from . import models
 
-class HomepageURLTests(TestCase):
+
+class CatalogURLTests(TestCase):
     """CATALOG app test cases"""
 
     APP_DIR = reverse('catalog')
@@ -49,3 +54,55 @@ class HomepageURLTests(TestCase):
         for item_id_req in test_paths_404:
             response = Client().get(f'{test_path}{item_id_req}/')
             self.assertEqual(response.status_code, 404, item_id_req)
+
+
+class CatalogModelTests(TestCase):
+    """tests valid model working"""
+
+    def test_base_slug_abstract_class(self) -> None:
+        """test field validators"""
+        with self.assertRaises(exceptions.ValidationError):
+            self.tag = models.Tag(name='1' * 151, slug='test')
+            self.tag.full_clean()
+            self.tag.save()
+            self.tag = models.Tag(name='test', slug='1' * 201)
+            self.tag.full_clean()
+            self.tag.save()
+        self.tag = models.Tag(name='test', slug='test')
+        self.assertEqual(self.tag.is_published, True)
+        self.tag.save()
+        with self.assertRaises(utils.IntegrityError):
+            models.Tag.objects.create(
+                name='test',
+                slug='test',
+            )
+
+    def test_category(self) -> None:
+        self.category = models.Category(
+            name='test',
+            slug='test',
+        )
+        self.assertEqual(self.category.weight, 100)
+
+    def test_item(self) -> None:
+        bad_tests = (
+            'плохо',
+            'Роскошный',
+            'роскный',
+        )
+        good_tests = ('роскошно', 'превосходно', 'Роскошно живём')
+        self.category = models.Category.objects.create(
+            name='test',
+            slug='test',
+        )
+        with self.assertRaises(exceptions.ValidationError):
+            for text in bad_tests:
+                self.item = models.Item(
+                    name='test', text=text, category=self.category
+                )
+                self.item.full_clean()
+        for text in good_tests:
+            self.item = models.Item(
+                name='test', text=text, category=self.category
+            )
+            self.item.full_clean()

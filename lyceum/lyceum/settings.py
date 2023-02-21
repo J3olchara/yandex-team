@@ -35,6 +35,7 @@ REVERSER_MIDDLEWARE = os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
 # --------------------------------------------------------------------
 
 INSTALLED_APPS: List[str] = [
+    'core.apps.CoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

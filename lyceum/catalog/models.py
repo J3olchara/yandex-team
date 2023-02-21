@@ -1,8 +1,7 @@
 """CATALOG app database models"""
 from typing import Any
 
-import core
-
+import core  # noqa: I201
 from django.db import models
 
 

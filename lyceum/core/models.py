@@ -1,4 +1,6 @@
 """HOMEPAGE app database models"""
+from typing import Any
+
 from django.core import validators
 from django.db import models
 
@@ -6,12 +8,12 @@ from . import validators as custom_validators
 
 
 class Base(models.Model):
-    is_published = models.BooleanField(
+    is_published: Any = models.BooleanField(
         verbose_name='Опубликован',
         help_text='Да/Нет',
         default=True,
     )
-    name = models.CharField(
+    name: Any = models.CharField(
         verbose_name='Название',
         help_text='Придумайте название',
         max_length=150,
@@ -25,7 +27,7 @@ class Base(models.Model):
 
 
 class BaseSlug(Base):
-    slug = models.CharField(
+    slug: Any = models.CharField(
         verbose_name='Уникальный артикул',
         help_text='Придумайте артикул'
         '(может состоять только из латинских букв, цифр, _ и -)',

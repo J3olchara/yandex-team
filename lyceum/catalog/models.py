@@ -19,7 +19,9 @@ class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]
 class Category(core.models.BaseSlug):  # type: ignore[name-defined, misc]
     """CATEGORY model for Item"""
 
-    weight = models.PositiveSmallIntegerField(verbose_name='Вес', default=100)
+    weight: Any = models.PositiveSmallIntegerField(
+        verbose_name='Вес', default=100
+    )
 
     class Meta:
         verbose_name = 'Категория'
@@ -32,22 +34,22 @@ class Category(core.models.BaseSlug):  # type: ignore[name-defined, misc]
 class Item(core.models.Base):  # type: ignore[name-defined, misc]
     """Object from the catalog model"""
 
-    text = models.TextField(
+    text: Any = models.TextField(
         'Описание',
         help_text='Опишите объект',
         validators=[
-            core.validators.rich_text_validator,
+            core.validators.ValidateMustContain('превосходно', 'роскошно'),
         ],
     )
 
-    category = models.ForeignKey(
+    category: Any = models.ForeignKey(
         'category',
         verbose_name='Категория',
         help_text='Выберите категорию',
         on_delete=models.DO_NOTHING,
     )
 
-    tags = models.ManyToManyField(
+    tags: Any = models.ManyToManyField(
         Tag,
         verbose_name='Тэги',
     )

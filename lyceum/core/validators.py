@@ -2,6 +2,7 @@
 import re
 
 from django.core.exceptions import ValidationError
+from django.utils.deconstruct import deconstructible
 
 
 def slug_validator(value: str) -> None:
@@ -13,9 +14,26 @@ def slug_validator(value: str) -> None:
         )
 
 
-def rich_text_validator(value: str) -> None:
-    value = value.lower()
-    if not ('превосходно' in value or 'роскошно' in value):
-        raise ValidationError(
-            'Text must contain one of words: превосходно или роскошно.'
-        )
+# def ValidateMustContain(*words) -> '(value: str) -> None':
+#     def wrapper(value: str) -> None:
+#         value = value.lower()
+#         fl = [word in value for word in words]
+#         if not any(fl):
+#             raise ValidationError(
+#                 f'Text must contain one of words: {words}'
+#             )
+#     return wrapper
+
+
+@deconstructible
+class ValidateMustContain:
+    def __init__(self, *words: str) -> None:
+        self.words = words
+
+    def __call__(self, value: str) -> None:
+        value = value.lower()
+        fl = [word in value for word in self.words]
+        if not any(fl):
+            raise ValidationError(
+                f'Text must contain one of words: {self.words}'
+            )

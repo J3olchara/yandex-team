@@ -17,6 +17,7 @@ class ValidatorsTest(TestCase):
         validators.slug_validator('123abc-_')
 
     def test_rich_text(self) -> None:
+        values_test = ['роскошно', 'превосходно']
         tests_good = (
             'превосходно',
             'роскошно',
@@ -29,6 +30,6 @@ class ValidatorsTest(TestCase):
         )
         with self.assertRaises(exceptions.ValidationError):
             for value in tests_bad:
-                validators.rich_text_validator(value)
+                validators.ValidateMustContain(*values_test)(value)
         for value in tests_good:
-            validators.rich_text_validator(value)
+            validators.ValidateMustContain(*values_test)(value)

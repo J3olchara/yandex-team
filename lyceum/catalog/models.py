@@ -1,9 +1,12 @@
 """CATALOG app database models"""
 from typing import Any
 
-import core  # isort: skip
+# isort: off
+import core
 
 from django.db import models
+
+# isort: on
 
 
 class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]

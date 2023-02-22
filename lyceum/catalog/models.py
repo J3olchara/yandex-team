@@ -20,6 +20,10 @@ class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]
     def __str__(self) -> Any:
         return self.name[:20]
 
+    def __call__(self, *args, **kwargs):
+        self.full_clean()
+        self.save()
+
 
 class Category(core.models.BaseSlug):  # type: ignore[name-defined, misc]
     """CATEGORY model for Item"""
@@ -34,6 +38,10 @@ class Category(core.models.BaseSlug):  # type: ignore[name-defined, misc]
 
     def __str__(self) -> Any:
         return self.name[:40]
+
+    def __call__(self, *args, **kwargs):
+        self.full_clean()
+        self.save()
 
 
 class Item(core.models.Base):  # type: ignore[name-defined, misc]
@@ -65,3 +73,7 @@ class Item(core.models.Base):  # type: ignore[name-defined, misc]
 
     def __str__(self) -> Any:
         return self.name[:15]
+
+    def __call__(self, *args, **kwargs):
+        self.full_clean()
+        self.save()

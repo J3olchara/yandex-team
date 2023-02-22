@@ -40,7 +40,7 @@ class ReverseMiddlewareTests(TestCase):
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
         content: List[str] = []
-        for _ in range(middlewares.CoffeeTime.enable):
+        for _ in range(middlewares.CoffeeTime.times_to_on):
             request = self.client.get(
                 reverse('test'), data={'test': test_string}
             )
@@ -53,7 +53,7 @@ class ReverseMiddlewareTests(TestCase):
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
         contents: List[str] = []
-        for _ in range(middlewares.CoffeeTime.enable - 1):
+        for _ in range(middlewares.CoffeeTime.times_to_on - 1):
             request = self.client.get(
                 reverse('test'), data={'test': test_string}
             )
@@ -61,13 +61,13 @@ class ReverseMiddlewareTests(TestCase):
         self.client.get(reverse('test'), data={'test': test_string})
         self.assertEqual(len(set(contents)), 1)
         contents.clear()
-        for _ in range(middlewares.CoffeeTime.enable * 2 - 1):
+        for _ in range(middlewares.CoffeeTime.times_to_on * 2 - 1):
             request = self.client.get(
                 reverse('test'), data={'test': test_string}
             )
             contents.append(request.content.decode())
         self.assertEqual(
-            contents.count(test_string), middlewares.CoffeeTime.enable * 2 - 2
+            contents.count(test_string), middlewares.CoffeeTime.times_to_on * 2 - 2
         )
         self.assertEqual(contents.count(rev_string), 1)
 

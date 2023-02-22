@@ -10,12 +10,12 @@ from . import validators as custom_validators
 
 class Base(models.Model):
     is_published: Any = models.BooleanField(
-        verbose_name='Опубликован',
+        verbose_name='опубликован',
         help_text='Да/Нет',
         default=True,
     )
     name: Any = models.CharField(
-        verbose_name='Название',
+        verbose_name='название',
         help_text='Придумайте название',
         max_length=150,
         validators=[
@@ -29,7 +29,7 @@ class Base(models.Model):
 
 class BaseSlug(Base):
     slug: Any = models.CharField(
-        verbose_name='Уникальный артикул',
+        verbose_name='уникальный артикул',
         help_text='Придумайте артикул'
         '(может состоять только из латинских букв, цифр, _ и -)',
         max_length=200,
@@ -41,7 +41,7 @@ class BaseSlug(Base):
     )
 
     normalized_name: Any = models.CharField(
-        verbose_name='Нормализованное имя',
+        verbose_name='нормализованное имя',
         max_length=150,
         unique=True,
         editable=False,

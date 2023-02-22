@@ -1,4 +1,5 @@
 """HOMEPAGE app database models"""
+from string import punctuation
 from typing import Any
 
 from django.core import validators
@@ -38,6 +39,37 @@ class BaseSlug(Base):
             validators.MaxLengthValidator(200),
         ],
     )
+
+    normalized_name: Any = models.CharField(
+        verbose_name='Нормализованное имя',
+        max_length=150,
+        unique=True,
+    )
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        self.normalized_name = self.normalize_name()
+        return super().save()
+
+    def normalize_name(self) -> str:
+        normalized: str = self.name.upper()
+        tab = dict.fromkeys(punctuation)
+        alphabet = {  # rus: eng
+            'А': 'A',
+            'В': 'B',
+            'Е': 'E',
+            'Т': 'T',
+            'О': 'O',
+            'Р': 'P',
+            'Н': 'H',
+            'К': 'K',
+            'Х': 'X',
+            'С': 'C',
+            'М': 'M',
+            ' ': '',
+        }
+        tab.update(alphabet)
+        translate_tab = str.maketrans(tab)
+        return normalized.translate(translate_tab)
 
     class Meta:
         abstract = True

@@ -44,7 +44,7 @@ class BaseSlug(Base):
         verbose_name='Нормализованное имя',
         max_length=150,
         unique=True,
-        editable=False
+        editable=False,
     )
 
     def save(self, *args: Any, **kwargs: Any) -> None:

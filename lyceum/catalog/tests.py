@@ -1,7 +1,7 @@
 """CATALOG app tests"""
 
 from django.core import exceptions
-from django.db import utils
+from django.db import transaction, utils
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -71,11 +71,12 @@ class CatalogModelTests(TestCase):
         self.tag = models.Tag(name='test', slug='test')
         self.assertEqual(self.tag.is_published, True)
         self.tag.save()
-        with self.assertRaises(utils.IntegrityError):
-            models.Tag.objects.create(
-                name='test',
-                slug='test',
-            )
+        with transaction.atomic():
+            with self.assertRaises(utils.IntegrityError):
+                models.Tag.objects.create(
+                    name='test',
+                    slug='test',
+                )
 
     def test_category(self) -> None:
         self.category = models.Category(
@@ -106,3 +107,11 @@ class CatalogModelTests(TestCase):
                 name='test', text=text, category=self.category
             )
             self.item.full_clean()
+
+    def test_abstract_base_slug_normalized_name(self) -> None:
+        models.Tag.objects.create(name='test', slug='test')
+        test_names = ('tеst', 'Test', 'test! ,', 'TESт', 'tes t', ' test ')
+        for name in test_names:
+            with transaction.atomic():
+                with self.assertRaises(utils.IntegrityError):
+                    models.Tag.objects.create(name=name, slug='testslug')

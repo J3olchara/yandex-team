@@ -116,4 +116,3 @@ class CatalogModelTests(TestCase):
                 with self.assertRaises(utils.IntegrityError):
                     models.Tag.objects.create(name=name, slug='testslug')
         models.Tag.objects.create(name='test name', slug='testslug')
-

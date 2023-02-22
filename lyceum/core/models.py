@@ -1,10 +1,10 @@
 """HOMEPAGE app database models"""
-from string import punctuation
 from typing import Any
 
 from django.core import validators
 from django.db import models
 
+from . import support
 from . import validators as custom_validators
 
 
@@ -47,29 +47,15 @@ class BaseSlug(Base):
         editable=False,
     )
 
+    normalizer_alphabet: dict = support.get_normalize_table()
+
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.normalized_name = self.normalize_name()
         return super().save()
 
     def normalize_name(self) -> str:
         normalized: str = self.name.upper()
-        tab = dict.fromkeys(punctuation)
-        alphabet = {  # rus: eng
-            'А': 'A',
-            'В': 'B',
-            'Е': 'E',
-            'Т': 'T',
-            'О': 'O',
-            'Р': 'P',
-            'Н': 'H',
-            'К': 'K',
-            'Х': 'X',
-            'С': 'C',
-            'М': 'M',
-            ' ': '',
-        }
-        tab.update(alphabet)
-        translate_tab = str.maketrans(tab)
+        translate_tab = str.maketrans(self.normalizer_alphabet)
         return normalized.translate(translate_tab)
 
     class Meta:

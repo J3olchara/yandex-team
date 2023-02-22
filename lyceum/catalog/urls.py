@@ -1,4 +1,4 @@
-"""APP urls URL Configuration"""
+"""Catalog APP urls URL Configuration"""
 from typing import List
 
 from django.urls import path, re_path, register_converter, resolvers
@@ -10,7 +10,7 @@ register_converter(converters.NaturalNumber, 'nat')
 urlpatterns: List[resolvers.URLPattern] = [
     path('', views.item_list, name='catalog'),
     path('<int:item_id>/', views.item_detail, name='int_item_deatil'),
-    re_path(r'^re/[1-9]\d*/', views.regular_item, name='re_item_deatil'),
+    re_path(r'^re/(?P<item_id>[1-9]\d*)/$', views.regular_item, name='re_item_deatil'),
     path(
         'converter/<nat:item_id>/',
         views.converter_item,

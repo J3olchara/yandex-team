@@ -4,6 +4,7 @@ from django.core import exceptions
 from django.db import transaction, utils
 from django.test import Client, TestCase
 from django.urls import reverse
+from parameterized import parameterized
 
 from . import models
 
@@ -85,34 +86,32 @@ class CatalogModelTests(TestCase):
         )
         self.assertEqual(self.category.weight, 100)
 
-    def test_item(self) -> None:
-        bad_tests = (
-            'плохо',
-            'Роскошный',
-            'роскный',
-        )
-        good_tests = ('роскошно', 'превосходно', 'Роскошно живём')
+    @parameterized.expand([
+        ['плохо', 'роскошно'],
+        ['Роскошный','превосходно',],
+        ['роскный', 'Роскошно живём'],
+    ])
+    def test_item(self, bad_test, good_test) -> None:
         self.category = models.Category.objects.create(
             name='test',
             slug='test',
         )
         with self.assertRaises(exceptions.ValidationError):
-            for text in bad_tests:
-                self.item = models.Item(
-                    name='test', text=text, category=self.category
-                )
-                self.item.full_clean()
-        for text in good_tests:
             self.item = models.Item(
-                name='test', text=text, category=self.category
+                name='test', text=bad_test, category=self.category
             )
             self.item.full_clean()
+        self.item = models.Item(
+            name='test', text=good_test, category=self.category
+        )
+        self.item.full_clean()
 
-    def test_abstract_base_slug_normalized_name(self) -> None:
+    @parameterized.expand([
+        'tеst', 'Test', 'test! ,', 'TESт', 'tes t', ' test ',
+    ])
+    def test_abstract_base_slug_normalized_name(self, name) -> None:
         models.Tag.objects.create(name='test', slug='test')
-        test_names = ('tеst', 'Test', 'test! ,', 'TESт', 'tes t', ' test ')
-        for name in test_names:
-            with transaction.atomic():
-                with self.assertRaises(utils.IntegrityError):
-                    models.Tag.objects.create(name=name, slug='testslug')
+        with transaction.atomic():
+            with self.assertRaises(utils.IntegrityError):
+                models.Tag.objects.create(name=name, slug='testslug')
         models.Tag.objects.create(name='test name', slug='testslug')

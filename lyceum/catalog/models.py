@@ -3,9 +3,9 @@ from typing import Any
 
 # isort: off
 
-import core
-
 from django.db import models
+
+import core
 
 # isort: on
 

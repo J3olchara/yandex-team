@@ -5,6 +5,7 @@ from typing import List
 from django.conf import settings
 from django.test import TestCase, modify_settings, override_settings
 from django.urls import reverse
+from parameterized import parameterized
 
 from . import middlewares
 
@@ -19,21 +20,20 @@ from . import middlewares
 class ReverseMiddlewareTests(TestCase):
     """tests reversing middleware"""
 
-    def test_reverser(self) -> None:
-        """test reversing function work"""
-        tests = [
+    @parameterized.expand([
             ('hello world!', 'hello world!'),
             ('Привет world', 'тевирП world'),
             ('Helпривет мorld', 'Helпривет мorld'),
             ('Привет мир', 'тевирП рим'),
             ('Да', 'аД'),
             ('Привет, друг', 'тевирП, гурд'),
-        ]
-        for test, ans in tests:
-            content: bytes = middlewares.CoffeeTime.reverse_words(
-                test.encode()
-            )
-            self.assertIn(ans, content.decode())
+        ])
+    def test_reverser(self, test, answer) -> None:
+        """test reversing function work"""
+        content: bytes = middlewares.CoffeeTime.reverse_words(
+            test.encode()
+        )
+        self.assertIn(answer, content.decode())
 
     def test_work(self) -> None:
         """tests middleware working all in all"""
@@ -67,14 +67,15 @@ class ReverseMiddlewareTests(TestCase):
             )
             contents.append(request.content.decode())
         self.assertEqual(
-            contents.count(test_string), middlewares.CoffeeTime.times_to_on * 2 - 2
+            contents.count(test_string),
+            middlewares.CoffeeTime.times_to_on * 2 - 2,
         )
         self.assertEqual(contents.count(rev_string), 1)
 
     def test_switcher_environ(self) -> None:
         """tests correct working of switcher"""
-        tmp_enable = middlewares.CoffeeTime.enable
-        middlewares.CoffeeTime.enable = 1
+        tmp_times_to_on = middlewares.CoffeeTime.times_to_on
+        middlewares.CoffeeTime.times_to_on = 1
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
 
@@ -97,4 +98,4 @@ class ReverseMiddlewareTests(TestCase):
                 rev_string,
                 settings.REVERSER_MIDDLEWARE,
             )
-        middlewares.CoffeeTime.enable = tmp_enable
+        middlewares.CoffeeTime.times_to_on = tmp_times_to_on

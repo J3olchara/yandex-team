@@ -6,7 +6,7 @@ from django.urls import reverse
 class HomepageURLTests(TestCase):
     """HOMEPAGE app test cases"""
 
-    APP_DIR = '/'
+    APP_DIR = reverse('home')
 
     def test_homepage_endpoint(self) -> None:
         """test getting response from app dir"""

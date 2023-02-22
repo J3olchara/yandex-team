@@ -1,35 +1,31 @@
 from django.core import exceptions
 from django.test import TestCase
 
+from parameterized import parameterized
+
 from . import validators
 
 
 class ValidatorsTest(TestCase):
-    def test_text_validator(self) -> None:
-        tests = (
-            ('123abc-_[', False),
-            ('123abc-_=', False),
-            ('123abc-_+', False),
-        )
-        with self.assertRaises(exceptions.ValidationError):
-            for value, _ in tests:
-                validators.slug_validator(value)
-        validators.slug_validator('123abc-_')
 
-    def test_rich_text(self) -> None:
-        values_test = ['роскошно', 'превосходно']
-        tests_good = (
-            'превосходно',
-            'роскошно',
-            'роскошно ест',
-        )
-        tests_bad = (
-            'плохо',
-            'роскошный',
-            'превосходный',
-        )
+    validator_test_words = ['роскошно', 'превосходно']
+
+    @parameterized.expand([
+            ('123abc-_[', '123abc-_'),
+            ('123abc-_=', 'abc-_'),
+            ('123abc-_+', '1bc'),
+        ])
+    def test_text_validator(self, bad_test, good_test) -> None:
         with self.assertRaises(exceptions.ValidationError):
-            for value in tests_bad:
-                validators.ValidateMustContain(*values_test)(value)
-        for value in tests_good:
-            validators.ValidateMustContain(*values_test)(value)
+            validators.slug_validator(bad_test)
+        validators.slug_validator(good_test)
+
+    @parameterized.expand([
+            ['превосходно', 'плохо'],
+            ['роскошно', 'роскошный'],
+            ['роскошно ест', 'превосходный'],
+    ])
+    def test_rich_text_good(self, test_good, test_bad) -> None:
+        with self.assertRaises(exceptions.ValidationError):
+            validators.ValidateMustContain(*self.validator_test_words)(test_bad)
+        validators.ValidateMustContain(*self.validator_test_words)(test_good)

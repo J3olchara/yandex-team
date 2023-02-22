@@ -17,15 +17,19 @@ class CoffeeTime:
     def reverse_words(content_data: bytes) -> bytes:
         """reverses all russian words"""
         content: str = content_data.decode()
-        pattern = re.compile(r'[а-яА-ЯёЁ]+')
-        iterator = re.finditer(pattern, content)
+        pattern_word = re.compile(r'\b[а-яА-ЯёЁ]*\b')
+        pattern_ru_word = re.compile(r'[а-яА-ЯёЁ]+')
+        iterator = re.finditer(pattern_word, content)
         raw_new_content: list = []
         start: int = 0
         end: int = len(content)
         for word in iterator:
-            raw_new_content.append(content[start : word.start(0)])  # isort ignore
-            raw_new_content.append(word.group(0)[::-1])
-            start = word.end(0)
+            if re.match(pattern_ru_word, word.group(0)):
+                raw_new_content.append(
+                    content[start : word.start(0)]
+                )  # isort ignore
+                raw_new_content.append(word.group(0)[::-1])
+                start = word.end(0)
         raw_new_content.append(content[start:end])
         return ''.join(raw_new_content).encode()
 

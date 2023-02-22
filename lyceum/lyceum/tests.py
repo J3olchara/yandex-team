@@ -20,19 +20,19 @@ from . import middlewares
 class ReverseMiddlewareTests(TestCase):
     """tests reversing middleware"""
 
-    @parameterized.expand([
+    @parameterized.expand(  # type: ignore[misc]
+        [
             ('hello world!', 'hello world!'),
             ('Привет world', 'тевирП world'),
             ('Helпривет мorld', 'Helпривет мorld'),
             ('Привет мир', 'тевирП рим'),
             ('Да', 'аД'),
             ('Привет, друг', 'тевирП, гурд'),
-        ])
-    def test_reverser(self, test, answer) -> None:
+        ]
+    )
+    def test_reverser(self, test: str, answer: str) -> None:
         """test reversing function work"""
-        content: bytes = middlewares.CoffeeTime.reverse_words(
-            test.encode()
-        )
+        content: bytes = middlewares.CoffeeTime.reverse_words(test.encode())
         self.assertIn(answer, content.decode())
 
     def test_work(self) -> None:

@@ -20,7 +20,7 @@ class CoffeeTime:
         pattern_word = re.compile(r'\b[а-яА-ЯёЁ]*\b')
         pattern_ru_word = re.compile(r'[а-яА-ЯёЁ]+')
         iterator = re.finditer(pattern_word, content)
-        raw_new_content: list = []
+        raw_new_content: list[str] = []
         start: int = 0
         end: int = len(content)
         for word in iterator:

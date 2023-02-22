@@ -1,8 +1,5 @@
 """CATALOG app pages views"""
-import re
-
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import Http404
 from django.shortcuts import HttpResponse, render
 
 

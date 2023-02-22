@@ -1,5 +1,5 @@
 """HOMEPAGE app database models"""
-from typing import Any
+from typing import Any, Dict, Optional
 
 from django.core import validators
 from django.db import models
@@ -47,7 +47,9 @@ class BaseSlug(Base):
         editable=False,
     )
 
-    normalizer_alphabet: dict = support.get_normalize_table()
+    normalizer_alphabet: Dict[
+        str, Optional[Any]
+    ] = support.get_normalize_table()
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         self.normalized_name = self.normalize_name()

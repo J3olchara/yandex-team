@@ -86,12 +86,17 @@ class CatalogModelTests(TestCase):
         )
         self.assertEqual(self.category.weight, 100)
 
-    @parameterized.expand([
-        ['плохо', 'роскошно'],
-        ['Роскошный','превосходно',],
-        ['роскный', 'Роскошно живём'],
-    ])
-    def test_item(self, bad_test, good_test) -> None:
+    @parameterized.expand(  # type: ignore[misc]
+        [
+            ['плохо', 'роскошно'],
+            [
+                'Роскошный',
+                'превосходно',
+            ],
+            ['роскный', 'Роскошно живём'],
+        ]
+    )
+    def test_item(self, bad_test: str, good_test: str) -> None:
         self.category = models.Category.objects.create(
             name='test',
             slug='test',
@@ -106,10 +111,17 @@ class CatalogModelTests(TestCase):
         )
         self.item.full_clean()
 
-    @parameterized.expand([
-        'tеst', 'Test', 'test! ,', 'TESт', 'tes t', ' test ',
-    ])
-    def test_abstract_base_slug_normalized_name(self, name) -> None:
+    @parameterized.expand(  # type: ignore[misc]
+        [
+            'tеst',
+            'Test',
+            'test! ,',
+            'TESт',
+            'tes t',
+            ' test ',
+        ]
+    )
+    def test_abstract_base_slug_normalized_name(self, name: str) -> None:
         models.Tag.objects.create(name='test', slug='test')
         with transaction.atomic():
             with self.assertRaises(utils.IntegrityError):

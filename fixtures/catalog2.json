@@ -1,0 +1,151 @@
+[
+{
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+        "is_published": true,
+        "name": "tag1",
+        "slug": "tag1",
+        "normalized_name": "TAG1"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+        "is_published": true,
+        "name": "tаg2",
+        "slug": "tag2",
+        "normalized_name": "TAG2"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+        "is_published": true,
+        "name": "tag3",
+        "slug": "tag3",
+        "normalized_name": "TAG3"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 4,
+    "fields": {
+        "is_published": true,
+        "name": "tag4",
+        "slug": "tag4",
+        "normalized_name": "TAG4"
+    }
+},
+{
+    "model": "catalog.tag",
+    "pk": 5,
+    "fields": {
+        "is_published": true,
+        "name": "tag5",
+        "slug": "tag5",
+        "normalized_name": "TAG5"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "is_published": true,
+        "name": "category1",
+        "slug": "category1",
+        "normalized_name": "CATEGORY1",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "is_published": true,
+        "name": "category2",
+        "slug": "category2",
+        "normalized_name": "CATEGORY2",
+        "weight": 100
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 1,
+    "fields": {
+        "is_published": true,
+        "name": "item1",
+        "text": "item1 превосходно",
+        "category": 2,
+        "tags": [
+            1,
+            2,
+            3,
+            4,
+            5
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 2,
+    "fields": {
+        "is_published": true,
+        "name": "item2",
+        "text": "item2 роскошно",
+        "category": 1,
+        "tags": [
+            2,
+            4
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 3,
+    "fields": {
+        "is_published": true,
+        "name": "item3",
+        "text": "роскошно",
+        "category": 2,
+        "tags": [
+            2,
+            3,
+            5
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 4,
+    "fields": {
+        "is_published": true,
+        "name": "item4",
+        "text": "превосходно и роскошно",
+        "category": 2,
+        "tags": [
+            1,
+            2,
+            4
+        ]
+    }
+},
+{
+    "model": "catalog.item",
+    "pk": 5,
+    "fields": {
+        "is_published": true,
+        "name": "item5",
+        "text": "превосходно и роскошно ялквмом",
+        "category": 1,
+        "tags": [
+            2,
+            3,
+            4,
+            5
+        ]
+    }
+}
+]

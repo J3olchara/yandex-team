@@ -6,7 +6,6 @@ from . import validators
 
 
 class ValidatorsTest(TestCase):
-
     validator_test_words = ['роскошно', 'превосходно']
 
     @parameterized.expand(  # type: ignore[misc]

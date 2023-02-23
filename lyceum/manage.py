@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+import argparse
 import os
 import sys
-import argparse
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -33,14 +33,19 @@ def main() -> None:
 def init_data() -> None:
     default_fixtures_path = Path(__file__).resolve().parent.parent / 'fixtures'
 
-    def create_parser() -> argparse.PARSER:
+    def create_parser() -> argparse.ArgumentParser:
         nonlocal default_fixtures_path
         arg_parser = argparse.ArgumentParser()
-        arg_parser.add_argument('-fp', '--fixtures-path', default=str(default_fixtures_path))
-        arg_parser.add_argument('-cm', '--check-migrations', default=str(default_fixtures_path))
+        arg_parser.add_argument(
+            '-fp', '--fixtures-path', default=str(default_fixtures_path)
+        )
+        arg_parser.add_argument(
+            '-cm', '--check-migrations', default=str(default_fixtures_path)
+        )
         arg_parser.add_argument('-m', '--migrate', default=False)
         arg_parser.add_argument('-ld', '--load_data', default=False)
         return arg_parser
+
     parser = create_parser()
     print(parser.parse_args(sys.argv[2:]))
 

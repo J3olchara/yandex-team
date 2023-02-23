@@ -51,7 +51,8 @@ class Item(core.models.Base):  # type: ignore[name-defined, misc]
         'category',
         verbose_name='категория',
         help_text='Выберите категорию',
-        on_delete=models.DO_NOTHING,
+        on_delete=models.SET_NULL,
+        null=True,
     )
 
     tags: Any = models.ManyToManyField(

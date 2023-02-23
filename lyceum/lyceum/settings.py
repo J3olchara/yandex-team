@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
-if not load_dotenv(BASE_DIR.parent / Path(r'.env')):
-    load_dotenv(BASE_DIR.parent / Path(r'example.env'))
+if not load_dotenv(BASE_DIR.parent / '.env'):
+    load_dotenv(BASE_DIR.parent / 'example.env')
 
 # --------------------------------------------------------------------
 # ------------------------Project Parameters Section------------------

@@ -1,16 +1,10 @@
 """CATALOG app database models"""
 from typing import Any
 
+import core  # noqa: I100
 from django.db import models
 from django.utils.html import mark_safe  # type: ignore[attr-defined]
 from django_cleanup import cleanup
-
-# isort: off
-
-import core  # noqa: E731,E123
-
-# isort: on
-
 from sorl.thumbnail import get_thumbnail
 
 

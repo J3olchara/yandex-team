@@ -7,7 +7,7 @@ from django_cleanup import cleanup
 
 # isort: off
 
-import core
+import core  # noqa: E731,E123
 
 # isort: on
 

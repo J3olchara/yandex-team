@@ -1,10 +1,10 @@
 """lyceum URL Configuration"""
-from typing import List, Union, Any
+from typing import Any
 
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path, resolvers
+from django.urls import include, path
 
 urlpatterns: Any = [
     path('admin/', admin.site.urls, name='admin'),

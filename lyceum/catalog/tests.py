@@ -3,7 +3,7 @@
 from django.core import exceptions
 from django.db import transaction, utils
 from django.test import Client, TestCase
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from parameterized import parameterized
 
 from . import models
@@ -12,7 +12,7 @@ from . import models
 class CatalogURLTests(TestCase):
     """CATALOG app test cases"""
 
-    APP_DIR = reverse('catalog')
+    APP_DIR = reverse('catalog:catalog')
 
     def test_catalog_endpoint(self) -> None:
         """test getting response from app dir"""
@@ -29,32 +29,29 @@ class CatalogURLTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-    def test_re_path(self) -> None:
+    @parameterized.expand([[10, -10], [1, 0]])
+    def test_re_path(self, test_200: int, test_404: int) -> None:
         """testing regular expression path from catalog"""
-        test_path = self.APP_DIR + 're/'
-        test_paths_200 = [10, 1]
-        test_paths_404 = [-10, 0]
-        for item_id_req in test_paths_200:
-            response = Client().get(f'{test_path}{item_id_req}/')
-            self.assertEqual(response.status_code, 200, item_id_req)
-            self.assertIn(str(item_id_req).encode(), response.content)
-        for item_id_req in test_paths_404:
-            response = Client().get(f'{test_path}{item_id_req}/')
-            self.assertEqual(response.status_code, 404, item_id_req)
+        dir_200 = reverse(
+            'catalog:re_item_deatil', kwargs={'item_id': test_200}
+        )
+        response = Client().get(dir_200)
+        self.assertEqual(response.status_code, 200, test_200)
+        self.assertIn(str(test_200).encode(), response.content)
+        with self.assertRaises(NoReverseMatch):
+            reverse('catalog:re_item_deatil', kwargs={'item_id': test_404})
 
-    def test_natnum_converter(self) -> None:
+    @parameterized.expand([[10, -10], [1, 0]])
+    def test_natnum_converter(self, test_200: int, test_404: int) -> None:
         """tests self written converter for /catalog/converters/<natnum>"""
-        test_path = self.APP_DIR + 'converter/'
-        test_paths_200 = [10, 1]
-        test_paths_404 = [-10, 0]
-        for item_id_req in test_paths_200:
-            response = Client().get(f'{test_path}{item_id_req}/')
-            item_id = response.resolver_match.kwargs['item_id']
-            self.assertEqual(response.status_code, 200, item_id_req)
-            self.assertEqual(item_id, item_id_req)
-        for item_id_req in test_paths_404:
-            response = Client().get(f'{test_path}{item_id_req}/')
-            self.assertEqual(response.status_code, 404, item_id_req)
+        dir_200 = reverse(
+            'catalog:conv_item_deatil', kwargs={'item_id': test_200}
+        )
+        response = Client().get(dir_200)
+        self.assertEqual(response.status_code, 200, test_200)
+        self.assertIn(str(test_200).encode(), response.content)
+        with self.assertRaises(NoReverseMatch):
+            reverse('catalog:conv_item_deatil', kwargs={'item_id': test_404})
 
 
 class CatalogModelTests(TestCase):
@@ -101,13 +98,20 @@ class CatalogModelTests(TestCase):
             name='test',
             slug='test',
         )
+        main_image = models.MainImage.objects.create(image='test.jpg')
         with self.assertRaises(exceptions.ValidationError):
             self.item = models.Item(
-                name='test', text=bad_test, category=self.category
+                name='test',
+                text=bad_test,
+                category=self.category,
+                main_image=main_image,
             )
             self.item.full_clean()
         self.item = models.Item(
-            name='test', text=good_test, category=self.category
+            name='test',
+            text=good_test,
+            category=self.category,
+            main_image=main_image,
         )
         self.item.full_clean()
 

@@ -35,16 +35,18 @@ REVERSER_MIDDLEWARE = os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
 # --------------------------------------------------------------------
 
 INSTALLED_APPS: List[str] = [
-    'core.apps.CoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core.apps.CoreConfig',
     'about.apps.AboutConfig',
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
+    'sorl.thumbnail',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 # --------------------------------------------------------------------
@@ -90,9 +92,7 @@ TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / Path(r'\homepage\templates'),
-            BASE_DIR / Path(r'\about\templates'),
-            BASE_DIR / Path(r'\catalog\templates'),
+            BASE_DIR / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -161,6 +161,14 @@ USE_TZ: bool = True
 # -----------------------------------------------------------------------
 
 STATIC_URL: str = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static_dev',
+]
+
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
 # -----------------------------------------------------------------------
 # ------------------------------Other Section----------------------------

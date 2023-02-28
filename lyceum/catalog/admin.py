@@ -7,11 +7,15 @@ from . import models
 @admin.register(models.Item)
 class ItemAdmin(admin.ModelAdmin):  # type: ignore[type-arg]
     list_display = (
+        models.Item.image_tmb,
         models.Item.name.field.name,
         models.Item.is_published.field.name,
     )
     list_editable = (models.Item.is_published.field.name,)
-    filter_horizontal = (models.Item.tags.field.name,)
+    filter_horizontal = (
+        models.Item.tags.field.name,
+        models.Item.item_gallery.field.name,
+    )
     list_display_links = (models.Item.name.field.name,)
 
 
@@ -35,3 +39,13 @@ class CategoryAdmin(admin.ModelAdmin):  # type: ignore[type-arg]
     )
     list_editable = (models.Item.is_published.field.name,)
     list_display_links = (models.Item.name.field.name,)
+
+
+@admin.register(models.MainImage)
+class MainImageAdmin(admin.ModelAdmin):  # type: ignore[type-arg]
+    list_display = (models.MainImage.image.field.name,)
+
+
+@admin.register(models.PhotoGallery)
+class GalleryAdmin(admin.ModelAdmin):  # type: ignore[type-arg]
+    list_display = (models.MainImage.image_tmb,)

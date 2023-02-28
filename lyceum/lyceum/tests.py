@@ -42,7 +42,7 @@ class ReverseMiddlewareTests(TestCase):
         content: List[str] = []
         for _ in range(middlewares.CoffeeTime.times_to_on):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             content.append(request.content.decode())
         self.assertIn(test_string, content)
@@ -55,15 +55,15 @@ class ReverseMiddlewareTests(TestCase):
         contents: List[str] = []
         for _ in range(middlewares.CoffeeTime.times_to_on - 1):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             contents.append(request.content.decode())
-        self.client.get(reverse('test'), data={'test': test_string})
+        self.client.get(reverse('home:test'), data={'test': test_string})
         self.assertEqual(len(set(contents)), 1)
         contents.clear()
         for _ in range(middlewares.CoffeeTime.times_to_on * 2 - 1):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             contents.append(request.content.decode())
         self.assertEqual(
@@ -81,7 +81,7 @@ class ReverseMiddlewareTests(TestCase):
 
         with self.settings(REVERSER_MIDDLEWARE=False):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             self.assertEqual(
                 request.content.decode(),
@@ -91,7 +91,7 @@ class ReverseMiddlewareTests(TestCase):
 
         with self.settings(REVERSER_MIDDLEWARE=True):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             self.assertEqual(
                 request.content.decode(),

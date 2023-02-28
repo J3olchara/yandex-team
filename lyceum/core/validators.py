@@ -24,5 +24,5 @@ class ValidateMustContain:
         fl = (word not in value for word in self.words)
         if all(fl):
             raise ValidationError(
-                f'Text must contain one of words: {self.words}'
+                f'Text must contain one of words: {", ".join(self.words)}'
             )

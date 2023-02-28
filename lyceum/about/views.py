@@ -5,5 +5,5 @@ from django.shortcuts import HttpResponse, render
 
 def description(request: WSGIRequest) -> HttpResponse:
     """returns project description page"""
-    response: HttpResponse = render(request, 'homepage/teapot.html')
+    response: HttpResponse = render(request, 'about/about_us.html')
     return response

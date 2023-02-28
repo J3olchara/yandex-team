@@ -6,16 +6,16 @@ from django.urls import reverse
 class HomepageURLTests(TestCase):
     """HOMEPAGE app test cases"""
 
-    APP_DIR = reverse('home')
+    APP_DIR = reverse('home:home')
 
     def test_homepage_endpoint(self) -> None:
         """test getting response from app dir"""
-        response = Client().get(reverse('home'))
+        response = Client().get(self.APP_DIR)
         self.assertEqual(response.status_code, 200)
 
     def test_coffee_django(self) -> None:
         """test getting response from app dir"""
-        test_path = reverse('coffee')
+        test_path = reverse('home:coffee')
         response = Client().get(test_path)
         self.assertEqual(response.status_code, 418)
         self.assertIn(

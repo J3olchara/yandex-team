@@ -11,10 +11,11 @@ mypy_path = "./lyceum"
 ignore_missing_imports = true
 python_version = 3.9
 disallow_untyped_defs = true
-exclude = "env.*|venv.*|migrations.*"
+exclude = "env.*|venv.*|migrations.*|tests.py"
 plugins = "mypy_django_plugin.main"
 strict = true
 explicit_package_bases = true
+disallow_any_decorated = false
 
 [tool.django-stubs]
 django_settings_module = "lyceum.settings"

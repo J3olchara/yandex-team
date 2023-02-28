@@ -26,7 +26,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install black isort flake8 flake8-import-order flake8-quotes pep8-naming
-        python -m pip install sorl-thumbnail
         python -m pip install -r requirements/dev.txt
     - name: isort
       uses: isort/isort-action@master
@@ -52,6 +51,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install -r requirements/test.txt
+        python -m pip install -r requirements/dev.txt
     - name: Run tests
       run: |
         cd lyceum

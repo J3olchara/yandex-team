@@ -175,7 +175,7 @@ MEDIA_URL = '/media/'
 # ------------------------------Plugins----------------------------
 # -----------------------------------------------------------------------
 
-CKEDITOR_BASEPATH = STATIC_URL + "ckeditor/ckeditor/"
+CKEDITOR_BASEPATH = STATIC_URL + 'ckeditor/ckeditor/'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'Custom',
@@ -198,7 +198,7 @@ CKEDITOR_CONFIGS = {
         ],
     }
 }
-CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
+CKEDITOR_UPLOAD_PATH = 'ckeditor_uploads/'
 
 # -----------------------------------------------------------------------
 # ------------------------------Other Section----------------------------

@@ -2,6 +2,7 @@
 from typing import Any
 
 import core  # noqa: I100
+from ckeditor.fields import RichTextField
 from django.db import models
 from django.utils.html import mark_safe  # type: ignore[attr-defined]
 from django_cleanup import cleanup
@@ -85,7 +86,7 @@ class PhotoGallery(models.Model):  # type: ignore[django-manager-missing]
 class Item(core.models.Base):  # type: ignore[name-defined, misc]
     """Object from the catalog model"""
 
-    text: Any = models.TextField(
+    text: Any = RichTextField(
         verbose_name='описание',
         help_text='Опишите объект',
         validators=[

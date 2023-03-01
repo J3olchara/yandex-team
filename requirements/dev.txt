@@ -8,3 +8,4 @@ django-debug-toolbar~=3.8.1
 django-cleanup~=7.0.0
 sorl-thumbnail~=12.9.0
 pillow~=9.4.0
+django-ckeditor~=6.5.1

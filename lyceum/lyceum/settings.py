@@ -45,8 +45,9 @@ INSTALLED_APPS: List[str] = [
     'about.apps.AboutConfig',
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
-    'sorl.thumbnail',
     'django_cleanup.apps.CleanupConfig',
+    'sorl.thumbnail',
+    'ckeditor',
 ]
 
 # --------------------------------------------------------------------
@@ -169,6 +170,35 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+# -----------------------------------------------------------------------
+# ------------------------------Plugins----------------------------
+# -----------------------------------------------------------------------
+
+CKEDITOR_BASEPATH = STATIC_URL + "ckeditor/ckeditor/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            [
+                'NumberedList',
+                'BulletedList',
+                '-',
+                'Outdent',
+                'Indent',
+                '-',
+                'JustifyLeft',
+                'JustifyCenter',
+                'JustifyRight',
+                'JustifyBlock',
+            ],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source'],
+        ],
+    }
+}
+CKEDITOR_UPLOAD_PATH = "ckeditor_uploads/"
 
 # -----------------------------------------------------------------------
 # ------------------------------Other Section----------------------------

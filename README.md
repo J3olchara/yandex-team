@@ -22,6 +22,8 @@
 >
 > python -m pip install -r requirements\prod.txt
 
+ - install GNU tools from https://mlocati.github.io/articles/gettext-iconv-windows.html
+
 3. Get a secret variables for your application:
   > create .env file with example.env variables. 
 
@@ -64,6 +66,8 @@ Then the application will start on http://localhost:8000
   > - or if you want to run it in production you need to run:
   >
   > python3 -m pip3 install -r requirements/prod.txt
+
+> sudo apt-get install gettext
 
 3. Get a secret variables for your application:
   > create .env file with example.env variables. 

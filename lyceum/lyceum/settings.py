@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
+from django.utils.translation import ugettext_lazy as _
 from dotenv import load_dotenv
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
@@ -66,7 +67,9 @@ COMMON_MIDDLEWARES: List[str] = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-OTHER_MIDDLEWARES: List[str] = []
+OTHER_MIDDLEWARES: List[str] = [
+    'django.middleware.locale.LocaleMiddleware',
+]
 
 if DEBUG:
     OTHER_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
@@ -147,7 +150,7 @@ AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
 # -------------------------Client settings Section-----------------------
 # -----------------------------------------------------------------------
 
-LANGUAGE_CODE: str = 'ru-ru'
+LANGUAGE_CODE: str = 'ru'
 
 TIME_ZONE: str = 'Europe/Moscow'
 
@@ -170,6 +173,21 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+# --------------------------------------------------------------------
+# --------------------------locale Section----------------------------
+# --------------------------------------------------------------------
+
+LOCALE = 'ru'
+LOCALE_FALLBACK = 'en'
+LOCALES = ('ru', 'en')
+LOCALES_PATH = BASE_DIR / 'locale'
+LOCALE_PATHS = (BASE_DIR / 'locale',)
+
+LANGUAGES = (
+    ('ru', _('Russian')),
+    ('en', _('English')),
+)
 
 # -----------------------------------------------------------------------
 # ------------------------------Plugins----------------------------

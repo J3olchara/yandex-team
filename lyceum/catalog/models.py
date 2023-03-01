@@ -9,6 +9,7 @@ from sorl.thumbnail import get_thumbnail
 
 # isort: off
 import core  # noqa: I100
+
 # isort: on
 
 

@@ -1,12 +1,13 @@
 """CATALOG app database models"""
 from typing import Any
 
-import core  # noqa: I100
 from ckeditor.fields import RichTextField
 from django.db import models
 from django.utils.html import mark_safe  # type: ignore[attr-defined]
 from django_cleanup import cleanup
 from sorl.thumbnail import get_thumbnail
+
+import core  # isort: skip
 
 
 class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]

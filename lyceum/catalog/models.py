@@ -7,7 +7,9 @@ from django.utils.html import mark_safe  # type: ignore[attr-defined]
 from django_cleanup import cleanup
 from sorl.thumbnail import get_thumbnail
 
-import core  # isort: skip
+# isort: off
+import core  # noqa: I100
+# isort: on
 
 
 class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]

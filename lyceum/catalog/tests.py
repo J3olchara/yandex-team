@@ -57,31 +57,53 @@ class CatalogURLTests(TestCase):
 class CatalogModelTests(TestCase):
     """tests valid model working"""
 
+    def setUp(self) -> None:
+        super(CatalogModelTests, self).setUp()
+        self.category = models.Category.objects.create(
+            is_published=True,
+            name='test_category',
+            slug='test_category_slug',
+            weight=75,
+        )
+        self.tag = models.Tag.objects.create(
+            is_published=True,
+            name='test_tag',
+            slug='test_tag_slug',
+        )
+        self.item = models.Item.objects.create(
+            is_published=True,
+            name='test_name',
+            text='some_test_text роскошно',
+            main_image='test_image.jpg',
+        )
+        self.main_image = models.PhotoGallery.objects.create(
+            image='test.jpg',
+            item=self.item,
+        )
+
     def test_base_slug_abstract_class(self) -> None:
         """test field validators"""
         with self.assertRaises(exceptions.ValidationError):
-            self.tag = models.Tag(name='1' * 151, slug='test')
-            self.tag.full_clean()
-            self.tag.save()
-            self.tag = models.Tag(name='test', slug='1' * 201)
-            self.tag.full_clean()
-            self.tag.save()
-        self.tag = models.Tag(name='test', slug='test')
+            tag = models.Tag(name='1' * 151, slug='test')
+            tag.full_clean()
+            tag.save()
+            tag = models.Tag(name='test', slug='1' * 201)
+            tag.full_clean()
+            tag.save()
         self.assertEqual(self.tag.is_published, True)
-        self.tag.save()
         with transaction.atomic():
             with self.assertRaises(utils.IntegrityError):
                 models.Tag.objects.create(
-                    name='test',
-                    slug='test',
+                    name='test_tag',
+                    slug='test_tag_slug',
                 )
 
     def test_category(self) -> None:
-        self.category = models.Category(
+        category = models.Category(
             name='test',
             slug='test',
         )
-        self.assertEqual(self.category.weight, 100)
+        self.assertEqual(category.weight, 100)
 
     @parameterized.expand(  # type: ignore[misc]
         [
@@ -94,26 +116,21 @@ class CatalogModelTests(TestCase):
         ]
     )
     def test_item(self, bad_test: str, good_test: str) -> None:
-        self.category = models.Category.objects.create(
-            name='test',
-            slug='test',
-        )
-        main_image = models.MainImage.objects.create(image='test.jpg')
         with self.assertRaises(exceptions.ValidationError):
-            self.item = models.Item(
+            item = models.Item(
                 name='test',
                 text=bad_test,
                 category=self.category,
-                main_image=main_image,
+                main_image='test.jpg',
             )
-            self.item.full_clean()
-        self.item = models.Item(
+            item.full_clean()
+        item = models.Item(
             name='test',
             text=good_test,
             category=self.category,
-            main_image=main_image,
+            main_image='test.jpg',
         )
-        self.item.full_clean()
+        item.full_clean()
 
     @parameterized.expand(  # type: ignore[misc]
         [

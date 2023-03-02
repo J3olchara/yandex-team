@@ -4,6 +4,7 @@ from typing import Any, Dict, Optional
 
 
 def get_normalize_table() -> Dict[str, Optional[Any]]:
+    """returns table for name-normalizing in model Item"""
     tab = dict.fromkeys(punctuation)
     alphabet = {  # rus: eng
         'А': 'A',

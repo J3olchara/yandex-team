@@ -1,3 +1,4 @@
+"""Some tests for Core App"""
 from django.core import exceptions
 from django.test import TestCase
 from parameterized import parameterized

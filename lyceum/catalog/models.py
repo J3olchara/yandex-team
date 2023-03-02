@@ -14,7 +14,16 @@ import core  # noqa: I100
 
 
 class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]
-    """TAG model for Item"""
+    """
+    TAG model for Item
+
+    is_published: Bool = True. Explains that post/item was published
+    name: char[150]. Explains name of this post/item
+    slug: char[200]. Explains unique item/post ID
+    normalized_name: char[150]. Normalized name field
+        without registry, punctuation and other.
+        auto-creates from name field.
+    """
 
     class Meta:
         verbose_name = 'тэг'
@@ -25,7 +34,17 @@ class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]
 
 
 class Category(core.models.BaseSlug):  # type: ignore[name-defined, misc]
-    """CATEGORY model for Item"""
+    """
+    CATEGORY model for Item
+
+    is_published: Bool = True. Explains that post/item was published
+    name: char[150]. Explains name of this post/item
+    slug: char[200]. Explains unique item/post ID
+    normalized_name: char[150]. Normalized name field
+        without registry, punctuation and other.
+        auto-creates from name field.
+    weight: Item weight field (0 -> 32768)
+    """
 
     weight: Any = models.PositiveSmallIntegerField(
         verbose_name='вес', default=100
@@ -39,44 +58,37 @@ class Category(core.models.BaseSlug):  # type: ignore[name-defined, misc]
         return self.name[:40]
 
 
-class MainImage(models.Model):  # type: ignore[django-manager-missing]
+class PhotoGallery(models.Model):
+    """
+    PhotoGallery Model for Item
+
+    image: second-needed image for gallery
+    item: FK to Item that uses this image
+
+    """
+
     image: Any = models.ImageField(
-        verbose_name='Фото',
-        help_text='Загрузите фото',
-        upload_to='uploads/main_images/',
-    )
-
-    def get_image_px(
-        self, px: str = '400x300', crop: str = 'center', quality: int = 51
-    ) -> Any:
-        return get_thumbnail(self.image, px, crop=crop, quality=quality)
-
-    def image_tmb(self) -> Any:
-        return mark_safe(
-            f'<img src="{self.image.url}" width="16" height="16">'
-        )
-
-    def __str__(self) -> str:
-        return str(self.image.url)
-
-    class Meta:
-        verbose_name = 'Главное изображение'
-        verbose_name_plural = 'Главные изображения'
-
-
-class PhotoGallery(models.Model):  # type: ignore[django-manager-missing]
-    image: Any = models.ImageField(
-        verbose_name='Фото',
+        verbose_name='фото',
         help_text='Загрузите фото',
         upload_to='uploads/gallery/',
     )
 
+    item: Any = models.ForeignKey('Item', on_delete=models.CASCADE, blank=True)
+
     def get_image_px(
         self, px: str = '400x300', crop: str = 'center', quality: int = 51
     ) -> Any:
+        """
+        crops the picture
+
+        px: string. format of the new image (1200x400, 1200)
+        crop: string. crop centering
+        quality: integer. quality of the new image
+        """
         return get_thumbnail(self.image, px, crop=crop, quality=quality)
 
     def image_tmb(self) -> Any:
+        """returns HTML picture for Item"""
         return mark_safe(f'<img src="{self.image.url}" width="50">')
 
     def __str__(self) -> str:
@@ -84,11 +96,22 @@ class PhotoGallery(models.Model):  # type: ignore[django-manager-missing]
 
     class Meta:
         verbose_name = 'Галерея'
+        verbose_name_plural = 'Галерея'
 
 
 @cleanup.select
 class Item(core.models.Base):  # type: ignore[name-defined, misc]
-    """Object from the catalog model"""
+    """
+    Item database object
+
+    is_published: Bool = True. Explains that post/item was published
+    name: char[150]. Explains name of this post/item
+    text: string. Explains item description.
+        Must contain one from words: 'превосходно' or 'роскошно'.
+    category: FK to Category. Explains item category
+        like kitchen instrument or something else.
+    main_image: ImageFile. Main Item picture that user firstly see in catalog
+    """
 
     text: Any = RichTextField(
         verbose_name='описание',
@@ -111,25 +134,18 @@ class Item(core.models.Base):  # type: ignore[name-defined, misc]
         verbose_name='тэги',
     )
 
-    main_image: Any = models.ForeignKey(
-        MainImage,
+    main_image: Any = models.ImageField(
         verbose_name='основное фото',
-        help_text='Выберите основное фото, '
-        'для загрузки перейдите в таблицу Главные изображения',
-        on_delete=models.CASCADE,
-    )
-
-    item_gallery: Any = models.ManyToManyField(
-        'PhotoGallery',
-        verbose_name='галерея',
+        help_text='Выберите основное фото товара',
     )
 
     def image_tmb(self) -> Any:
         if self.main_image:
-            return mark_safe(
-                f'<img src="{self.main_image.image.url}" width="50">'
-            )
+            return mark_safe(f'<img src="{self.main_image.url}" width="50">')
         return 'Изображения нет'
+
+    def full_clean(self):
+        return super(Item, self).full_clean()
 
     class Meta:
         verbose_name = 'товар'

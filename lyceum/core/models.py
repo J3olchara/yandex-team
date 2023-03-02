@@ -9,6 +9,14 @@ from . import validators as custom_validators
 
 
 class Base(models.Model):
+    """
+    BASE Abstract class for posts, items and other
+
+    is_published: Bool = True. Explains that post/item was published
+    name: char[150]. Explains name of this post/item
+
+    """
+
     is_published: Any = models.BooleanField(
         verbose_name='опубликован',
         help_text='Да/Нет',
@@ -28,6 +36,18 @@ class Base(models.Model):
 
 
 class BaseSlug(Base):
+    """
+    BASESlug Abstract class for tags, categories and other
+
+    is_published: Bool = True. Explains that post/item was published
+    name: char[150]. Explains name of this post/item
+    slug: char[200]. Explains unique item/post ID
+    normalized_name: char[150]. Normalized name field
+        without registry, punctuation and other.
+        auto-creates from name field.
+
+    """
+
     slug: Any = models.CharField(
         verbose_name='уникальный артикул',
         help_text='Придумайте артикул'

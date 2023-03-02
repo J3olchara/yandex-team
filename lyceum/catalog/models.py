@@ -144,7 +144,7 @@ class Item(core.models.Base):  # type: ignore[name-defined, misc]
             return mark_safe(f'<img src="{self.main_image.url}" width="50">')
         return 'Изображения нет'
 
-    def full_clean(self):
+    def full_clean(self) -> Any:
         return super(Item, self).full_clean()
 
     class Meta:

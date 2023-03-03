@@ -74,7 +74,7 @@ class CatalogModelTests(TestCase):
             is_published=True,
             name='test_name',
             text='some_test_text роскошно',
-            main_image='test_image.jpg',
+            image='test_image.jpg',
         )
         self.main_image = models.PhotoGallery.objects.create(
             image='test.jpg',
@@ -121,14 +121,14 @@ class CatalogModelTests(TestCase):
                 name='test',
                 text=bad_test,
                 category=self.category,
-                main_image='test.jpg',
+                image='test.jpg',
             )
             item.full_clean()
         item = models.Item(
             name='test',
             text=good_test,
             category=self.category,
-            main_image='test.jpg',
+            image='test.jpg',
         )
         item.full_clean()
 

@@ -1,4 +1,8 @@
-"""Django settings for lyceum project."""
+"""
+Django settings for lyceum project.
+
+!!!!!!!!!!!!!DO NOT ENABLE DEBUG IN PRODUCTION!!!!!!!!!!!!!!!
+"""
 import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union

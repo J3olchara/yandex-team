@@ -84,6 +84,7 @@ class ItemManager(models.Manager):  # type: ignore[type-arg]
         return (
             self.get_queryset()
             .filter(**kwargs)
+            .only('name', 'text', 'id', 'category', 'image')
             .select_related('category')
             .prefetch_related(
                 models.Prefetch(
@@ -93,7 +94,6 @@ class ItemManager(models.Manager):  # type: ignore[type-arg]
                     ),
                 )
             )
-            .only('name', 'text', 'id', 'category', 'image')
         )
 
 

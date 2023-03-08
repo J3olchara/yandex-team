@@ -1,16 +1,15 @@
 {% load static %}
 {% load support %}
-{% load sorl_thumbnail %}
 <div class="catalog-card-wrapper">
 	<div id="catalog--item-{{ item.id }}" class="catalog-item"
 	     style="background-image: url('{% get_image_px_by_url item.image px='300x400' crop='center' quality=100 %}');">
 		<div class="catalog-header-blur"></div>
 		<div class="catalog-item-header">
-			<h2 class="catalog-item-name">{{ item.name }}</h2>
+			<h2 class="catalog-item-name">{{ item.name.capitalize }}</h2>
 			<span class="catalog-item-tags">
-				{% with item_tags_sub=item.tags.all|slice:':3' %}
+				{% with item_tags_sub=item.tags__name|slice:':3' %}
 				{% for tag in item_tags_sub %}
-					<span class="catalog-item-tag">{{ tag.name }}</span>
+					<span class="catalog-item-tag">{{ tag }}</span>
 				{% empty %}
 				{% endfor %}
 				{% endwith %}
@@ -18,7 +17,7 @@
 		</div>
 		<div class="catalog-item-navigation go-to-{{ item.id }}" data-url-redirect="{% url 'catalog:int_item_detail' item.id %}">
 			<script src="{% static 'js/catalog-item.js' %}"></script>
-			<div class="catalog-item-text item--{{ item.id }}">{{ item.get_sub_text_words|safe }}</div>
+			<div class="catalog-item-text item--{{ item.id }}">{{ item.text|get_words_slice:'10'|safe }}</div>
 			<div class="catalog-go-to-item-btn redirect-to-item-{{ item.id }}">
 				<svg xmlns="http://www.w3.org/2000/svg" width="31px" height="31px" viewBox="0 0 512 512">
 					<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"

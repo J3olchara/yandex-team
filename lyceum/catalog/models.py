@@ -4,10 +4,12 @@ Database models from Catalog app
 There is models that helping users to get information from catalog
 like items descriptions, items, their tags, categories and other
 """
-from typing import Any, Union
+from collections import OrderedDict
+from typing import Any, Dict, List, Union
 
 from ckeditor.fields import RichTextField
 from django.db import models
+from django.db.models import QuerySet
 from django_cleanup import cleanup
 
 # isort: off
@@ -80,19 +82,41 @@ class PhotoGallery(core.models.Image):  # type: ignore[name-defined, misc]
 
 
 class ItemManager(models.Manager):  # type: ignore[type-arg]
-    def published(self, **kwargs: Any) -> Any:
+    def __init__(self) -> None:
+        super(ItemManager, self).__init__()
+
+    def published(self, **kwargs: Any) -> Union[QuerySet[Any], Any]:
+        prefetch = models.Prefetch(
+            'tags',
+            queryset=Tag.objects.filter(is_published=True).only(
+                'name',
+            ),
+            to_attr='tags',
+        )
         return (
             self.get_queryset()
             .filter(**kwargs)
-            .only('name', 'text', 'id', 'category', 'image')
             .select_related('category')
-            .prefetch_related(
-                models.Prefetch(
-                    'tags',
-                    queryset=Tag.objects.filter(is_published=True).only(
-                        'name'
-                    ),
-                )
+            .prefetch_related(prefetch)
+            .values(
+                'name', 'text', 'id', 'category__name', 'image', 'tags__name'
+            )
+        )
+
+    def item_detail(self, item_id: int) -> Union[QuerySet[Any], Any]:
+        prefetch = models.Prefetch(
+            'tags',
+            queryset=Tag.objects.filter(is_published=True).only(
+                'name',
+            ),
+        )
+        return (
+            self.get_queryset()
+            .filter(id=item_id)
+            .select_related('category')
+            .prefetch_related(prefetch)
+            .values(
+                'name', 'text', 'category__name', 'image', 'tags__name', 'id'
             )
         )
 

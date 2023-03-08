@@ -2,8 +2,12 @@
 
 .catalog-items {
     display: flex;
-    justify-content: center;
-    grid-gap: 100px;
+    justify-content: left;
+    grid-row-gap: 50px;
+    grid-column-gap: 150px;
+    padding-bottom: 50px;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .catalog-item {
@@ -102,7 +106,8 @@
     font-family: 'Inter', sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    padding: 0 2px;
+    font-size: 10px;
     line-height: 15px;
     overflow: hidden;
 }
@@ -111,4 +116,16 @@
     text-align: center;
     left: 0;
     width: 100%;
+}
+.category-group-header {
+    height: fit-content;
+    font-family: 'Inter', sans-serif;
+    display: inline-block;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 36px;
+    color: #a10000;
+    margin: 0;
+    padding: 0 0 20px 0;
 }

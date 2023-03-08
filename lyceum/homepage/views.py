@@ -2,6 +2,7 @@
 from typing import List
 
 from django.core.handlers.wsgi import WSGIRequest
+from django.db.models.query import QuerySet
 from django.http import Http404
 from django.shortcuts import HttpResponse, render
 
@@ -14,7 +15,7 @@ import catalog  # noqa: I100
 def home(request: WSGIRequest) -> HttpResponse:
     """returns homepage"""
     template = 'homepage/index.html'
-    items: List[  # type: ignore[name-defined]
+    items: QuerySet[  # type: ignore[name-defined]
         catalog.models.Item
     ] = catalog.models.Item.objects.published(  # type: ignore[attr-defined]
         is_published=True, is_on_main=True

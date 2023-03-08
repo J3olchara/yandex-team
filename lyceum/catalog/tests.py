@@ -1,6 +1,14 @@
 """CATALOG app tests"""
+from typing import List
+
+import catalog.models
+import django.http
 from django.core import exceptions
 from django.db import transaction, utils
+from django.db.models.query import QuerySet
+from django.db.models.sql.query import Query
+from django.forms.models import model_to_dict
+from django.shortcuts import render
 from django.test import Client
 from django.urls import NoReverseMatch, reverse
 from parameterized import parameterized
@@ -137,13 +145,20 @@ class CatalogShowTests(core.tests.SetupData):
     tests that user sees only that he is able to see
     """
 
+    def group_query_set(self, qs, field_name, pk):
+        return super(CatalogShowTests, self).group_query_set(
+            qs, field_name, pk
+        )
+
     def test_catalog_correct_context(self):
         """tests that user have got an items list"""
         test_path = reverse('catalog:catalog')
         response = Client().get(test_path)
-        items = response.context['items']
+        items = self.group_query_set(
+            response.context['items'], 'tags__name', 'id'
+        )
         self.assertEqual(
-            items.count(), 3
+            len(items), 3
         )  # is_on_main True, False, False with is_published=True
 
     def test_item_detail_context(self):
@@ -153,4 +168,44 @@ class CatalogShowTests(core.tests.SetupData):
             'catalog:int_item_detail', kwargs={'item_id': item.id}
         )
         response = Client().get(test_path)
-        self.assertEqual(response.context['item'], item)
+        grouped_item = self.group_query_set(
+            response.context['item'], 'tags__name', 'id'
+        )[0]
+        self.assertEqual(
+            grouped_item.keys(),
+            {'name', 'text', 'category__name', 'image', 'tags__name', 'id'},
+        )
+
+    def test_sql_fields(self):
+        items: QuerySet = self.group_query_set(
+            catalog.models.Item.objects.published(), 'tags__name', 'id'
+        )
+        self.assertEqual(
+            items[0].keys(),
+            {'name', 'text', 'id', 'category__name', 'image', 'tags__name'},
+        )
+
+    def test_sql_fields_item_list(self):
+        response = Client().get(reverse('catalog:catalog'))
+        item = self.group_query_set(
+            response.context['items'], 'tags__name', 'id'
+        )[0]
+        self.assertEqual(
+            set(item.keys()),
+            {'name', 'text', 'id', 'category__name', 'image', 'tags__name'},
+        )
+
+    def test_sql_field_item_detail(self):
+        response = Client().get(
+            reverse(
+                'catalog:int_item_detail',
+                kwargs={'item_id': self.item_published.id},
+            )
+        )
+        item = self.group_query_set(
+            response.context['item'], 'tags__name', 'id'
+        )[0]
+        self.assertEqual(
+            set(item.keys()),
+            {'name', 'text', 'category__name', 'image', 'tags__name', 'id'},
+        )

@@ -1,16 +1,27 @@
 {% extends "core/base.html" %}
 {% load static %}
+{% load support %}
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/catalog.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="catalog-items">
-	{% for item in items %}
-	{% include "catalog/includes/item_card.html" %}
-	{% empty %}
-	<h2>Извините, но на пока что каталог пуст :(</h2>
+<div class="catalog_categories">
+	{% with grouped_items=items|group:'tags__name,id' %}
+	{% regroup grouped_items by category__name as categories %}
+	{% for category in categories %}
+		{% if category.list %}
+			<div class="category-block category-{{ category.grouper }}">
+				<h2 class="category-group-header category-{{ category.grouper }}">{{ category.grouper }}</h2>
+				<div class="catalog-items category-{{ category.grouper.name }}">
+					{% for item in category.list %}
+						{% include "catalog/includes/item_card.html" %}
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
 	{% endfor %}
+	{% endwith %}
 </div>
 {% endblock %}

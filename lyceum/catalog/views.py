@@ -1,7 +1,9 @@
 """CATALOG app pages views"""
-from typing import List
+from typing import Any, Dict, List
 
+import catalog.models
 from django.core.handlers.wsgi import WSGIRequest
+from django.db.models.query import QuerySet
 from django.shortcuts import HttpResponse, get_object_or_404, render
 
 from . import models
@@ -10,9 +12,9 @@ from . import models
 def item_list(request: WSGIRequest) -> HttpResponse:
     """returns item list page"""
     template = 'catalog/catalog.html'
-    items: List[models.Item] = models.Item.objects.published(
-        is_published=True
-    ).order_by('category', 'pk')
+    items: Any = models.Item.objects.published(is_published=True).order_by(
+        'category__name', 'id'
+    )
     data = {
         'items': items,
     }
@@ -23,12 +25,9 @@ def item_list(request: WSGIRequest) -> HttpResponse:
 def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
     """returns item $item_id description"""
     template = 'catalog/item_page.html'
-    item: models.Item = get_object_or_404(
-        models.Item.objects.published(),
-        id=item_id,
-    )
+    item: Any = models.Item.objects.item_detail(item_id)
     images: List[models.PhotoGallery] = models.PhotoGallery.objects.filter(
-        item=item
+        item=item_id
     )
     data = {
         'item': item,

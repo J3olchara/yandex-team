@@ -5,6 +5,8 @@ window.onload = function() {
         let url = navigation[i].getAttribute('data-url-redirect');
         navigation[i].addEventListener('click', Redirect(url));
     }
+    clockUpdate();
+    setInterval(clockUpdate, 1000);
 }
 
 function Redirect(url) {

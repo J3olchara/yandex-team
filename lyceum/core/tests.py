@@ -1,8 +1,10 @@
 """Some tests for Core App"""
 import shutil
+from typing import Any, List
 
 from django.conf import settings
 from django.core import exceptions
+from django.db.models import QuerySet
 from django.test import TestCase
 from parameterized import parameterized
 
@@ -112,6 +114,29 @@ class SetupData(TestCase):
         self.image.clean()
         self.image.save()
         return super(SetupData, self).setUp()
+
+    def group_query_set(
+        self, qs: QuerySet[Any], field_name: str, pk: str
+    ) -> List[Any]:
+        j = 0
+        i = 0
+        grouped = []
+        if qs.count():
+            grouped.append(qs[0])
+            grouped[j][field_name] = [
+                grouped[j][field_name],
+            ]
+            while i < qs.count() - 1:
+                if qs[i][pk] != qs[i + 1][pk]:
+                    grouped.append(qs[i + 1])
+                    grouped[j][field_name] = [
+                        qs[i + 1][field_name],
+                    ]
+                    j += 1
+                else:
+                    grouped[j - 1][field_name].append(qs[i + 1][field_name])
+                i += 1
+        return grouped
 
 
 class ValidatorsTest(TestCase):

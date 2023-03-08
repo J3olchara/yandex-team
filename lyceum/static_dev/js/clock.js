@@ -1,8 +1,3 @@
-window.onload = function() {
-  clockUpdate();
-  setInterval(clockUpdate, 1000);
-}
-
 function clockUpdate() {
   let date = new Date();
   const clock = window.document.getElementsByClassName('footer-clock')[0];

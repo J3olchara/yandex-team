@@ -1,12 +1,28 @@
 """HOMEPAGE app pages views"""
+from typing import List
+
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import Http404
 from django.shortcuts import HttpResponse, render
 
+# isort: off
+import catalog  # noqa: I100
+
+# isort: on
+
 
 def home(request: WSGIRequest) -> HttpResponse:
     """returns homepage"""
-    response: HttpResponse = render(request, 'homepage/index.html')
+    template = 'homepage/index.html'
+    items: List[  # type: ignore[name-defined]
+        catalog.models.Item
+    ] = catalog.models.Item.objects.published(  # type: ignore[attr-defined]
+        is_published=True, is_on_main=True
+    )
+    data = {
+        'items': items,
+    }
+    response: HttpResponse = render(request, template, data)
     return response
 
 

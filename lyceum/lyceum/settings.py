@@ -40,19 +40,19 @@ REVERSER_MIDDLEWARE = os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
 # --------------------------------------------------------------------
 
 INSTALLED_APPS: List[str] = [
+    'core.apps.CoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.CoreConfig',
-    'about.apps.AboutConfig',
-    'catalog.apps.CatalogConfig',
-    'homepage.apps.HomepageConfig',
     'django_cleanup.apps.CleanupConfig',
     'sorl.thumbnail',
     'ckeditor',
+    'about.apps.AboutConfig',
+    'catalog.apps.CatalogConfig',
+    'homepage.apps.HomepageConfig',
 ]
 
 # --------------------------------------------------------------------
@@ -170,8 +170,10 @@ USE_TZ: bool = True
 
 STATIC_URL: str = '/static/'
 
+STATICFILES_DIRS_DEV_DIR = BASE_DIR / 'static_dev'
+
 STATICFILES_DIRS = [
-    BASE_DIR / 'static_dev',
+    STATICFILES_DIRS_DEV_DIR,
 ]
 
 

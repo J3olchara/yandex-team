@@ -79,6 +79,24 @@ class PhotoGallery(core.models.Image):  # type: ignore[name-defined, misc]
         verbose_name_plural = 'Галерея'
 
 
+class ItemManager(models.Manager):  # type: ignore[type-arg]
+    def published(self, **kwargs: Any) -> Any:
+        return (
+            self.get_queryset()
+            .filter(**kwargs)
+            .select_related('category')
+            .prefetch_related(
+                models.Prefetch(
+                    'tags',
+                    queryset=Tag.objects.filter(is_published=True).only(
+                        'name'
+                    ),
+                )
+            )
+            .only('name', 'text', 'id', 'category', 'image')
+        )
+
+
 @cleanup.select
 class Item(
     core.models.Base, core.models.Image  # type: ignore[name-defined, misc]
@@ -92,8 +110,11 @@ class Item(
         Must contain one from words: 'превосходно' or 'роскошно'.
     category: FK to Category. Explains item category
         like kitchen instrument or something else.
-    main_image: ImageFile. Main Item picture that user firstly see in catalog
+    image: ImageFile. Main Item picture that user firstly see in catalog
+    is_on_main: Bool = False. Makes item visible on Main page.
     """
+
+    objects = ItemManager()
 
     text: Union[str, 'RichTextField[Any, Any]'] = RichTextField(
         verbose_name='описание',
@@ -120,9 +141,26 @@ class Item(
         verbose_name='тэги',
     )
 
+    is_on_main: Union[
+        bool, 'models.BooleanField[Any, Any]'
+    ] = models.BooleanField(
+        verbose_name='показать на главной',
+        help_text='показывать товар на главной странице?',
+        default=False,
+    )
+
+    def get_sub_text_words(self, cnt: int = 10) -> str:
+        words = self.text.split(maxsplit=cnt)[:-1]
+        return ' '.join(words)
+
+    def get_comma_separated_tags(self) -> str:
+        tags = (tag.name for tag in self.tags.all())
+        return ', '.join(tags)
+
     class Meta:
+        ordering = ('name', 'pk')
         verbose_name = 'товар'
         verbose_name_plural = 'товары'
 
     def __str__(self) -> str:
-        return str(self.name[:15])
+        return str(self.id) + ' ' + str(self.name[:15])

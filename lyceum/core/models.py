@@ -111,7 +111,7 @@ class Image(models.Model):
     )
 
     def get_image_px(
-        self, px: str = '400x300', crop: str = 'center', quality: int = 51
+        self, px: str = '300x400', crop: str = 'center', quality: int = 70
     ) -> Any:
         """
         crops the picture

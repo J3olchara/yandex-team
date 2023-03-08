@@ -1,4 +1,5 @@
 """HOMEPAGE app tests"""
+import core
 from django.test import Client, TestCase
 from django.urls import reverse
 
@@ -23,3 +24,17 @@ class HomepageURLTests(TestCase):
             response.content,
             response.content.decode(),
         )
+
+
+class CatalogShowTests(core.tests.SetupData):
+    """
+    Catalog views tests
+
+    tests that user sees only that he is able to see
+    """
+
+    def test_home_page_correct_context(self):
+        """tests that user have got an items list"""
+        test_path = reverse('home:home')
+        response = Client().get(test_path)
+        self.assertIn('items', response.context)

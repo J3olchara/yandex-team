@@ -12,7 +12,7 @@ body {
     height: 100vh;
 }
 .container {
-    min-height: 100vh;
+    min-height: 100%;
     align-content: center;
     position: relative;
 }
@@ -21,11 +21,9 @@ body {
     box-sizing: border-box;
     padding: 30px 0 30px 0;
     min-height: 62vh;
-    margin-bottom: -1px;
 }
 .footer {
     position: relative;
-    box-sizing: border-box;
     padding-top: 10px;
     border-top: darkgrey;
     height: 200px;

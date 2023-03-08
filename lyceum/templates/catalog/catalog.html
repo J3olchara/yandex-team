@@ -1,4 +1,16 @@
 {% extends "core/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/catalog.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Каталог</h1>
+<div class="catalog-items">
+	{% for item in items %}
+	{% include "catalog/includes/item_card.html" %}
+	{% empty %}
+	<h2>Извините, но на пока что каталог пуст :(</h2>
+	{% endfor %}
+</div>
 {% endblock %}

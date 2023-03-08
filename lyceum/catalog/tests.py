@@ -1,15 +1,19 @@
 """CATALOG app tests"""
-
 from django.core import exceptions
 from django.db import transaction, utils
-from django.test import Client, TestCase
+from django.test import Client
 from django.urls import NoReverseMatch, reverse
 from parameterized import parameterized
 
 from . import models
 
+# isort: off
+import core  # noqa: I100
 
-class CatalogURLTests(TestCase):
+# isort: on
+
+
+class CatalogURLTests(core.tests.SetupData):
     """CATALOG app test cases"""
 
     APP_DIR = reverse('catalog:catalog')
@@ -21,65 +25,41 @@ class CatalogURLTests(TestCase):
 
     def test_catalog_item_endpoint_and_item_id(self) -> None:
         """test status code 200 from catalog and checking given item_id"""
-        item_id = '10'
-        test_path = self.APP_DIR + item_id + '/'
-        response = Client().get(test_path)
-        self.assertIn(
-            bytes(item_id, 'utf-8'), response.content, response.content
+        item_id = self.item_on_main.id
+        test_path = reverse(
+            'catalog:int_item_detail', kwargs={'item_id': item_id}
         )
+        response = Client().get(test_path)
+        self.assertIn(str(item_id).encode(), response.content, test_path)
         self.assertEqual(response.status_code, 200)
 
-    @parameterized.expand([[10, -10], [1, 0]])
+    @parameterized.expand([[2, -10], [1, 0]])
     def test_re_path(self, test_200: int, test_404: int) -> None:
         """testing regular expression path from catalog"""
         dir_200 = reverse(
-            'catalog:re_item_deatil', kwargs={'item_id': test_200}
+            'catalog:re_item_detail', kwargs={'item_id': test_200}
         )
         response = Client().get(dir_200)
         self.assertEqual(response.status_code, 200, test_200)
         self.assertIn(str(test_200).encode(), response.content)
         with self.assertRaises(NoReverseMatch):
-            reverse('catalog:re_item_deatil', kwargs={'item_id': test_404})
+            reverse('catalog:re_item_detail', kwargs={'item_id': test_404})
 
-    @parameterized.expand([[10, -10], [1, 0]])
+    @parameterized.expand([[2, -10], [1, 0]])
     def test_natnum_converter(self, test_200: int, test_404: int) -> None:
         """tests self written converter for /catalog/converters/<natnum>"""
         dir_200 = reverse(
-            'catalog:conv_item_deatil', kwargs={'item_id': test_200}
+            'catalog:conv_item_detail', kwargs={'item_id': test_200}
         )
         response = Client().get(dir_200)
         self.assertEqual(response.status_code, 200, test_200)
         self.assertIn(str(test_200).encode(), response.content)
         with self.assertRaises(NoReverseMatch):
-            reverse('catalog:conv_item_deatil', kwargs={'item_id': test_404})
+            reverse('catalog:conv_item_detail', kwargs={'item_id': test_404})
 
 
-class CatalogModelTests(TestCase):
+class CatalogModelTests(core.tests.SetupData):
     """tests valid model working"""
-
-    def setUp(self) -> None:
-        super(CatalogModelTests, self).setUp()
-        self.category = models.Category.objects.create(
-            is_published=True,
-            name='test_category',
-            slug='test_category_slug',
-            weight=75,
-        )
-        self.tag = models.Tag.objects.create(
-            is_published=True,
-            name='test_tag',
-            slug='test_tag_slug',
-        )
-        self.item = models.Item.objects.create(
-            is_published=True,
-            name='test_name',
-            text='some_test_text роскошно',
-            image='test_image.jpg',
-        )
-        self.main_image = models.PhotoGallery.objects.create(
-            image='test.jpg',
-            item=self.item,
-        )
 
     def test_base_slug_abstract_class(self) -> None:
         """test field validators"""
@@ -90,12 +70,12 @@ class CatalogModelTests(TestCase):
             tag = models.Tag(name='test', slug='1' * 201)
             tag.full_clean()
             tag.save()
-        self.assertEqual(self.tag.is_published, True)
+        self.assertEqual(self.tag_published.is_published, True)
         with transaction.atomic():
             with self.assertRaises(utils.IntegrityError):
                 models.Tag.objects.create(
-                    name='test_tag',
-                    slug='test_tag_slug',
+                    name=self.tag_published.name,
+                    slug=self.tag_published.slug,
                 )
 
     def test_category(self) -> None:
@@ -120,14 +100,14 @@ class CatalogModelTests(TestCase):
             item = models.Item(
                 name='test',
                 text=bad_test,
-                category=self.category,
+                category=self.category_published,
                 image='test.jpg',
             )
             item.full_clean()
         item = models.Item(
             name='test',
             text=good_test,
-            category=self.category,
+            category=self.category_published,
             image='test.jpg',
         )
         item.full_clean()
@@ -148,3 +128,29 @@ class CatalogModelTests(TestCase):
             with self.assertRaises(utils.IntegrityError):
                 models.Tag.objects.create(name=name, slug='testslug')
         models.Tag.objects.create(name='test name', slug='testslug')
+
+
+class CatalogShowTests(core.tests.SetupData):
+    """
+    Catalog views tests
+
+    tests that user sees only that he is able to see
+    """
+
+    def test_catalog_correct_context(self):
+        """tests that user have got an items list"""
+        test_path = reverse('catalog:catalog')
+        response = Client().get(test_path)
+        items = response.context['items']
+        self.assertEqual(
+            items.count(), 3
+        )  # is_on_main True, False, False with is_published=True
+
+    def test_item_detail_context(self):
+        """tests that user hae got an item detail"""
+        item = self.item_on_main
+        test_path = reverse(
+            'catalog:int_item_detail', kwargs={'item_id': item.id}
+        )
+        response = Client().get(test_path)
+        self.assertEqual(response.context['item'], item)

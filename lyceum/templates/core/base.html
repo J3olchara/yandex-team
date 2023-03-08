@@ -27,7 +27,10 @@
 	      </a>
 	      {% with request.resolver_match.view_name as view_name %}
 	      <ul class="nav nav-pills py-6 align-items-center">
-	        <li class="nav-item"><a href="{% url 'home:home' %}" class="nav-link {% if view_name == 'home:home' %}active{% endif %}" aria-current="page">{% trans 'Главная' %}</a></li>
+	        {% if user.is_superuser %}
+	        <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link {% if view_name == 'admin' %}active{% endif %}" aria-current="page">{% trans 'Админ панель' %}</a></li>
+	        {% endif %}
+		      <li class="nav-item"><a href="{% url 'home:home' %}" class="nav-link {% if view_name == 'home:home' %}active{% endif %}" aria-current="page">{% trans 'Главная' %}</a></li>
 	        <li class="nav-item"><a href="{% url 'catalog:catalog' %}" class="nav-link {% if view_name == 'catalog:catalog' %}active{% endif %}">{% trans 'Каталог' %}</a></li>
 	        <li class="nav-item"><a href="{% url 'about:about' %}" class="nav-link {% if view_name == 'about:about' %}active{% endif %}">{% trans 'О нас' %}</a></li>
 	        <li class="change_language">

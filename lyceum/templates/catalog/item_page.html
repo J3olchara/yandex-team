@@ -20,6 +20,7 @@
 	  {% with photo_px='500x400' %}
 	    <div class="carousel-item active">
 	      <img class="d-block w-100" src="{% get_image_px_by_url image=grouped_item.image px=photo_px crop='center' quality=100 %}" alt="First slide">
+		    <a href="" download="{% url grouped_item.image %}"></a>
 	    </div>
 		  {% for image in images %}
 	    <div class="carousel-item">

@@ -1,14 +1,9 @@
 """CATALOG app tests"""
-from typing import List
 
 import catalog.models
-import django.http
 from django.core import exceptions
 from django.db import transaction, utils
 from django.db.models.query import QuerySet
-from django.db.models.sql.query import Query
-from django.forms.models import model_to_dict
-from django.shortcuts import render
 from django.test import Client
 from django.urls import NoReverseMatch, reverse
 from parameterized import parameterized

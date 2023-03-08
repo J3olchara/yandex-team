@@ -1,10 +1,8 @@
 """CATALOG app pages views"""
-from typing import Any, Dict, List
+from typing import Any, List
 
-import catalog.models
 from django.core.handlers.wsgi import WSGIRequest
-from django.db.models.query import QuerySet
-from django.shortcuts import HttpResponse, get_object_or_404, render
+from django.shortcuts import HttpResponse, render
 
 from . import models
 

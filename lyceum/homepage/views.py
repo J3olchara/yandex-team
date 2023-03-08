@@ -1,5 +1,4 @@
 """HOMEPAGE app pages views"""
-from typing import List
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.models.query import QuerySet

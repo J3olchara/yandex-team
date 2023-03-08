@@ -4,8 +4,7 @@ Database models from Catalog app
 There is models that helping users to get information from catalog
 like items descriptions, items, their tags, categories and other
 """
-from collections import OrderedDict
-from typing import Any, Dict, List, Union
+from typing import Any, Union
 
 from ckeditor.fields import RichTextField
 from django.db import models

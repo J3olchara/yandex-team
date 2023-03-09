@@ -21,7 +21,7 @@
 	  <div class="container">
 	    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
 	      <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
-	        <img src="{% static 'img/cats/nya.jpg' %}" width="100" height="100" alt="">
+	        <img src="{% static 'img/cats/nya.jpg' %}" width="60" height="60" alt="">
 	        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
 	        <span class="fs-4">Кошачий магазин</span>
 	      </a>
@@ -30,6 +30,26 @@
 	        {% if user.is_superuser %}
 	        <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link {% if view_name == 'admin' %}active{% endif %}" aria-current="page">{% trans 'Админ панель' %}</a></li>
 	        {% endif %}
+
+		      <li class="nav-item nav-link">
+			      <div class="dropdown open">
+						  <button class="btn dropdown-toggle intresting-header" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							  {% trans 'Интересное' %}
+						  </button>
+						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						    <a href="{% url 'catalog:news' %}" class="dropdown-item {% if view_name == 'catalog:news' %}active{% endif %}" aria-current="page">
+						      {% trans 'Новинки' %}
+						    </a>
+						    <a href="{% url 'catalog:friday' %}" class="dropdown-item {% if view_name == 'catalog:friday' %}active{% endif %}" aria-current="page">
+						      {% trans 'Пятница' %}
+						    </a>
+						    <a href="{% url 'catalog:unchecked' %}" class="dropdown-item {% if view_name == 'catalog:unchecked' %}active{% endif %}" aria-current="page">
+						      {% trans 'Непроверенное' %}
+						    </a>
+						  </div>
+						</div>
+			      </a>
+		      </li>
 		      <li class="nav-item"><a href="{% url 'home:home' %}" class="nav-link {% if view_name == 'home:home' %}active{% endif %}" aria-current="page">{% trans 'Главная' %}</a></li>
 	        <li class="nav-item"><a href="{% url 'catalog:catalog' %}" class="nav-link {% if view_name == 'catalog:catalog' %}active{% endif %}">{% trans 'Каталог' %}</a></li>
 	        <li class="nav-item"><a href="{% url 'about:about' %}" class="nav-link {% if view_name == 'about:about' %}active{% endif %}">{% trans 'О нас' %}</a></li>

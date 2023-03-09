@@ -7,7 +7,8 @@
 {% endblock %}
 
 {% block content %}
-{% with grouped_item=item|group:'tags__name,id,' %}
+
+{% with item=item_raw|group_items:'tags__name,id,1' %}
 <div class="item-content">
 	<div id="carouselExampleControls" class="item-gallery carousel slide" data-bs-ride="carousel">
 	  <ol class="carousel-indicators">
@@ -19,12 +20,13 @@
 	  <div class="carousel-inner">
 	  {% with photo_px='500x400' %}
 	    <div class="carousel-item active">
-	      <img class="d-block w-100" src="{% get_image_px_by_url image=grouped_item.image px=photo_px crop='center' quality=100 %}" alt="First slide">
-		    <a href="" download="{{ grouped_item.image }}"></a>
+	      <img class="d-block w-100" src="{% get_image_px_by_url image=item.image px=photo_px crop='center' quality=100 %}" alt="First slide">
+		    <a class="image-download-button" href="" download="{{ item.image }}">Скачать</a>
 	    </div>
 		  {% for image in images %}
 	    <div class="carousel-item">
 	      <img class="d-block w-100" src="{% get_image_px_by_url image=image.image px=photo_px crop='center' quality=100 %}" alt="First slide">
+		    <a class="image-download-button" href="" download="{{ image.image }}">Скачать</a>
 	    </div>
 		  {% endfor %}
 		{% endwith %}
@@ -39,12 +41,13 @@
 	  </a>
 	</div>
 	<div class="item-head">
-		<h1 class="item-name">{{ grouped_item.name.capitalize }}</h1>
-		<span class="item-category">{{ grouped_item.category__name.capitalize }}</span>
-		<span class="item-tags">{% comma_separated grouped_item.tags__name %}</span>
+		<h1 class="item-name">{{ item.name.capitalize }}</h1>
+		<span class="item-category">{{ item.category__name.capitalize }}</span>
+		<span class="item-tags">{% comma_separated item.tags__name %}</span>
 		<span class="back-chat">Обратная связь</span>
 	</div>
-	<div class="item-description">{{ grouped_item.text|safe }}</div>
+	<div class="item-description">{{ item.text|safe }}</div>
 </div>
 {% endwith %}
+
 {% endblock %}

@@ -45,3 +45,6 @@ body {
 .change-language-form {
     margin-left: 30px;
 }
+.intresting-header {
+    color: var(--bs-nav-link-color);
+}

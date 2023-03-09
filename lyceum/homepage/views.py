@@ -4,6 +4,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.db.models.query import QuerySet
 from django.http import Http404
 from django.shortcuts import HttpResponse, render
+from django.template.response import TemplateResponse
 
 # isort: off
 import catalog  # noqa: I100
@@ -17,18 +18,18 @@ def home(request: WSGIRequest) -> HttpResponse:
     items: QuerySet[  # type: ignore[name-defined]
         catalog.models.Item
     ] = catalog.models.Item.objects.published(  # type: ignore[attr-defined]
-        is_published=True, is_on_main=True
+        order_by=('name', 'id'), is_published=True, is_on_main=True
     )
     data = {
-        'items': items,
+        'items_raw': items,
     }
-    response: HttpResponse = render(request, template, data)
+    response: HttpResponse = TemplateResponse(request, template, data)
     return response
 
 
 def coffee(request: WSGIRequest) -> HttpResponse:
     """returns error page that django cant generate because he is a tea pot"""
-    response: HttpResponse = render(request, 'homepage/teapot.html')
+    response: HttpResponse = TemplateResponse(request, 'homepage/teapot.html')
     response.status_code = 418
     return response
 

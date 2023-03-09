@@ -22,4 +22,7 @@ urlpatterns: List[resolvers.URLPattern] = [
         views.converter_item,
         name='conv_item_detail',
     ),
+    path('news/', views.news, name='news'),
+    path('friday/', views.friday, name='friday'),
+    path('unchecked/', views.unchecked, name='unchecked'),
 ]

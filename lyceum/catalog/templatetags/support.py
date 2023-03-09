@@ -1,7 +1,6 @@
-from typing import Any, Collection, List, Union
+from typing import Any, Collection, Iterable, List, Union
 
 from django import template
-from django.db.models import QuerySet
 from sorl.thumbnail import get_thumbnail
 
 # isort: off
@@ -25,34 +24,42 @@ def comma_separated(names: List[str]) -> str:
 
 
 @register.filter()
-def group(value: QuerySet[Any], data: str, is_many: Any = True) -> Any:
-    dataset = data.split(',')
-    if len(dataset) == 3:
-        field_name, pk, is_many = dataset
-    else:
-        field_name, pk = dataset
-    qs = value
-    j = 0
-    i = 0
-    grouped = []
-    if qs.count():
-        grouped.append(qs[0])
-        grouped[j][field_name] = [
-            grouped[j][field_name],
+def group_items(
+    value: Any, data: str, is_one: bool = False
+) -> Union[List[Any], Any]:
+    data_set = data.split(',')
+    field_name, pk = data_set[:2]
+    if len(data_set) == 3:
+        is_one = data_set[2].lower() in ['1', 'y', 'true', 'yes']
+    jindex = 0
+    index = 0
+    grouped: List[Any] = []
+    if value:
+        grouped.append(value[0])
+        grouped[jindex][field_name] = [
+            grouped[jindex][field_name],
         ]
-        while i < qs.count() - 1:
-            if qs[i][pk] != qs[i + 1][pk]:
-                grouped.append(qs[i + 1])
-                grouped[j][field_name] = [
-                    qs[i + 1][field_name],
+        jindex += 1
+        while index < value.count() - 1:
+            if value[index][pk] != value[index + 1][pk]:
+                grouped.append(value[index + 1])
+                grouped[jindex][field_name] = [
+                    value[index + 1][field_name],
                 ]
-                j += 1
+                jindex += 1
             else:
-                grouped[j - 1][field_name].append(qs[i + 1][field_name])
-            i += 1
-    if not is_many:
+                grouped[jindex - 1][field_name].append(
+                    value[index + 1][field_name]
+                )
+            index += 1
+    if is_one:
         return grouped[0]
     return grouped
+
+
+@register.filter()
+def make_unique(iterable: Iterable[Any]) -> Iterable[Any]:
+    return list({v['id']: v for v in iterable}.values())[:5]
 
 
 @register.filter()

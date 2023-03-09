@@ -73,6 +73,7 @@ COMMON_MIDDLEWARES: List[str] = [
 
 OTHER_MIDDLEWARES: List[str] = [
     'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 if DEBUG:

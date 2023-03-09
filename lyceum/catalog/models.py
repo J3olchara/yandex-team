@@ -4,12 +4,16 @@ Database models from Catalog app
 There is models that helping users to get information from catalog
 like items descriptions, items, their tags, categories and other
 """
-from typing import Any, Union
+from datetime import datetime, timedelta
+from typing import Any, Iterable, Optional, Set, Union
 
 from ckeditor.fields import RichTextField
+from django.conf import settings
 from django.db import models
-from django.db.models import QuerySet
+from django.db.models import F, QuerySet
+from django.db.models.aggregates import Count
 from django_cleanup import cleanup
+from pytz import timezone
 
 # isort: off
 import core  # noqa: I100
@@ -81,29 +85,82 @@ class PhotoGallery(core.models.Image):  # type: ignore[name-defined, misc]
 
 
 class ItemManager(models.Manager):  # type: ignore[type-arg]
-    def __init__(self) -> None:
-        super(ItemManager, self).__init__()
-
-    def published(self, **kwargs: Any) -> Union[QuerySet[Any], Any]:
+    def published(
+        self, order_by: Optional[Iterable[str]] = None, **kwargs: Any
+    ) -> Union[QuerySet[Any], Any]:
+        if order_by is None:
+            order_by = []
         prefetch = models.Prefetch(
             'tags',
             queryset=Tag.objects.filter(is_published=True).only(
                 'name',
             ),
-            to_attr='tags',
         )
         return (
             self.get_queryset()
             .filter(**kwargs)
             .select_related('category')
             .prefetch_related(prefetch)
+            .order_by(*order_by)
             .values(
                 'name', 'text', 'id', 'category__name', 'image', 'tags__name'
             )
         )
 
     def item_detail(self, item_id: int) -> Union[QuerySet[Any], Any]:
-        prefetch = models.Prefetch(
+        prefetch_tags = models.Prefetch(
+            'tags',
+            queryset=Tag.objects.filter(is_published=True).only(
+                'name',
+            ),
+        )
+        prefetch_images = models.Prefetch(
+            'PhotoGallery', queryset=PhotoGallery.objects.all().only('image')
+        )
+        return (
+            self.get_queryset()
+            .filter(id=item_id)
+            .select_related('category')
+            .prefetch_related(prefetch_tags)
+            .prefetch_related(prefetch_images)
+            .values(
+                'name', 'text', 'category__name', 'image', 'tags__name', 'id'
+            )
+        )
+
+    def random_news(self) -> Union[QuerySet[Any], Any]:
+        prefetch_tags = models.Prefetch(
+            'tags',
+            queryset=Tag.objects.filter(is_published=True).only(
+                'name',
+            ),
+        )
+        now = datetime.now(tz=timezone(settings.TIME_ZONE))
+        count = self.aggregate(count=Count('id'))['count']
+        rand: Set[int] = set()
+        while len(rand) < 5 and len(rand) < count:
+            qs = (
+                self.get_queryset()
+                .filter(creation_date__range=(now - timedelta(days=7), now))
+                .order_by('?')
+                .values('id')[:5]
+            )
+            for item in qs:
+                rand.add(item['id'])
+        return (
+            self.get_queryset()
+            .filter(
+                creation_date__range=(now - timedelta(days=7), now),
+                id__in=rand,
+            )
+            .prefetch_related(prefetch_tags)
+            .values(
+                'name', 'text', 'id', 'category__name', 'image', 'tags__name'
+            )
+        )
+
+    def get_friday(self) -> Union[QuerySet[Any], Any]:
+        prefetch_tags = models.Prefetch(
             'tags',
             queryset=Tag.objects.filter(is_published=True).only(
                 'name',
@@ -111,11 +168,26 @@ class ItemManager(models.Manager):  # type: ignore[type-arg]
         )
         return (
             self.get_queryset()
-            .filter(id=item_id)
-            .select_related('category')
-            .prefetch_related(prefetch)
+            .filter(last_edit_date__iso_week_day=5)
+            .prefetch_related(prefetch_tags)[:5]
             .values(
-                'name', 'text', 'category__name', 'image', 'tags__name', 'id'
+                'name', 'text', 'id', 'category__name', 'image', 'tags__name'
+            )
+        )
+
+    def get_unchecked(self) -> Union[QuerySet[Any], Any]:
+        prefetch_tags = models.Prefetch(
+            'tags',
+            queryset=Tag.objects.filter(is_published=True).only(
+                'name',
+            ),
+        )
+        return (
+            self.get_queryset()
+            .filter(last_edit_date=F('creation_date'))
+            .prefetch_related(prefetch_tags)
+            .values(
+                'name', 'text', 'id', 'category__name', 'image', 'tags__name'
             )
         )
 
@@ -172,13 +244,15 @@ class Item(
         default=False,
     )
 
-    def get_sub_text_words(self, cnt: int = 10) -> str:
-        words = self.text.split(maxsplit=cnt)[:-1]
-        return ' '.join(words)
+    last_edit_date = models.DateTimeField(
+        verbose_name='Дата последнего изменения',
+        auto_now=True,
+    )
 
-    def get_comma_separated_tags(self) -> str:
-        tags = (tag.name for tag in self.tags.all())
-        return ', '.join(tags)
+    creation_date = models.DateTimeField(
+        verbose_name='Дата создания',
+        auto_now_add=True,
+    )
 
     class Meta:
         ordering = ('name', 'pk')

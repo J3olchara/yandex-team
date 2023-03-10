@@ -164,7 +164,7 @@ class CatalogShowTests(core.tests.SetupData):
         )
         response = Client().get(test_path)
         grouped_item = self.group_query_set(
-            response.context['item'], 'tags__name', 'id'
+            response.context['item_raw'], 'tags__name', 'id'
         )[0]
         self.assertEqual(
             grouped_item.keys(),
@@ -198,7 +198,7 @@ class CatalogShowTests(core.tests.SetupData):
             )
         )
         item = self.group_query_set(
-            response.context['item'], 'tags__name', 'id'
+            response.context['item_raw'], 'tags__name', 'id'
         )[0]
         self.assertEqual(
             set(item.keys()),

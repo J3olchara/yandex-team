@@ -121,12 +121,12 @@ class SetupData(TestCase):
         j = 0
         i = 0
         grouped = []
-        if qs.count():
+        if len(qs):
             grouped.append(qs[0])
             grouped[j][field_name] = [
                 grouped[j][field_name],
             ]
-            while i < qs.count() - 1:
+            while i < len(qs) - 1:
                 if qs[i][pk] != qs[i + 1][pk]:
                     grouped.append(qs[i + 1])
                     grouped[j][field_name] = [

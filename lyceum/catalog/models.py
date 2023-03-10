@@ -146,7 +146,8 @@ class ItemManager(models.Manager):  # type: ignore[type-arg]
                 .values('id')[:5]
             )
             for item in qs:
-                rand.add(item['id'])
+                if len(rand) < 5:
+                    rand.add(item['id'])
         return (
             self.get_queryset()
             .filter(
@@ -169,7 +170,8 @@ class ItemManager(models.Manager):  # type: ignore[type-arg]
         return (
             self.get_queryset()
             .filter(last_edit_date__iso_week_day=5)
-            .prefetch_related(prefetch_tags)[:5]
+            .prefetch_related(prefetch_tags)
+            .order_by('-last_edit_date')[:5]
             .values(
                 'name', 'text', 'id', 'category__name', 'image', 'tags__name'
             )
@@ -184,7 +186,11 @@ class ItemManager(models.Manager):  # type: ignore[type-arg]
         )
         return (
             self.get_queryset()
-            .filter(last_edit_date=F('creation_date'))
+            .filter(
+                last_edit_date__date=F('last_edit_date'),
+                last_edit_date__hour=F('last_edit_date'),
+                last_edit_date__minute=F('last_edit_date'),
+            )
             .prefetch_related(prefetch_tags)
             .values(
                 'name', 'text', 'id', 'category__name', 'image', 'tags__name'

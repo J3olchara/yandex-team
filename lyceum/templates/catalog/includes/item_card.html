@@ -17,7 +17,7 @@
 		</div>
 		<div class="catalog-item-navigation go-to-{{ item.id }}" data-url-redirect="{% url 'catalog:int_item_detail' item.id %}">
 			<script src="{% static 'js/catalog-item.js' %}"></script>
-			<div class="catalog-item-text item--{{ item.id }}">{{ item.text|get_words_slice:'10'|safe }}</div>
+			<div class="catalog-item-text item--{{ item.id }}">{{ item.text| truncatewords_html:10 |safe }}</div>
 			<div class="catalog-go-to-item-btn redirect-to-item-{{ item.id }}">
 				<svg xmlns="http://www.w3.org/2000/svg" width="31px" height="31px" viewBox="0 0 512 512">
 					<g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"

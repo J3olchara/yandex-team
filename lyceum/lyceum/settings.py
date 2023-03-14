@@ -172,10 +172,10 @@ USE_TZ: bool = True
 
 STATIC_URL: str = '/static/'
 
-STATICFILES_DIRS_DEV_DIR = BASE_DIR / 'static_dev'
+STATICFILES_DIR_DEV = BASE_DIR / 'static_dev'
 
 STATICFILES_DIRS = [
-    STATICFILES_DIRS_DEV_DIR,
+    STATICFILES_DIR_DEV,
 ]
 
 

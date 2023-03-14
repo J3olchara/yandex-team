@@ -10,7 +10,7 @@
 {% if status_good %}
 	<span class="status-good">{{ status_good }}</span>
 {% endif %}
-<form method="post" action="{% url 'feedback:feedback' %}">
+<form method="post" action="{% url 'feedback:feedback' %}" enctype="multipart/form-data">
 	{% csrf_token %}
 	{% for field in feedback_form %}
 		{{ field.label_tag }}

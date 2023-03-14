@@ -20,7 +20,7 @@ class SetupData(TestCase):
         from catalog import models
 
         test_original_file_path = (
-            settings.STATICFILES_DIRS_DEV_DIR / 'test_img' / 'nya.jpg'
+            settings.STATICFILES_DIR_DEV / 'test_img' / 'nya.jpg'
         )
         test_image_path = str(settings.MEDIA_ROOT / 'test_media_file.jpg')
         shutil.copy2(test_original_file_path, test_image_path)

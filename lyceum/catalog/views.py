@@ -18,8 +18,7 @@ def item_list(request: WSGIRequest) -> HttpResponse:
     data = {
         'items_raw': items,
     }
-    response = TemplateResponse(request, template, data)
-    return response
+    return TemplateResponse(request, template, data)
 
 
 def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
@@ -33,8 +32,7 @@ def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
         'item_raw': item,
         'images': images,
     }
-    response = TemplateResponse(request, template, data)
-    return response
+    return TemplateResponse(request, template, data)
 
 
 def regular_item(request: WSGIRequest, item_id: str) -> HttpResponse:
@@ -52,21 +50,18 @@ def news(request: WSGIRequest) -> HttpResponse:
     template = 'catalog/interesting.html'
     items = catalog.models.Item.objects.random_news()
     data = {'items_raw': items}
-    response = TemplateResponse(request, template, data)
-    return response
+    return TemplateResponse(request, template, data)
 
 
 def friday(request: WSGIRequest) -> HttpResponse:
     template = 'catalog/interesting.html'
     items = catalog.models.Item.objects.get_friday()
     data = {'items_raw': items}
-    response = TemplateResponse(request, template, data)
-    return response
+    return TemplateResponse(request, template, data)
 
 
 def unchecked(request: WSGIRequest) -> HttpResponse:
     template = 'catalog/interesting.html'
     items = catalog.models.Item.objects.get_unchecked()
     data = {'items_raw': items}
-    response = TemplateResponse(request, template, data)
-    return response
+    return TemplateResponse(request, template, data)

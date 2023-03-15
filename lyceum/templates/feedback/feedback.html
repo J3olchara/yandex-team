@@ -7,10 +7,10 @@
 {% endblock %}
 
 {% block content %}
-{% if status_good %}
-	<span class="status-good">{{ status_good }}</span>
+{% if status %}
+	<span class="status-good">{% trans 'Сообщение отправлено' %}</span>
 {% endif %}
-<form method="post" action="{% url 'feedback:feedback' %}" enctype="multipart/form-data">
+<form class="feedback-form" method="post" action="{% url 'feedback:feedback' %}" enctype="multipart/form-data">
 	{% csrf_token %}
 	{% for field in feedback_form %}
 		{{ field.label_tag }}
@@ -24,6 +24,6 @@
 			<p class="help">{{ field.help_text|safe }}</p>
 		{% endif %}
 	{% endfor %}
-	<button type="submit" class="btn btn-primary mt-3">{% trans 'Отправить' %}</button>
+	<button type="submit" class="btn btn-primary mt-3 d-block">{% trans 'Отправить' %}</button>
 </form>
 {% endblock %}

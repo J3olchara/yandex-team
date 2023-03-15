@@ -1,7 +1,7 @@
-from typing import List, Union
+import datetime
+from typing import Any, List, Union
 
-from django.core import mail
-from django.core.files.uploadedfile import SimpleUploadedFile, UploadedFile
+from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django_cleanup import cleanup
 
@@ -9,61 +9,33 @@ from . import support
 
 
 class Sender(models.Model):
-    name = models.CharField(
+    name: Union[str, 'models.CharField[Any, Any]'] = models.CharField(
         verbose_name='Имя',
         max_length=100,
     )
 
-    email = models.EmailField(
+    email: Union[str, 'models.EmailField[Any, Any]'] = models.EmailField(
         verbose_name='электронная почта',
         unique=True,
     )
 
-    first_feedback = models.DateTimeField(
+    first_feedback: Union[
+        str, 'models.DateTimeField[Any, Any]'
+    ] = models.DateTimeField(
         auto_now_add=True,
     )
 
 
-class FeedbackManager(models.Manager):  # type: ignore[type-arg]
-    def create_feedback(
-        self,
-        name: str,
-        email: str,
-        text: str,
-        files: Union[List[UploadedFile], SimpleUploadedFile],
-    ) -> None:
-        mail.send_mail(
-            subject=f'Feedback from {name}',
-            from_email=email,
-            message=text,
-            recipient_list=['yoursite@gmail.com'],
-        )
-        qs = Sender.objects.filter(email=email)
-        if not qs:
-            sender = Sender.objects.create(
-                name=name,
-                email=email,
-            )
-        else:
-            sender = qs[0]
-        feedback = self.create(
-            sender=sender,
-            text=text,
-        )
-        for file in files:
-            FeedbackFiles.objects.create(file=file, feedback=feedback)
-
-
 class Feedback(models.Model):
-    objects = FeedbackManager()
+    objects = models.Manager()
 
-    sender = models.ForeignKey(
+    sender: Union[Sender, 'models.ForeignKey[Any, Any]'] = models.ForeignKey(
         Sender,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.PROTECT,
         verbose_name='Отправитель',
     )
 
-    text = models.TextField(
+    text: Any = models.TextField(
         verbose_name='Текст',
     )
 
@@ -73,25 +45,43 @@ class Feedback(models.Model):
         ('answered', 'ответ дан'),
     )
 
-    processing_status = models.CharField(
+    processing_status: Union[
+        str, 'models.CharField[Any, Any]'
+    ] = models.CharField(
         default=process_choices[0][0],
         choices=process_choices,
         blank=False,
         max_length=100,
     )
 
-    created_at = models.DateTimeField(
+    created_at: Union[
+        datetime.datetime, 'models.DateTimeField[Any, Any]'
+    ] = models.DateTimeField(
         verbose_name='Дата и время создания',
         auto_now_add=True,
     )
 
 
+class FeedbackFilesManager(models.Manager['FeedbackFiles']):
+    def save_files(
+        self, files: List[UploadedFile], feedback: Feedback
+    ) -> None:
+        feedback_files_list = [
+            FeedbackFiles(file=file, feedback=feedback) for file in files
+        ]
+        self.bulk_create(feedback_files_list)
+
+
 @cleanup.select
 class FeedbackFiles(models.Model):
-    feedback = models.ForeignKey(
+    objects = FeedbackFilesManager()
+
+    feedback: Union[
+        'Feedback', 'models.ForeignKey[Any, Any]'
+    ] = models.ForeignKey(
         'Feedback',
         on_delete=models.CASCADE,
     )
-    file = models.FileField(
+    file: Union[UploadedFile, 'models.FileField'] = models.FileField(
         upload_to=support.make_file_path,
     )

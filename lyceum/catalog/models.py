@@ -84,7 +84,7 @@ class PhotoGallery(core.models.Image):  # type: ignore[name-defined, misc]
         verbose_name_plural = 'Галерея'
 
 
-class ItemManager(models.Manager):  # type: ignore[type-arg]
+class ItemManager(models.Manager['Item']):
     def published(
         self, order_by: Optional[Iterable[str]] = None, **kwargs: Any
     ) -> Union[QuerySet[Any], Any]:

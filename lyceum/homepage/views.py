@@ -23,8 +23,7 @@ def home(request: WSGIRequest) -> HttpResponse:
     data = {
         'items_raw': items,
     }
-    response: HttpResponse = TemplateResponse(request, template, data)
-    return response
+    return TemplateResponse(request, template, data)
 
 
 def coffee(request: WSGIRequest) -> HttpResponse:

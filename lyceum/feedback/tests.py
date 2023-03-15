@@ -30,9 +30,9 @@ class FeedbackFormTests(TestCase):
             'email': fake_email,
             'text': fake_text,
         }
-        request = Client().post(test_path, data)
-        self.assertIn('feedback_form', request.context)
-        form: forms.FeedbackForm = request.context['feedback_form']
+        response = Client().post(test_path, data, follow=True)
+        self.assertIn('feedback_form', response.context)
+        form = forms.FeedbackForm(data)
         self.assertEqual(len(form.visible_fields()), 4)
         for field in form.visible_fields():
             if field.name == 'email':
@@ -46,10 +46,13 @@ class FeedbackFormTests(TestCase):
                 self.assertEqual(
                     field.field.widget.attrs['placeholder'], 'Опишите вопрос'
                 )
-        # тест на редирект не стал делать ибо его вообще тут нет
-        # потому что а зачем тут редирект вообще в этой вьюхе
-        # можно же просто после отправки прогрузить страницу как я и сделал
+            elif field.name == 'files':
+                self.assertEqual(field.label, 'Приложенные файлы')
         sender = models.Sender.objects.get(email=form.data['email'])
+        self.assertRedirects(
+            response,
+            reverse('feedback:feedback', kwargs={'feedback_status': 1}),
+        )
         models.Feedback.objects.get(sender=sender, text=form.data['text'])
 
     def test_file_upload(self):

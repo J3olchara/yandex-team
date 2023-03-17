@@ -1,3 +1,8 @@
+"""
+Feedback app models
+
+Create your database models for Feedback here.
+"""
 import datetime
 from typing import Any, List, Union
 
@@ -9,6 +14,14 @@ from . import support
 
 
 class Sender(models.Model):
+    """
+    Sender model to save users data.
+
+    name: char[100]. User name.
+    email: char[254]. User email. Validate email.
+    first_feedback: datetime.datetime. First feedback datetime.
+    """
+
     name: Union[str, 'models.CharField[Any, Any]'] = models.CharField(
         verbose_name='Имя',
         max_length=100,
@@ -27,7 +40,22 @@ class Sender(models.Model):
 
 
 class Feedback(models.Model):
+    """
+    Feedback model to save feedbacks.
+
+    sender: id FK -> Sender.
+    text: str. Feedback main text body.
+    processing_status: char[100] choice <- process_choices
+    created_at: datetime.datetime. Feedback creation date
+    """
+
     objects = models.Manager()
+
+    process_choices = (
+        ('received', 'получено'),
+        ('processing', 'в обработке'),
+        ('answered', 'ответ дан'),
+    )
 
     sender: Union[Sender, 'models.ForeignKey[Any, Any]'] = models.ForeignKey(
         Sender,
@@ -37,12 +65,6 @@ class Feedback(models.Model):
 
     text: Any = models.TextField(
         verbose_name='Текст',
-    )
-
-    process_choices = (
-        ('received', 'получено'),
-        ('processing', 'в обработке'),
-        ('answered', 'ответ дан'),
     )
 
     processing_status: Union[
@@ -63,9 +85,16 @@ class Feedback(models.Model):
 
 
 class FeedbackFilesManager(models.Manager['FeedbackFiles']):
+    """
+    Feedback files manager to manage fedback files save.
+    """
+
     def save_files(
         self, files: List[UploadedFile], feedback: Feedback
     ) -> None:
+        """
+        saves more than one file
+        """
         feedback_files_list = [
             FeedbackFiles(file=file, feedback=feedback) for file in files
         ]
@@ -74,6 +103,13 @@ class FeedbackFilesManager(models.Manager['FeedbackFiles']):
 
 @cleanup.select
 class FeedbackFiles(models.Model):
+    """
+    Feedback files to save feedback files (some feedback proof).
+
+    feedback: id FK -> Feedback. Feedback that contains this file.
+    file: UploadedFile. Feedback file proof.
+    """
+
     objects = FeedbackFilesManager()
 
     feedback: Union[
@@ -83,5 +119,5 @@ class FeedbackFiles(models.Model):
         on_delete=models.CASCADE,
     )
     file: Union[UploadedFile, 'models.FileField'] = models.FileField(
-        upload_to=support.make_file_path,
+        upload_to=support.make_feedback_files_path,
     )

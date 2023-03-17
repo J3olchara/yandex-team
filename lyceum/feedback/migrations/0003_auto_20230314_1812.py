@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             name='FeedbackFiles',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.FileField(upload_to=feedback.support.make_file_path)),
+                ('file', models.FileField(upload_to=feedback.support.make_feedback_files_path)),
                 ('feedback', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='feedback.feedback')),
             ],
         ),

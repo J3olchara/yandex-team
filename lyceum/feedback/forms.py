@@ -1,3 +1,8 @@
+"""
+Feedback app forms.
+
+Write your forms for Feedback here.
+"""
 from typing import Any, List, Optional
 
 from django import forms
@@ -7,6 +12,15 @@ from . import models
 
 
 class FeedbackForm(forms.ModelForm):  # type: ignore[type-arg]
+    """
+    Feedback Form to generate feedbacks from users
+
+    name: char[100]. User name
+    email: char[100]. User's email. validating user's email
+    text: char[1000]. User feedback
+    files: UploadedFile. Files for proof the text.
+    """
+
     name = forms.CharField(
         label='Как к вам обращаться?',
         required=True,
@@ -53,6 +67,13 @@ class FeedbackForm(forms.ModelForm):  # type: ignore[type-arg]
     def save(
         self, commit: bool = True, files: Optional[List[UploadedFile]] = None
     ) -> Any:
+        """
+        Recreated forms.ModelForm base method to save all data to
+        correct model
+        name, email -> Sender;
+        text, Sender.id (FK) -> Feedback;
+        files, Feedback.id (FK) -> FeedbackFiles;
+        """
         if files is None:
             files = []
         sender = models.Sender.objects.get_or_create(

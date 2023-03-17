@@ -11,6 +11,12 @@ from . import forms
 def feedback(
     request: WSGIRequest, feedback_status: bool = False
 ) -> HttpResponse:
+    """
+    Feedback page
+
+    returns feedback form page;
+    validates and saves feedback forms;
+    """
     template = r'feedback\feedback.html'
     feedback_form = forms.FeedbackForm(
         request.POST or None, request.FILES or None

@@ -1,3 +1,8 @@
+"""
+Feedback app tests.
+
+Write tests here.
+"""
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import reverse
 from django.test import Client, TestCase
@@ -21,6 +26,9 @@ class FeedbackFormTests(TestCase):
         )
 
     def test_feedback_page_form(self):
+        """
+        tests correct form view
+        """
         test_path = reverse('feedback:feedback')
         fake_email = 'mail@yandex.ru'
         fake_text = 'Some question'
@@ -32,9 +40,11 @@ class FeedbackFormTests(TestCase):
         }
         response = Client().post(test_path, data, follow=True)
         self.assertIn('feedback_form', response.context)
-        form = forms.FeedbackForm(data)
-        self.assertEqual(len(form.visible_fields()), 4)
-        for field in form.visible_fields():
+        good_form = forms.FeedbackForm(data)
+        empty_form = forms.FeedbackForm({'email': '123.123'})
+        self.assertEqual(len(empty_form.visible_fields()), 4)
+        self.assertTrue(empty_form.has_error('email'))
+        for field in empty_form.visible_fields():
             if field.name == 'email':
                 self.assertEqual(field.label, 'Адрес электронной почты')
                 self.assertEqual(
@@ -48,14 +58,23 @@ class FeedbackFormTests(TestCase):
                 )
             elif field.name == 'files':
                 self.assertEqual(field.label, 'Приложенные файлы')
-        sender = models.Sender.objects.get(email=form.data['email'])
+                self.assertTrue(not field.field.required)
+            elif field.name == 'name':
+                self.assertEqual(field.label, 'Как к вам обращаться?')
+                self.assertEqual(
+                    field.field.widget.attrs['placeholder'], 'Ваше имя'
+                )
+        sender = models.Sender.objects.get(email=good_form.data['email'])
         self.assertRedirects(
             response,
             reverse('feedback:feedback', kwargs={'feedback_status': 1}),
         )
-        models.Feedback.objects.get(sender=sender, text=form.data['text'])
+        models.Feedback.objects.get(sender=sender, text=good_form.data['text'])
 
     def test_file_upload(self):
+        """
+        tests model FeedbackFiles to upload file
+        """
         file = SimpleUploadedFile('test.txt', b'some text')
         models.FeedbackFiles.objects.create(
             file=file,

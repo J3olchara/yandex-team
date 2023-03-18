@@ -15,7 +15,7 @@ from . import forms, models
 
 
 @override_settings(
-    FEEDBACK_URL=r'tests\\feedback\\',
+    FEEDBACK_URL='tests/feedback/',
     EMAIL_FILE_PATH=settings.MEDIA_ROOT / 'tests' / 'email',
 )
 class FeedbackFormTests(TestCase):
@@ -91,6 +91,7 @@ class FeedbackFormTests(TestCase):
 
     def tearDown(self) -> None:
         feedback_path = settings.MEDIA_ROOT / settings.FEEDBACK_URL
+        print(feedback_path)
         for p in os.listdir(feedback_path):
             shutil.rmtree(feedback_path / p, ignore_errors=True)
         # for p in os.listdir(settings.EMAIL_FILE_PATH):

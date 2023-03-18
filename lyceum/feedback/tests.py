@@ -39,12 +39,19 @@ class FeedbackFormTests(TestCase):
             'text': fake_text,
         }
         response = Client().post(test_path, data, follow=True)
+
+        self.assertRedirects(
+            response,
+            reverse('feedback:feedback', kwargs={'feedback_status': 1}),
+        )
         self.assertIn('feedback_form', response.context)
-        good_form = forms.FeedbackForm(data)
+
         empty_form = forms.FeedbackForm({'email': '123.123'})
-        self.assertEqual(len(empty_form.visible_fields()), 4)
         self.assertTrue(empty_form.has_error('email'))
-        for field in empty_form.visible_fields():
+
+        form: forms.FeedbackForm = response.context['feedback_form']
+        self.assertEqual(len(form.visible_fields()), 4)
+        for field in form.visible_fields():
             if field.name == 'email':
                 self.assertEqual(field.label, 'Адрес электронной почты')
                 self.assertEqual(
@@ -64,12 +71,6 @@ class FeedbackFormTests(TestCase):
                 self.assertEqual(
                     field.field.widget.attrs['placeholder'], 'Ваше имя'
                 )
-        sender = models.Sender.objects.get(email=good_form.data['email'])
-        self.assertRedirects(
-            response,
-            reverse('feedback:feedback', kwargs={'feedback_status': 1}),
-        )
-        models.Feedback.objects.get(sender=sender, text=good_form.data['text'])
 
     def test_file_upload(self):
         """

@@ -17,7 +17,7 @@ def feedback(
     returns feedback form page;
     validates and saves feedback forms;
     """
-    template = r'feedback\feedback.html'
+    template = 'feedback/feedback.html'
     feedback_form = forms.FeedbackForm(
         request.POST or None, request.FILES or None
     )

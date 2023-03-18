@@ -47,13 +47,13 @@ INSTALLED_APPS: List[str] = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_cleanup.apps.CleanupConfig',
     'sorl.thumbnail',
     'ckeditor',
     'about.apps.AboutConfig',
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
     'feedback.apps.FeedbackConfig',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 # --------------------------------------------------------------------
@@ -204,6 +204,8 @@ LANGUAGES = (
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 
 EMAIL_FILE_PATH = BASE_DIR / 'send_email'
+
+FEEDBACK_URL = r'uploads\\feedback\\'  # by media root
 
 # -----------------------------------------------------------------------
 # ------------------------------Plugins----------------------------------

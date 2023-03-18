@@ -39,6 +39,7 @@ class Sender(models.Model):
     )
 
 
+@cleanup.select
 class Feedback(models.Model):
     """
     Feedback model to save feedbacks.

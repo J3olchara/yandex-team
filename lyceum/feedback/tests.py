@@ -3,13 +3,21 @@ Feedback app tests.
 
 Write tests here.
 """
+import os
+import shutil
+
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import reverse
-from django.test import Client, TestCase
+from django.test import Client, TestCase, override_settings
 
 from . import forms, models
 
 
+@override_settings(
+    FEEDBACK_URL=r'tests\\feedback\\',
+    EMAIL_FILE_PATH=settings.MEDIA_ROOT / 'tests' / 'email',
+)
 class FeedbackFormTests(TestCase):
     def setUp(self) -> None:
         self.sender = models.Sender.objects.create(
@@ -39,7 +47,6 @@ class FeedbackFormTests(TestCase):
             'text': fake_text,
         }
         response = Client().post(test_path, data, follow=True)
-
         self.assertRedirects(
             response,
             reverse('feedback:feedback', kwargs={'feedback_status': 1}),
@@ -81,3 +88,11 @@ class FeedbackFormTests(TestCase):
             file=file,
             feedback=self.feedback,
         )
+
+    def tearDown(self) -> None:
+        feedback_path = settings.MEDIA_ROOT / settings.FEEDBACK_URL
+        for p in os.listdir(feedback_path):
+            shutil.rmtree(feedback_path / p, ignore_errors=True)
+        # for p in os.listdir(settings.EMAIL_FILE_PATH):
+        #     os.remove(settings.EMAIL_FILE_PATH / p)
+        return super(FeedbackFormTests, self).tearDown()

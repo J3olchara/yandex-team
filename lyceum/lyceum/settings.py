@@ -131,7 +131,7 @@ DATABASES: Dict[str, Dict[str, Union[str, Path]]] = {
 }
 
 # -----------------------------------------------------------------------
-# --------------------------Validators Section---------------------------
+# --------------------------USER AUTH Section----------------------------
 # -----------------------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
@@ -152,6 +152,16 @@ AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
         + 'NumericPasswordValidator',
     },
 ]
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/auth/login/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
+
+NEW_USERS_ACTIVATED = DEBUG or os.getenv('NEW_USERS_ACTIVATED', 'False').lower() in (
+    'true',
+    '1',
+    't',
+)
 
 # -----------------------------------------------------------------------
 # -------------------------Client settings Section-----------------------

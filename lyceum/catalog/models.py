@@ -272,5 +272,6 @@ class Item(
         ordering = ('name', 'pk')
         verbose_name = 'товар'
         verbose_name_plural = 'товары'
+
     def __str__(self) -> str:
         return str(self.id) + ' ' + str(self.name[:15])

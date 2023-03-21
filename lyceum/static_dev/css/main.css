@@ -15,6 +15,7 @@ body {
     min-height: 100%;
     align-content: center;
     position: relative;
+    width: fit-content;
 }
 .content {
     position: relative;

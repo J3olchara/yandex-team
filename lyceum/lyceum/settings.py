@@ -53,6 +53,7 @@ INSTALLED_APPS: List[str] = [
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
     'feedback.apps.FeedbackConfig',
+    'users.apps.UsersConfig',
     'django_cleanup.apps.CleanupConfig',
 ]
 
@@ -206,8 +207,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / 'send_email'
 
 FEEDBACK_URL = 'uploads/feedback/'  # by media root
-
-FEEDBACK_URL
 
 # -----------------------------------------------------------------------
 # ------------------------------Plugins----------------------------------

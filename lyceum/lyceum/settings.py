@@ -1,14 +1,19 @@
-"""Django settings for lyceum project."""
+"""
+Django settings for lyceum project.
+
+!!!!!!!!!!!!!DO NOT ENABLE DEBUG IN PRODUCTION!!!!!!!!!!!!!!!
+"""
 import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
+from django.utils.translation import ugettext_lazy as _
 from dotenv import load_dotenv
 
 BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
-if not load_dotenv(BASE_DIR.parent / Path(r'.env')):
-    load_dotenv(BASE_DIR.parent / Path(r'example.env'))
+if not load_dotenv(BASE_DIR.parent / '.env'):
+    load_dotenv(BASE_DIR.parent / 'example.env')
 
 # --------------------------------------------------------------------
 # ------------------------Project Parameters Section------------------
@@ -42,9 +47,14 @@ INSTALLED_APPS: List[str] = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sorl.thumbnail',
+    'ckeditor',
     'about.apps.AboutConfig',
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
+    'feedback.apps.FeedbackConfig',
+    'users.apps.UsersConfig',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 # --------------------------------------------------------------------
@@ -63,7 +73,10 @@ COMMON_MIDDLEWARES: List[str] = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-OTHER_MIDDLEWARES: List[str] = []
+OTHER_MIDDLEWARES: List[str] = [
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+]
 
 if DEBUG:
     OTHER_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
@@ -90,9 +103,7 @@ TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / Path(r'\homepage\templates'),
-            BASE_DIR / Path(r'\about\templates'),
-            BASE_DIR / Path(r'\catalog\templates'),
+            BASE_DIR / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -146,7 +157,7 @@ AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
 # -------------------------Client settings Section-----------------------
 # -----------------------------------------------------------------------
 
-LANGUAGE_CODE: str = 'ru-ru'
+LANGUAGE_CODE: str = 'ru'
 
 TIME_ZONE: str = 'Europe/Moscow'
 
@@ -161,6 +172,70 @@ USE_TZ: bool = True
 # -----------------------------------------------------------------------
 
 STATIC_URL: str = '/static/'
+
+STATICFILES_DIR_DEV = BASE_DIR / 'static_dev'
+
+STATICFILES_DIRS = [
+    STATICFILES_DIR_DEV,
+]
+
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
+# --------------------------------------------------------------------
+# --------------------------locale Section----------------------------
+# --------------------------------------------------------------------
+
+LOCALE = 'ru'
+LOCALE_FALLBACK = 'en'
+LOCALES = ('ru', 'en')
+LOCALES_PATH = BASE_DIR / 'locale'
+LOCALE_PATHS = (BASE_DIR / 'locale',)
+
+LANGUAGES = (
+    ('ru', _('Russian')),
+    ('en', _('English')),
+)
+
+# -----------------------------------------------------------------------
+# --------------------------------EMAIL----------------------------------
+# -----------------------------------------------------------------------
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+EMAIL_FILE_PATH = BASE_DIR / 'send_email'
+
+FEEDBACK_URL = 'uploads/feedback/'  # by media root
+
+# -----------------------------------------------------------------------
+# ------------------------------Plugins----------------------------------
+# -----------------------------------------------------------------------
+
+CKEDITOR_BASEPATH = STATIC_URL + 'ckeditor/ckeditor/'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            [
+                'NumberedList',
+                'BulletedList',
+                '-',
+                'Outdent',
+                'Indent',
+                '-',
+                'JustifyLeft',
+                'JustifyCenter',
+                'JustifyRight',
+                'JustifyBlock',
+            ],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source'],
+        ],
+    }
+}
+CKEDITOR_UPLOAD_PATH = 'ckeditor_uploads/'
 
 # -----------------------------------------------------------------------
 # ------------------------------Other Section----------------------------

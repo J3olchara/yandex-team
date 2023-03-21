@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load support %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/item_cards.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>Главная страница</h1>
+<div class="catalog-items">
+	{% with items=items_raw|group_items:'tags__name,id' %}
+		{% for item in items %}
+			{% include "catalog/includes/item_card.html" %}
+		{% empty %}
+			<h2>Извините, но на пока что каталог пуст :(</h2>
+		{% endfor %}
+	{% endwith %}
+</div>
+{% endblock %}

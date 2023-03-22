@@ -1,74 +1,43 @@
-from typing import Any, Dict
-
-from django.utils.translation import gettext_lazy as _
-import django.contrib.auth.views as default_views
-from django.urls import reverse_lazy
+from django.shortcuts import render, get_object_or_404
+from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.forms.models import model_to_dict
 
 from . import forms
 
 
-class CustomLoginView(default_views.LoginView):
-    form_class = forms.LoginForm
-    template_name = 'users/login.html'
-    success_url = reverse_lazy('home:home')
-
-    def form_valid(self, form: Any) -> HttpResponse:
-        remember_me = form.cleaned_data['remember_me']
-        if not remember_me:
-            self.request.session.set_expiry(0)
-            self.request.session.modified = True
-        return super(CustomLoginView, self).form_valid(form)
+def user_list(request: WSGIRequest) -> HttpResponse:
+    template = 'users/user_list.html'
+    data = {
+        'users': User.objects.all().filter(is_active=True)
+    }
+    return render(request, template, data)
 
 
-class CustomChangePasswordDone(default_views.PasswordChangeDoneView):
-    template_name = 'users/done.html'
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super(CustomChangePasswordDone, self).get_context_data(**kwargs)
-        context['alerts'] = [
-            {
-                'type': 'success',
-                'text': _('Пароль успешно изменён')
-            }
-        ]
-        return context
-
-
-class CustomPasswordResetDone(default_views.PasswordResetDoneView):
-    template_name = 'users/done.html'
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super(CustomPasswordResetDone, self).get_context_data(**kwargs)
-        head = _('Письмо с инструкциями по восстановлению пароля отправлено')
-        p1 = _(
-            'Мы отправили вам инструкцию по установке нового пароля на указанный адрес электронной почты'
-            '(если в нашей базе данных есть такой адрес). Вы должны получить ее в ближайшее время.'
+def user_detail(request: WSGIRequest, user_id: int) -> HttpResponse:
+    template = 'users/user_detail.html'
+    data = {
+        'current_user': get_object_or_404(
+            User.objects,
+            id=user_id
         )
-        p2 = _(
-            'Если вы не получили письмо, пожалуйста, убедитесь, что вы ввели адрес с которым Вы зарегистрировались,'
-            ' и проверьте папку со спамом.'
-        )
-        context['message'] = (
-            f'<h1>{head}</h1>\n'
-            f'<p>{p1}</p>\n'
-            f'<p>{p2}</p>'
-        )
-        return context
+    }
+    return render(request, template, data)
 
 
-class CustomPasswordResetComplete(default_views.PasswordResetCompleteView):
-    template_name = 'users/done.html'
-
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super(CustomPasswordResetComplete, self).get_context_data(**kwargs)
-        context['alerts'] = [
-            {
-                'type': 'success',
-                'text': _('Пароль успешно изменён')
-            }
-        ]
-        return context
-
+@login_required()
+def profile(request: WSGIRequest) -> HttpResponse:
+    template = 'users/profile.html'
+    profile = model_to_dict(request.user.profile)
+    user = model_to_dict(request.user)
+    form = forms.EditProfile(user or None, profile or None)
+    data = {
+        'form': form
+    }
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+    return render(request, template, data)
 
 

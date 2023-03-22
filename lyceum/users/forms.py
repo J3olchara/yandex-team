@@ -1,69 +1,39 @@
-import django.contrib.auth.forms as default_forms
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django import forms
 
+from authorisation.models import UserProxy
 
-class LoginForm(default_forms.AuthenticationForm):
-    remember_me = forms.BooleanField(
-        label='Запомнить меня',
-        widget=forms.CheckboxInput(
-            attrs={
-                'class': 'form-check-input mb-4',
 
-            }
-        ),
-        required=False,
+class EditProfile(UserChangeForm):
+
+    birthday = forms.DateField(
+        label='День рождения',
+        widget=forms.DateInput(),
     )
 
     def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget = forms.TextInput(
-            attrs={
-                'class': 'form-control form-control-lg mb-2',
-                'placeholder': 'Username',
-            }
+        super(EditProfile, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+            if field not in ['email']:
+                self.fields[field].required = False
+        del self.fields['password']
+        self.fields['username'].disabled = True
+        self.fields['birthday'].widget.attrs['value'] = args[1]['birthday']
+
+    def save(self, commit: bool = ...):
+        self.instance = User.objects.get(
+            username=self.cleaned_data['username']
         )
-        self.fields['password'].widget = forms.TextInput(
-            attrs={
-                'class': 'form-control form-control-lg mb-3',
-                'placeholder':  'Password',
-                'type': 'password'
-            }
-        )
+        self.instance.first_name = self.cleaned_data['first_name']
+        self.instance.second_name = self.cleaned_data['last_name']
+        self.instance.email = self.cleaned_data['email']
+        self.instance.profile.birthday = self.cleaned_data['birthday']
+        self.instance.profile.save()
+        self.instance.save()
 
-
-class PasswordChangeForm(default_forms.PasswordChangeForm):
-    def __init__(self, *args, **kwargs):
-        super(PasswordChangeForm, self).__init__(*args, **kwargs)
-        widget = forms.TextInput(
-            attrs={
-                'class': 'form-control form-control-lg mb-2',
-                'type': 'password',
-            }
-        )
-        self.fields['old_password'].widget = widget
-        self.fields['new_password1'].widget = widget
-        self.fields['new_password2'].widget = widget
-
-
-class PasswordResetForm(default_forms.PasswordResetForm):
-    def __init__(self, *args, **kwargs):
-        super(PasswordResetForm, self).__init__(*args, **kwargs)
-        self.fields['email'].widget = forms.TextInput(
-            attrs={
-                'class': 'form-control form-control-lg mb-2',
-                'type': 'email',
-            }
-        )
-
-
-class PasswordResetConfirmForm(default_forms.SetPasswordForm):
-    def __init__(self, *args, **kwargs):
-        super(PasswordResetConfirmForm, self).__init__(*args, **kwargs)
-        widget = forms.TextInput(
-            attrs={
-                'class': 'form-control form-control-lg mb-2',
-                'type': 'password',
-            }
-        )
-        self.fields['new_password1'].widget = widget
-        self.fields['new_password2'].widget = widget
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'first_name', 'last_name', 'email']

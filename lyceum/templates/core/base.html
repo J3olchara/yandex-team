@@ -41,7 +41,7 @@
 			      </a>
 		      </li>
 		      <li class="nav-item"><a href="{% url 'home:home' %}" class="nav-link {% if view_name == 'home:home' %}active{% endif %}" aria-current="page">{% trans 'Главная' %}</a></li>
-		      <li class="nav-item"><a href="{% url 'feedback:feedback' %}" class="nav-link {% if view_name == 'feedback:feedback' %}active{% endif %}" aria-current="page">{% trans 'Обратная связь' %}</a></li>
+	        <li class="nav-item"><a href="{% url 'users:list' %}" class="nav-link {% if view_name == 'users:list' %}active{% endif %}" aria-current="page">{% trans 'Люди' %}</a></li>
 	        <li class="nav-item"><a href="{% url 'catalog:catalog' %}" class="nav-link {% if view_name == 'catalog:catalog' %}active{% endif %}">{% trans 'Каталог' %}</a></li>
 	        <li class="nav-item"><a href="{% url 'about:about' %}" class="nav-link {% if view_name == 'about:about' %}active{% endif %}">{% trans 'О нас' %}</a></li>
 	        {% if user.is_authenticated %}
@@ -51,21 +51,21 @@
 							  {{ user.username | truncatechars:11 }}
 						  </button>
 						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-						    <a href="#" class="dropdown-item" aria-current="page">
+						    <a href="{% url 'users:profile' %}" class="dropdown-item" aria-current="page">
 						      {% trans 'Профиль' %}
 						    </a>
 						    <a href="#" class="dropdown-item" aria-current="page">
 						      {% trans 'Настройки' %}
 						    </a>
 							  <!-- todo: rebase this to settings -->
-						    <a href="{% url 'users:password_change' %}" class="dropdown-item" aria-current="page">
+						    <a href="{% url 'authorisation:password_change' %}" class="dropdown-item" aria-current="page">
 						      {% trans 'Сменить пароль' %}
 						    </a>
 							  <!-- end todo -->
-						    <a href="#" class="dropdown-item" aria-current="page">
+						    <a href="{% url 'feedback:feedback' %}" class="dropdown-item" aria-current="page">
 						      {% trans 'Помощь' %}
 						    </a>
-						    <a href="{% url 'users:logout' %}" class="dropdown-item" aria-current="page">
+						    <a href="{% url 'authorisation:logout' %}" class="dropdown-item" aria-current="page">
 						      {% trans 'Выйти' %}
 						    </a>
 						  </div>
@@ -73,7 +73,7 @@
 			      </a>
 		      </li>
 		      {% else %}
-		        <a href="{% url 'users:login' %}" class="nav-link login-btn">{% trans 'Войти в аккаунт' %}</a>
+		        <a href="{% url 'authorisation:login' %}" class="nav-link login-btn">{% trans 'Войти в аккаунт' %}</a>
 	        {% endif %}
 		      <li class="change_language">
 		        <form onchange="change_language_form(this);" class="change-language-form" action="{% url 'set_language' %}" method="post">{% csrf_token %}

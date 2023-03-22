@@ -16,6 +16,12 @@ if not load_dotenv(BASE_DIR.parent / '.env'):
     load_dotenv(BASE_DIR.parent / 'example.env')
 
 # --------------------------------------------------------------------
+# ------------------------Site info Section---------------------------
+# --------------------------------------------------------------------
+
+SITE_EMAIL = os.getenv('SITE_EMAIL')
+
+# --------------------------------------------------------------------
 # ------------------------Project Parameters Section------------------
 # --------------------------------------------------------------------
 
@@ -53,7 +59,7 @@ INSTALLED_APPS: List[str] = [
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
     'feedback.apps.FeedbackConfig',
-    'users.apps.UsersConfig',
+    'authorisation.apps.AuthorisationConfig',
     'django_cleanup.apps.CleanupConfig',
 ]
 
@@ -157,10 +163,16 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/auth/login/'
 LOGOUT_REDIRECT_URL = '/auth/login/'
 
-NEW_USERS_ACTIVATED = DEBUG or os.getenv('NEW_USERS_ACTIVATED', 'False').lower() in (
+NEW_USERS_ACTIVATED = DEBUG or os.getenv(
+    'NEW_USERS_ACTIVATED', 'False'
+).lower() in (
     'true',
     '1',
     't',
+)
+
+ACTIVATION_URL_EXPIRE_TIME = os.getenv(
+    'ACTIVATION_URL_EXPIRE_TIME', '00/00/00 12:00:00'
 )
 
 # -----------------------------------------------------------------------

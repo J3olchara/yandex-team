@@ -70,8 +70,8 @@ def get_words_slice(value: str, words_count: str) -> str:
 
 @register.simple_tag()
 def get_image_px_by_url(image: str, px: str, crop: str, quality: int) -> str:
-    res = str(get_thumbnail(image, px, crop=crop, quality=quality).url)
-    return res
+    if image:
+        return str(get_thumbnail(image, px, crop=crop, quality=quality).url)
 
 
 @register.simple_tag()

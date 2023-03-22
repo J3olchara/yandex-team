@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block form %}
-<span class="login-header mb-5">{% trans 'Sign in your account' %}</span>
+<span class="login-header mb-5">{% trans 'Sign into your account' %}</span>
 <form method="post" action="">
 
   {% csrf_token %}
@@ -28,13 +28,13 @@
 
     {% if field.name == 'remember_me' %}
 	    </div>
-      <a class="forgot-password text-decoration-none" href="{% url 'users:password_reset' %}">{% trans 'Forgot password?' %}</a>
+      <a class="forgot-password text-decoration-none" href="{% url 'authorisation:password_reset' %}">{% trans 'Forgot password?' %}</a>
     </div>
     {% endif %}
 
   {% endfor %}
-
-  <button type="submit" class="btn btn-primary btn-lg btn-block">{% trans 'Вход' %}</button>
+	<a class="text-decoration-none" href="{% url 'authorisation:signup' %}">{% trans 'Вы еще не зарегистрировались?' %}</a>
+  <button type="submit" class="btn btn-primary btn-lg btn-block w-100">{% trans 'Вход' %}</button>
 
 </form>
 {% endblock %}

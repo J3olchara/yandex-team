@@ -9,3 +9,4 @@ class AuthorisationConfig(AppConfig):
     def ready(self) -> None:
         import authorisation.signals
 
+        authorisation.signals.forward()

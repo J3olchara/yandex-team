@@ -6,9 +6,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core import mail
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, reverse
+from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from . import forms, models
@@ -49,11 +49,14 @@ class CustomPasswordResetDone(default_views.PasswordResetDoneView):
         )
         head = _('Письмо с инструкциями по восстановлению пароля отправлено')
         p1 = _(
-            'Мы отправили вам инструкцию по установке нового пароля на указанный адрес электронной почты'
-            '(если в нашей базе данных есть такой адрес). Вы должны получить ее в ближайшее время.'
+            'Мы отправили вам инструкцию по установке нового '
+            'пароля на указанный адрес электронной почты'
+            '(если в нашей базе данных есть такой адрес). '
+            'Вы должны получить ее в ближайшее время.'
         )
         p2 = _(
-            'Если вы не получили письмо, пожалуйста, убедитесь, что вы ввели адрес с которым Вы зарегистрировались,'
+            'Если вы не получили письмо, пожалуйста, убедитесь, что '
+            'вы ввели адрес с которым Вы зарегистрировались,'
             ' и проверьте папку со спамом.'
         )
         context['message'] = (
@@ -91,7 +94,7 @@ def signup(request: WSGIRequest) -> HttpResponse:
             + url
         )
         mail.send_mail(
-            subject=_('Активация аккаунта'),
+            subject=str(_('Активация аккаунта')),
             message=message,
             from_email=settings.SITE_EMAIL,
             recipient_list=[form.data['email']],
@@ -100,7 +103,9 @@ def signup(request: WSGIRequest) -> HttpResponse:
     return TemplateResponse(request, template, {'form': form})
 
 
-def signup_confirm(request: WSGIRequest, user_id, token) -> HttpResponse:
+def signup_confirm(
+    request: WSGIRequest, user_id: int, token: models.ActivationToken
+) -> HttpResponse:
     template = 'authorisation/done.html'
     token = get_object_or_404(
         models.ActivationToken.objects,
@@ -120,7 +125,8 @@ def signup_confirm(request: WSGIRequest, user_id, token) -> HttpResponse:
             {
                 'type': 'danger',
                 'text': _(
-                    'Ссылка на активацию аккаунта истекла. Обратитесь к администрации'
+                    'Ссылка на активацию аккаунта истекла. '
+                    'Обратитесь к администрации'
                 ),
             }
         ]
@@ -133,7 +139,7 @@ def signup_done(request: WSGIRequest) -> HttpResponse:
         {
             'type': 'success',
             'text': _(
-                'На вашу электронную отправлена ссылка на активацию аккаунта'
+                'На вашу электронную отправлена ссылка на активацию аккаунта.'
             ),
         }
     ]

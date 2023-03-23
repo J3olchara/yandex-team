@@ -2,13 +2,13 @@
 from typing import Any
 
 import about.urls
+import authorisation.urls
 import catalog.urls
 import django.contrib.auth.urls
 import django.urls
 import feedback.urls
-import users.urls
 import homepage.urls
-import authorisation.urls
+import users.urls
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static

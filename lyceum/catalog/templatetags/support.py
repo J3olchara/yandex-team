@@ -1,4 +1,4 @@
-from typing import Any, Collection, Iterable, List, Union
+from typing import Any, Collection, Iterable, List, Optional, Union
 
 from django import template
 from sorl.thumbnail import get_thumbnail
@@ -69,9 +69,12 @@ def get_words_slice(value: str, words_count: str) -> str:
 
 
 @register.simple_tag()
-def get_image_px_by_url(image: str, px: str, crop: str, quality: int) -> str:
+def get_image_px_by_url(
+    image: str, px: str, crop: str, quality: int
+) -> Optional[str]:
     if image:
         return str(get_thumbnail(image, px, crop=crop, quality=quality).url)
+    return 'NaN'
 
 
 @register.simple_tag()

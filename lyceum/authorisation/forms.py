@@ -1,7 +1,9 @@
+from typing import Any
+
 import django.contrib.auth.forms as default_forms
-from django.contrib.auth import get_user_model
 from django import forms
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from . import models
@@ -18,7 +20,7 @@ class LoginForm(default_forms.AuthenticationForm):
         required=False,
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget = forms.TextInput(
             attrs={
@@ -36,7 +38,7 @@ class LoginForm(default_forms.AuthenticationForm):
 
 
 class PasswordChangeForm(default_forms.PasswordChangeForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(PasswordChangeForm, self).__init__(*args, **kwargs)
         widget = forms.TextInput(
             attrs={
@@ -50,7 +52,7 @@ class PasswordChangeForm(default_forms.PasswordChangeForm):
 
 
 class PasswordResetForm(default_forms.PasswordResetForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(PasswordResetForm, self).__init__(*args, **kwargs)
         self.fields['email'].widget = forms.TextInput(
             attrs={
@@ -61,7 +63,7 @@ class PasswordResetForm(default_forms.PasswordResetForm):
 
 
 class PasswordResetConfirmForm(default_forms.SetPasswordForm):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(PasswordResetConfirmForm, self).__init__(*args, **kwargs)
         widget = forms.PasswordInput(
             attrs={
@@ -73,7 +75,7 @@ class PasswordResetConfirmForm(default_forms.SetPasswordForm):
         self.fields['new_password2'].widget = widget
 
 
-class SignUpForm(default_forms.UserCreationForm):
+class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
     email = forms.EmailField(
         label=_('Ваш email'),
         widget=forms.EmailInput(
@@ -81,21 +83,23 @@ class SignUpForm(default_forms.UserCreationForm):
                 'class': 'form-control',
                 'type': 'email',
             }
-        )
+        ),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
-    def save(self, commit: bool = ...):
-        self.cleaned_data['is_active'] = settings.NEW_USERS_ACTIVATED
+    def save(self, commit: bool = True) -> models.ActivationToken:
         instance = super(SignUpForm, self).save(commit=commit)
+        instance.is_active = settings.NEW_USERS_ACTIVATED
+        print(instance.is_active)
         token = models.ActivationToken.objects.create(
             user=instance,
         )
+        instance.save()
         return token
 
     class Meta:

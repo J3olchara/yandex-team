@@ -172,7 +172,7 @@ NEW_USERS_ACTIVATED = DEBUG or os.getenv(
 )
 
 ACTIVATION_URL_EXPIRE_TIME = os.getenv(
-    'ACTIVATION_URL_EXPIRE_TIME', '00/00/00 12:00:00'
+    'ACTIVATION_URL_EXPIRE_TIME', '00 12:00:00'
 )
 
 # -----------------------------------------------------------------------

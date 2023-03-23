@@ -91,7 +91,6 @@ class FeedbackFormTests(TestCase):
 
     def tearDown(self) -> None:
         feedback_path = settings.MEDIA_ROOT / settings.FEEDBACK_URL
-        print(feedback_path)
         for p in os.listdir(feedback_path):
             shutil.rmtree(feedback_path / p, ignore_errors=True)
         # for p in os.listdir(settings.EMAIL_FILE_PATH):

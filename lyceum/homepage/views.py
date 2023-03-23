@@ -31,7 +31,7 @@ def coffee(request: WSGIRequest) -> HttpResponse:
     response: HttpResponse = TemplateResponse(request, 'homepage/teapot.html')
     response.status_code = 418
     if request.user.is_authenticated:
-        request.user.profile.coffee_break()  # type: ignore[attr-defined]
+        request.user.profile.coffee_break()
     return response
 
 

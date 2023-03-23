@@ -1,9 +1,9 @@
-from typing import Any
+from typing import Any, Optional
 
 import django.contrib.auth.forms as default_forms
+import django.contrib.auth.models as default_models
 from django import forms
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from . import models
@@ -92,10 +92,15 @@ class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
+    def clean_email(self) -> Optional[str]:
+        email = self.cleaned_data.get('email')
+        if default_models.User.objects.filter(email=email).exists():
+            raise forms.ValidationError(_('Этот email уже используется'))
+        return email
+
     def save(self, commit: bool = True) -> models.ActivationToken:
         instance = super(SignUpForm, self).save(commit=commit)
         instance.is_active = settings.NEW_USERS_ACTIVATED
-        print(instance.is_active)
         token = models.ActivationToken.objects.create(
             user=instance,
         )
@@ -103,5 +108,5 @@ class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
         return token
 
     class Meta:
-        model = get_user_model()
+        model = models.UserProxy
         fields = ['email', 'username', 'password1', 'password2']

@@ -33,8 +33,14 @@
             <div class="d-flex justify-content-end text-center py-1">
               <div>
                 <p class="mb-1 h5">{{ current_user.profile.coffee_count }}</p>
-                <p class="small text-muted mb-0">{% trans 'кофе выпито' %}</p>
+                <p class="small text-muted mb-0 mx-2">{% trans 'Кофе выпито' %}</p>
               </div>
+	            {% if current_user.profile.birthday %}
+              <div>
+                <p class="mb-1 h5">{{ current_user.profile.birthday }}</p>
+                <p class="small text-muted mb-0">{% trans 'День рождения' %}</p>
+              </div>
+	            {% endif %}
             </div>
           </div>
           <div class="card-body p-4 text-black">

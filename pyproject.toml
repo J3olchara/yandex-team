@@ -11,6 +11,7 @@ mypy_path = "./lyceum"
 ignore_missing_imports = true
 python_version = 3.9
 disallow_untyped_defs = true
+disable_error_code = ['misc',]
 exclude = "env.*|venv.*|migrations.*|tests.py"
 plugins = "mypy_django_plugin.main"
 strict = true

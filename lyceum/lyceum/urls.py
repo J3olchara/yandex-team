@@ -7,14 +7,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 # isort: off
-import about.urls
-import authorisation.urls
-import catalog.urls
-import django.contrib.auth.urls
-import django.urls
-import feedback.urls
-import homepage.urls
-import users.urls
+import about.urls  # noqa: I100
+import authorisation.urls  # noqa: I100
+import catalog.urls  # noqa: I100
+import django.contrib.auth.urls  # noqa: I100
+import django.urls  # noqa: I100
+import feedback.urls  # noqa: I100
+import homepage.urls  # noqa: I100
+import users.urls  # noqa: I100
 
 # isort: on
 

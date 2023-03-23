@@ -159,6 +159,10 @@ AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = ['lyceum.backends.LoginBackend']
+
+FAILED_AUTHS_TO_DEACTIVATE = int(os.getenv('FAILED_AUTHS_TO_DEACTIVATE', '10'))
+
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/auth/login/'
 LOGOUT_REDIRECT_URL = '/auth/login/'

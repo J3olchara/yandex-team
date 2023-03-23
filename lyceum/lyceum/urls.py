@@ -1,6 +1,12 @@
 """lyceum URL Configuration"""
 from typing import Any
 
+from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
+from django.conf.urls.static import static
+from django.contrib import admin
+
+# isort: off
 import about.urls
 import authorisation.urls
 import catalog.urls
@@ -9,10 +15,8 @@ import django.urls
 import feedback.urls
 import homepage.urls
 import users.urls
-from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
-from django.conf.urls.static import static
-from django.contrib import admin
+
+# isort: on
 
 urlpatterns: Any = [
     django.urls.path('admin/', admin.site.urls, name='admin'),

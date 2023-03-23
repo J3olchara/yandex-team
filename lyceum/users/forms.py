@@ -11,7 +11,6 @@ class DateInput(forms.DateInput):
 
 
 class EditProfile(UserChangeForm):  # type: ignore[type-arg]
-
     avatar = forms.FileField(widget=forms.FileInput())
 
     birthday = forms.DateField(

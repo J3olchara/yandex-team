@@ -65,7 +65,6 @@ class UserManagerExtended(models.Manager):  # type: ignore[type-arg]
 
 
 class UserProxy(User):
-
     objects = UserManagerExtended()  # type: ignore[assignment]
 
     class Meta:

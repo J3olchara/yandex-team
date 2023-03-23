@@ -35,13 +35,9 @@ class EditProfile(UserChangeForm):  # type: ignore[type-arg]
         user.last_name = self.cleaned_data.get('last_name')
         user.email = self.cleaned_data.get('email')
         if self.cleaned_data.get('birthday'):
-            user.profile.birthday = (  # type: ignore[union-attr]
-                self.cleaned_data['birthday']
-            )
-            user.profile.avatar = (  # type: ignore[union-attr]
-                self.cleaned_data['avatar']
-            )
-            user.profile.save()  # type: ignore[union-attr]
+            user.profile.birthday = self.cleaned_data['birthday']
+            user.profile.avatar = self.cleaned_data['avatar']
+            user.profile.save()
         user.save()
 
     class Meta:

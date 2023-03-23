@@ -3,7 +3,6 @@ from datetime import date, datetime
 from typing import Any, Union
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -14,7 +13,7 @@ from . import utils
 
 class Profile(models.Model):
     user: Union[User, Any] = models.OneToOneField(
-        get_user_model(),
+        User,
         related_name='profile',
         on_delete=models.CASCADE,
     )
@@ -73,7 +72,7 @@ class UserProxy(User):
 
 class ActivationToken(models.Model):
     user: Union[User, Any] = models.OneToOneField(
-        get_user_model(),
+        User,
         on_delete=models.CASCADE,
         verbose_name='Пользователь',
     )

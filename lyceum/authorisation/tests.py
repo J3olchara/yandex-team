@@ -1,12 +1,11 @@
 from datetime import timedelta
 from unittest import mock
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import Client, TestCase, override_settings
 
-from . import models
+from . import forms, models
 
 
 class SignUpTests(TestCase):
@@ -14,6 +13,7 @@ class SignUpTests(TestCase):
         self.user = User.objects.create(
             username='some_test_username',
             password='empty_password',
+            email='danila_eremin_email@google.com',
             is_active=False,
         )
         self.token = models.ActivationToken.objects.create(user=self.user)
@@ -78,9 +78,21 @@ class SignUpTests(TestCase):
                     'username': 'fake_username1',
                     'password1': 'fake_password1',
                     'password2': 'fake_password1',
-                    'email': 'email@yandex.ru',
+                    'email': 'love_danila_eremin@seniorgoogle.com',
                 },
             )
             self.assertRedirects(resp, reverse('authorisation:signup_done'))
             user = User.objects.get(username='fake_username1')
             self.assertTrue(user.is_active)
+
+    def test_unique_email_signup(self):
+        form_data = {
+            'username': 'some_interesting_username',
+            'password1': 'somehotpassword',
+            'password2': 'somehotpassword',
+            'email': self.user.email,
+        }
+        form = forms.SignUpForm(form_data)
+        form.full_clean()
+        self.assertNotIn('email', form.cleaned_data.keys())
+        self.assertEqual(1, len(form.errors))

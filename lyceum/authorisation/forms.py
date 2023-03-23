@@ -1,9 +1,9 @@
 from typing import Any, Optional
 
 import django.contrib.auth.forms as default_forms
+import django.contrib.auth.models as default_models
 from django import forms
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from . import models
@@ -94,7 +94,7 @@ class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
 
     def clean_email(self) -> Optional[str]:
         email = self.cleaned_data.get('email')
-        if self.Meta.model.objects.filter(email=email).exists():
+        if default_models.User.objects.filter(email=email).exists():
             raise forms.ValidationError(_('Этот email уже используется'))
         return email
 
@@ -108,5 +108,5 @@ class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
         return token
 
     class Meta:
-        model = get_user_model()
+        model = models.UserProxy
         fields = ['email', 'username', 'password1', 'password2']

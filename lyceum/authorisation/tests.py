@@ -11,9 +11,9 @@ from . import forms, models
 class SignUpTests(TestCase):
     def setUp(self) -> None:
         self.user = User.objects.create(
-            username='some_test_username',
+            username='some_test_username_qwerty',
             password='empty_password',
-            email='danila_eremin_email@google.com',
+            email='danila_eremin_email@google.comtest',
             is_active=False,
         )
         self.token = models.ActivationToken.objects.create(user=self.user)
@@ -96,3 +96,20 @@ class SignUpTests(TestCase):
         form.full_clean()
         self.assertNotIn('email', form.cleaned_data.keys())
         self.assertEqual(1, len(form.errors))
+
+
+class TestEndpoints(TestCase):
+    def test_signup(self):
+        path = reverse('authorisation:signup')
+        resp = self.client.get(path)
+        self.assertEqual(resp.status_code, 200)
+
+    def test_login(self):
+        path = reverse('authorisation:login')
+        resp = self.client.get(path)
+        self.assertEqual(resp.status_code, 200)
+
+    def test_signup_done(self):
+        path = reverse('authorisation:signup_done')
+        resp = self.client.get(path)
+        self.assertEqual(resp.status_code, 200)

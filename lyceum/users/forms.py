@@ -3,7 +3,11 @@ from typing import Any, Dict, Optional, Union
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.models import User
+
+# isort: off
+from authorisation.models import UserProxy  # noqa: I100
+
+# isort: on
 
 
 class DateInput(forms.DateInput):
@@ -29,7 +33,9 @@ class EditProfile(UserChangeForm):  # type: ignore[type-arg]
                 self.fields[field].required = False
         del self.fields['password']
 
-    def save(self, commit: bool = True, user: Union[User, Any] = None) -> None:
+    def save(
+        self, commit: bool = True, user: Union[UserProxy, Any] = None
+    ) -> None:
         user.first_name = self.cleaned_data.get('first_name')
         # print(self.fields['birthday'].widget.__dict__)
         user.last_name = self.cleaned_data.get('last_name')

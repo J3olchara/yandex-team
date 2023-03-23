@@ -14,7 +14,3 @@ def save_profile(
     if created:
         profile = models.Profile(user=instance)
         profile.save()
-
-
-def forward() -> None:
-    ...

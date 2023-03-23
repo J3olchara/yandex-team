@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIRequest
 from django.forms.models import model_to_dict
@@ -6,22 +5,22 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from . import forms
+# isort: off
+from . import forms  # noqa: I100
+from authorisation.models import UserProxy  # noqa: I100
+
+# isort: on
 
 
 def user_list(request: WSGIRequest) -> HttpResponse:
     template = 'users/user_list.html'
-    data = {'users': settings.UserModel.objects.all().filter(is_active=True)}
+    data = {'users': UserProxy.objects.all()}
     return render(request, template, data)
 
 
 def user_detail(request: WSGIRequest, user_id: int) -> HttpResponse:
     template = 'users/user_detail.html'
-    data = {
-        'current_user': get_object_or_404(
-            settings.UserModel.objects, id=user_id
-        )
-    }
+    data = {'current_user': get_object_or_404(UserProxy.objects, id=user_id)}
     return render(request, template, data)
 
 

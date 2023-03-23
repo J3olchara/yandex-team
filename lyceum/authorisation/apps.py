@@ -7,6 +7,4 @@ class AuthorisationConfig(AppConfig):
     label = 'users'
 
     def ready(self) -> None:
-        import authorisation.signals
-
-        authorisation.signals.forward()
+        import authorisation.signals  # noqa: F401

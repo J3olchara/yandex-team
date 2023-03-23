@@ -3,7 +3,7 @@ from datetime import date, datetime
 from typing import Any, Union
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.db import models
 from django.urls import reverse
 from pytz import timezone, utc
@@ -54,10 +54,20 @@ class Profile(models.Model):
         verbose_name_plural = 'Дополнительные поля'
 
 
-class UserManagerExtended(models.Manager):  # type: ignore[type-arg]
+class UserManagerExtended(UserManager['UserProxy']):
     def get_queryset(self) -> Any:
         return (
             super(UserManagerExtended, self)
+            .get_queryset()
+            .select_related('profile')
+            .filter(is_active=True)
+        )
+
+
+class InactiveUserManagerExtended(UserManager['UserProxy']):
+    def get_queryset(self) -> Any:
+        return (
+            super(InactiveUserManagerExtended, self)
             .get_queryset()
             .select_related('profile')
         )
@@ -65,6 +75,7 @@ class UserManagerExtended(models.Manager):  # type: ignore[type-arg]
 
 class UserProxy(User):
     objects = UserManagerExtended()  # type: ignore[assignment]
+    inactive = InactiveUserManagerExtended()
 
     class Meta:
         proxy = True

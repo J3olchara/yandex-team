@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+{% load support i18n static %}
+
+{% block content %}
+	<div class="row d-flex flex-row flex-wrap row-cols-3 gap-5">
+		{% for user in users %}
+			{% include 'users/includes/user_card.html' %}
+		{% endfor %}
+	</div>
+{% endblock %}

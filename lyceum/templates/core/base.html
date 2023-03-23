@@ -1,29 +1,20 @@
 <!doctype html>
 {% load static i18n %}
-<html lang="en">
+<html lang="{% with get_current_language as language %}{{ language }}{% endwith %}">
 	<head>
-	  <meta charset="UTF-8">
-	  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	  <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.min.css' %}">
-	  <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-	  <link rel="stylesheet" href="{% static 'css/main.css' %}">
-		<script src="{% static 'js/jquery-3.6.3.js' %}"></script>
-		<script src="{% static 'js/bootstrap/bootstrap.bundle.js' %}"></script>
-		<script src="{% static 'js/clock.js' %}"></script>
-		<script src="{% static 'js/main.js' %}"></script>
+		{% include 'core/base_header_links.html' %}
 	  {% include 'core/favicons/main.html' %}
 	  {% block head %}
 	  {% endblock %}
 	  <title>cat</title>
 	</head>
 	<body>
-	  <div class="container">
+	  <div class=" container">
 	    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
 	      <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
 	        <img src="{% static 'img/cats/nya.jpg' %}" width="60" height="60" alt="">
 	        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-	        <span class="fs-4">Кошачий магазин</span>
+	        <span class="fs-4">Kitty's market</span>
 	      </a>
 	      {% with request.resolver_match.view_name as view_name %}
 	      <ul class="nav nav-pills py-6 align-items-center">
@@ -50,10 +41,41 @@
 			      </a>
 		      </li>
 		      <li class="nav-item"><a href="{% url 'home:home' %}" class="nav-link {% if view_name == 'home:home' %}active{% endif %}" aria-current="page">{% trans 'Главная' %}</a></li>
-		      <li class="nav-item"><a href="{% url 'feedback:feedback' %}" class="nav-link {% if view_name == 'feedback:feedback' %}active{% endif %}" aria-current="page">{% trans 'Обратная связь' %}</a></li>
+	        <li class="nav-item"><a href="{% url 'users:list' %}" class="nav-link {% if view_name == 'users:list' %}active{% endif %}" aria-current="page">{% trans 'Люди' %}</a></li>
 	        <li class="nav-item"><a href="{% url 'catalog:catalog' %}" class="nav-link {% if view_name == 'catalog:catalog' %}active{% endif %}">{% trans 'Каталог' %}</a></li>
 	        <li class="nav-item"><a href="{% url 'about:about' %}" class="nav-link {% if view_name == 'about:about' %}active{% endif %}">{% trans 'О нас' %}</a></li>
-	        <li class="change_language">
+	        {% if user.is_authenticated %}
+	          <li class="user-profile nav-link">
+			      <div class="dropdown open">
+						  <button class="btn dropdown-toggle intresting-header" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							  {{ user.username | truncatechars:11 }}
+						  </button>
+						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						    <a href="{% url 'users:profile' %}" class="dropdown-item" aria-current="page">
+						      {% trans 'Профиль' %}
+						    </a>
+						    <a href="#" class="dropdown-item" aria-current="page">
+						      {% trans 'Настройки' %}
+						    </a>
+							  <!-- todo: rebase this to settings -->
+						    <a href="{% url 'authorisation:password_change' %}" class="dropdown-item" aria-current="page">
+						      {% trans 'Сменить пароль' %}
+						    </a>
+							  <!-- end todo -->
+						    <a href="{% url 'feedback:feedback' %}" class="dropdown-item" aria-current="page">
+						      {% trans 'Помощь' %}
+						    </a>
+						    <a href="{% url 'authorisation:logout' %}" class="dropdown-item" aria-current="page">
+						      {% trans 'Выйти' %}
+						    </a>
+						  </div>
+						</div>
+			      </a>
+		      </li>
+		      {% else %}
+		        <a href="{% url 'authorisation:login' %}" class="nav-link login-btn">{% trans 'Войти в аккаунт' %}</a>
+	        {% endif %}
+		      <li class="change_language">
 		        <form onchange="change_language_form(this);" class="change-language-form" action="{% url 'set_language' %}" method="post">{% csrf_token %}
 			        <input type="hidden" hidden value="{{ redirect_to }}">
 			        <select name="language">
@@ -66,7 +88,6 @@
 				          </option>
 			          {% endfor %}
 			        </select>
-
 		        </form>
 	        </li>
 	      </ul>

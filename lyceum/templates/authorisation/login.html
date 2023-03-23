@@ -1,0 +1,40 @@
+{% extends 'core/password_manipulations.html' %}
+{% load i18n %}
+
+{% block form %}
+<span class="login-header mb-5">{% trans 'Sign into your account' %}</span>
+<form method="post" action="">
+
+  {% csrf_token %}
+  {% for v, error in form.errors.items %}
+		<div class="alert alert-danger">
+			{{ error|escape|striptags }}
+		</div>
+  {% endfor %}
+  {% for field in form %}
+		{{ field.errors }}
+    {% if field.name == 'remember_me' %}
+      <div class="d-flex justify-content-around align-items-left mb-4">
+      <div class="form-check">
+    {% endif %}
+
+    <label class="form-label" for="{{ field.auto_id }}">{{ field.label}}</label>
+    {% for error in field.errors %}
+			<div class="alert alert-danger">
+				{{ error|escape }}
+			</div>
+    {% endfor %}
+    {{ field }}
+
+    {% if field.name == 'remember_me' %}
+	    </div>
+      <a class="forgot-password text-decoration-none" href="{% url 'authorisation:password_reset' %}">{% trans 'Forgot password?' %}</a>
+    </div>
+    {% endif %}
+
+  {% endfor %}
+	<a class="text-decoration-none" href="{% url 'authorisation:signup' %}">{% trans 'Вы еще не зарегистрировались?' %}</a>
+  <button type="submit" class="btn btn-primary btn-lg btn-block w-100">{% trans 'Вход' %}</button>
+
+</form>
+{% endblock %}

@@ -16,6 +16,12 @@ if not load_dotenv(BASE_DIR.parent / '.env'):
     load_dotenv(BASE_DIR.parent / 'example.env')
 
 # --------------------------------------------------------------------
+# ------------------------Site info Section---------------------------
+# --------------------------------------------------------------------
+
+SITE_EMAIL = os.getenv('SITE_EMAIL')
+
+# --------------------------------------------------------------------
 # ------------------------Project Parameters Section------------------
 # --------------------------------------------------------------------
 
@@ -53,6 +59,7 @@ INSTALLED_APPS: List[str] = [
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
     'feedback.apps.FeedbackConfig',
+    'authorisation.apps.AuthorisationConfig',
     'django_cleanup.apps.CleanupConfig',
 ]
 
@@ -130,7 +137,7 @@ DATABASES: Dict[str, Dict[str, Union[str, Path]]] = {
 }
 
 # -----------------------------------------------------------------------
-# --------------------------Validators Section---------------------------
+# --------------------------USER AUTH Section----------------------------
 # -----------------------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
@@ -151,6 +158,22 @@ AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
         + 'NumericPasswordValidator',
     },
 ]
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/auth/login/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
+
+NEW_USERS_ACTIVATED = DEBUG or os.getenv(
+    'NEW_USERS_ACTIVATED', 'False'
+).lower() in (
+    'true',
+    '1',
+    't',
+)
+
+ACTIVATION_URL_EXPIRE_TIME = os.getenv(
+    'ACTIVATION_URL_EXPIRE_TIME', '00 12:00:00'
+)
 
 # -----------------------------------------------------------------------
 # -------------------------Client settings Section-----------------------
@@ -206,8 +229,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = BASE_DIR / 'send_email'
 
 FEEDBACK_URL = 'uploads/feedback/'  # by media root
-
-FEEDBACK_URL
 
 # -----------------------------------------------------------------------
 # ------------------------------Plugins----------------------------------

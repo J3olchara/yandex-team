@@ -40,6 +40,10 @@ class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]
     def __str__(self) -> Any:
         return self.name[:20]
 
+    def __call__(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        self.save()
+
 
 class Category(core.models.BaseSlug):  # type: ignore[name-defined, misc]
     """
@@ -64,6 +68,10 @@ class Category(core.models.BaseSlug):  # type: ignore[name-defined, misc]
 
     def __str__(self) -> Any:
         return self.name[:40]
+
+    def __call__(self, *args: Any, **kwargs: Any) -> None:
+        self.full_clean()
+        self.save()
 
 
 @cleanup.select

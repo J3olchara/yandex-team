@@ -30,6 +30,8 @@ def coffee(request: WSGIRequest) -> HttpResponse:
     """returns error page that django cant generate because he is a tea pot"""
     response: HttpResponse = TemplateResponse(request, 'homepage/teapot.html')
     response.status_code = 418
+    if request.user.is_authenticated:
+        request.user.profile.coffee_break()  # type: ignore[attr-defined]
     return response
 
 

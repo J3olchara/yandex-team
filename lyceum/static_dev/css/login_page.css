@@ -1,0 +1,12 @@
+.login {
+    position: relative;
+}
+.login-header {
+    display: inline-block;
+    top: 0;
+    font-weight: 600;
+    font-size: 35px;
+}
+.forgot-password {
+
+}

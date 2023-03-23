@@ -7,7 +7,7 @@ from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 # isort: off
-from authorisation.models import UserProxy, ActivationToken  # noqa: I100
+from authorisation.models import UserProxy, ActivationToken  # noqa: I100, I101
 
 # isort: on
 

@@ -38,8 +38,8 @@ def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
     }
     if request.user.is_authenticated:
         evaluation: Any = rating.models.Evaluation.objects.filter(user=request.user.id, item=item_object).first()
-        # if evaluation:
-        #     data['url_to_delete'] = reverse('rating:delete_evaluation', item_id, request.user.id)
+        if evaluation:
+            data['url_to_delete'] = reverse('rating:delete_evaluation', item_id, request.user.id)
         form: Any = rating.forms.EvaluationForm(request.POST or None, instance=evaluation)
         if request.POST and form.is_valid():
             if evaluation:

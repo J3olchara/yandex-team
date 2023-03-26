@@ -1,1 +1,0 @@
-"""CATALOG app imports"""

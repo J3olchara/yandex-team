@@ -47,6 +47,22 @@
 		<span class="back-chat">Обратная связь</span>
 	</div>
 	<div class="item-description">{{ item.text|safe }}</div>
+	<div class="evoluation-form container">
+		<form method="post">
+			{% csrf_token %}
+			{% for field in evaluation_form %}
+				{{ field.label_tag }} {{ field }}
+				{% if field.help_text %}
+				<p class='form-text'> {{ field.help_text }} </p>
+				{% endif %}
+				{% for error in field.errors %}
+				<p class='text-danger'> {{ error|escape }} </p>
+				{% endfor %}
+		  	{% endfor %}
+			<button type="submit" class="btn btn-primary">Отправить</button>
+			<a class="btn btn-danger" href={{ url_to_delete }}>Удалить</a>
+		</form>
+	</div>
 </div>
 {% endwith %}
 

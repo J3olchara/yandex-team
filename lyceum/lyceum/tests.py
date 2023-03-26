@@ -3,8 +3,9 @@
 from typing import List
 
 from django.conf import settings
-from django.test import TestCase, modify_settings
+from django.test import TestCase, modify_settings, override_settings
 from django.urls import reverse
+from parameterized import parameterized
 
 from . import middlewares
 
@@ -15,12 +16,12 @@ from . import middlewares
         'remove': settings.COMMON_MIDDLEWARES,
     }
 )
+@override_settings(REVERSER_MIDDLEWARE=True)
 class ReverseMiddlewareTests(TestCase):
     """tests reversing middleware"""
 
-    def test_reverser(self) -> None:
-        """test reversing function work"""
-        tests = [
+    @parameterized.expand(  # type: ignore[misc]
+        [
             ('hello world!', 'hello world!'),
             ('Привет world', 'тевирП world'),
             ('Helпривет мorld', 'Helпривет мorld'),
@@ -28,20 +29,20 @@ class ReverseMiddlewareTests(TestCase):
             ('Да', 'аД'),
             ('Привет, друг', 'тевирП, гурд'),
         ]
-        for test, ans in tests:
-            content: bytes = middlewares.CoffeeTime.reverse_words(
-                test.encode()
-            )
-            self.assertIn(ans, content.decode())
+    )
+    def test_reverser(self, test: str, answer: str) -> None:
+        """test reversing function work"""
+        content: bytes = middlewares.CoffeeTime.reverse_words(test.encode())
+        self.assertIn(answer, content.decode())
 
     def test_work(self) -> None:
         """tests middleware working all in all"""
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
         content: List[str] = []
-        for _ in range(middlewares.CoffeeTime.enable):
+        for _ in range(middlewares.CoffeeTime.times_to_on):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             content.append(request.content.decode())
         self.assertIn(test_string, content)
@@ -52,48 +53,49 @@ class ReverseMiddlewareTests(TestCase):
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
         contents: List[str] = []
-        for _ in range(middlewares.CoffeeTime.enable - 1):
+        for _ in range(middlewares.CoffeeTime.times_to_on - 1):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             contents.append(request.content.decode())
-        self.client.get(reverse('test'), data={'test': test_string})
+        self.client.get(reverse('home:test'), data={'test': test_string})
         self.assertEqual(len(set(contents)), 1)
         contents.clear()
-        for _ in range(middlewares.CoffeeTime.enable * 2 - 1):
+        for _ in range(middlewares.CoffeeTime.times_to_on * 2 - 1):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             contents.append(request.content.decode())
         self.assertEqual(
-            contents.count(test_string), middlewares.CoffeeTime.enable * 2 - 2
+            contents.count(test_string),
+            middlewares.CoffeeTime.times_to_on * 2 - 2,
         )
         self.assertEqual(contents.count(rev_string), 1)
 
     def test_switcher_environ(self) -> None:
         """tests correct working of switcher"""
-        tmp_enable = middlewares.CoffeeTime.enable
-        middlewares.CoffeeTime.enable = 1
+        tmp_times_to_on = middlewares.CoffeeTime.times_to_on
+        middlewares.CoffeeTime.times_to_on = 1
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
 
-        with self.settings(REVERSER_MIDDLEWARE=True):
-            request = self.client.get(
-                reverse('test'), data={'test': test_string}
-            )
-            self.assertEqual(
-                request.content.decode(),
-                rev_string,
-                settings.REVERSER_MIDDLEWARE,
-            )
-
         with self.settings(REVERSER_MIDDLEWARE=False):
             request = self.client.get(
-                reverse('test'), data={'test': test_string}
+                reverse('home:test'), data={'test': test_string}
             )
             self.assertEqual(
                 request.content.decode(),
                 test_string,
                 settings.REVERSER_MIDDLEWARE,
             )
-        middlewares.CoffeeTime.enable = tmp_enable
+
+        with self.settings(REVERSER_MIDDLEWARE=True):
+            request = self.client.get(
+                reverse('home:test'), data={'test': test_string}
+            )
+            self.assertEqual(
+                request.content.decode(),
+                rev_string,
+                settings.REVERSER_MIDDLEWARE,
+            )
+        middlewares.CoffeeTime.times_to_on = tmp_times_to_on

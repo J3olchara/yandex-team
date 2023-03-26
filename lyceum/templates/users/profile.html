@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% load support i18n %}
+
+{% block content %}
+<div class="container bootstrap snippets bootdey w-100">
+    <h1 class="text-primary">Edit Profile</h1>
+      <hr>
+	<form method="post" enctype="multipart/form-data" action="">
+		<div class="row">
+	      <!-- left column -->
+	      <div class="col-md-3">
+	        <div class="text-center">
+	          <img src="{% get_image_px_by_url image=user.profile.avatar px='300x300' crop='center' quality=90 %}" class="avatar img-circle img-thumbnail" alt="avatar">
+	          <h6>Upload a different photo...</h6>
+
+	          {% for field in form %}
+		          {% if field.name == 'avatar' %}
+		            {{ field }}
+		          {% endif %}
+		        {% endfor %}
+	        </div>
+		      <a class="btn btn-primary btn-lg mt-3" href="{% url 'home:coffee' %}">Выпить кофе</a>
+	      </div>
+
+	      <!-- edit form column -->
+	      <div class="col-md-9 personal-info">
+	        {% for field in form %}
+		        {% if field.errors %}
+		          <div class="alert alert-info alert-dismissable">
+			          <a class="panel-close close" data-dismiss="alert">×</a>
+			          <i class="fa fa-coffee"></i>
+			          {{ field.errors|safe|striptags }}
+	            </div>
+	          {% endif %}
+	        {% endfor %}
+	        <h3>Personal info</h3>
+
+						{% csrf_token %}
+
+		        {% for field in form %}
+
+			        {% if field.name != 'username' and field.name != 'avatar' %}
+			        <div class="form-group">
+		            <label class="col-lg-3 control-label" for="{{ field.auto_id }}">{{ field.label}}</label>
+		            <div class="col-lg-8">
+			            {{ field }}
+		            </div>
+		          </div>
+
+			        {% elif field.name == 'username' %}
+				        {{ field.as_hidden }}
+			        {% endif %}
+
+		        {% endfor %}
+	          <button type="submit" class="btn btn-primary btn-lg w-75 btn-block mt-4">{% trans 'Сохранить' %}</button>
+	      </div>
+	  </div>
+	</form>
+</div>
+{% endblock %}

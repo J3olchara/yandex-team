@@ -1,0 +1,8 @@
+.status-good {
+    color: green;
+    background-color: rgba(0,255,40,0.13);
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    display: inline-block;
+}

@@ -1,0 +1,8 @@
+{% load support i18n %}
+<div class="card d-flex p-0" style="width: 18rem;">
+  <img src="{% get_image_px_by_url image=user.profile.avatar px='200x150' crop='center' quality=60 %}" class="card-img-top" alt="">
+  <div class="card-body">
+    <h5 class="card-title">{{ user.username }}</h5>
+    <a href="{% url 'users:details' user.id %}" class="btn btn-primary">{% trans 'Профиль' %}</a>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<!doctype html>
+{% load static i18n %}
+<html lang="{% with get_current_language as language %}{{ language }}{% endwith %}">
+	<head>
+		{% include 'core/base_header_links.html' %}
+	  {% include 'core/favicons/main.html' %}
+	  {% block head %}
+	  {% endblock %}
+	  <title>cat</title>
+	</head>
+	<body>
+	  <div class=" container">
+	    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+	      <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
+	        <img src="{% static 'img/cats/nya.jpg' %}" width="60" height="60" alt="">
+	        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+	        <span class="fs-4">Kitty's market</span>
+	      </a>
+	      {% with request.resolver_match.view_name as view_name %}
+	      <ul class="nav nav-pills py-6 align-items-center">
+	        {% if user.is_superuser %}
+	        <li class="nav-item"><a href="{% url 'admin:index' %}" class="nav-link {% if view_name == 'admin' %}active{% endif %}" aria-current="page">{% trans 'Админ панель' %}</a></li>
+	        {% endif %}
+		      <li class="nav-item nav-link">
+			      <div class="dropdown open">
+						  <button class="btn dropdown-toggle intresting-header" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							  {% trans 'Интересное' %}
+						  </button>
+						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						    <a href="{% url 'catalog:news' %}" class="dropdown-item {% if view_name == 'catalog:news' %}active{% endif %}" aria-current="page">
+						      {% trans 'Новинки' %}
+						    </a>
+						    <a href="{% url 'catalog:friday' %}" class="dropdown-item {% if view_name == 'catalog:friday' %}active{% endif %}" aria-current="page">
+						      {% trans 'Пятница' %}
+						    </a>
+						    <a href="{% url 'catalog:unchecked' %}" class="dropdown-item {% if view_name == 'catalog:unchecked' %}active{% endif %}" aria-current="page">
+						      {% trans 'Непроверенное' %}
+						    </a>
+						  </div>
+						</div>
+			      </a>
+		      </li>
+		      <li class="nav-item"><a href="{% url 'home:home' %}" class="nav-link {% if view_name == 'home:home' %}active{% endif %}" aria-current="page">{% trans 'Главная' %}</a></li>
+	        <li class="nav-item"><a href="{% url 'users:list' %}" class="nav-link {% if view_name == 'users:list' %}active{% endif %}" aria-current="page">{% trans 'Люди' %}</a></li>
+	        <li class="nav-item"><a href="{% url 'catalog:catalog' %}" class="nav-link {% if view_name == 'catalog:catalog' %}active{% endif %}">{% trans 'Каталог' %}</a></li>
+	        <li class="nav-item"><a href="{% url 'about:about' %}" class="nav-link {% if view_name == 'about:about' %}active{% endif %}">{% trans 'О нас' %}</a></li>
+	        {% if user.is_authenticated %}
+	          <li class="user-profile nav-link">
+			      <div class="dropdown open">
+						  <button class="btn dropdown-toggle intresting-header" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							  {{ user.username | truncatechars:11 }}
+						  </button>
+						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+						    <a href="{% url 'users:profile' %}" class="dropdown-item" aria-current="page">
+						      {% trans 'Профиль' %}
+						    </a>
+						    <a href="#" class="dropdown-item" aria-current="page">
+						      {% trans 'Настройки' %}
+						    </a>
+							  <!-- todo: rebase this to settings -->
+						    <a href="{% url 'authorisation:password_change' %}" class="dropdown-item" aria-current="page">
+						      {% trans 'Сменить пароль' %}
+						    </a>
+							  <!-- end todo -->
+						    <a href="{% url 'feedback:feedback' %}" class="dropdown-item" aria-current="page">
+						      {% trans 'Помощь' %}
+						    </a>
+						    <a href="{% url 'authorisation:logout' %}" class="dropdown-item" aria-current="page">
+						      {% trans 'Выйти' %}
+						    </a>
+						  </div>
+						</div>
+			      </a>
+		      </li>
+		      {% else %}
+		        <a href="{% url 'authorisation:login' %}" class="nav-link login-btn">{% trans 'Войти в аккаунт' %}</a>
+	        {% endif %}
+		      <li class="change_language">
+		        <form onchange="change_language_form(this);" class="change-language-form" action="{% url 'set_language' %}" method="post">{% csrf_token %}
+			        <input type="hidden" hidden value="{{ redirect_to }}">
+			        <select name="language">
+				        {% get_current_language as LANGUAGE_CODE %}
+				        {% get_available_languages as LANGUAGES %}
+				        {% get_language_info_list for LANGUAGES as languages %}
+			          {% for language in languages %}
+				          <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+				            {{ language.name_local }} ({{ language.code }})
+				          </option>
+			          {% endfor %}
+			        </select>
+		        </form>
+	        </li>
+	      </ul>
+	    {% endwith %}
+	    </header>
+		  <div class="content">
+			  {% block content %}{% endblock %}
+		  </div>
+			<footer class="footer">
+				<div class="footer-timer">
+					<span class="footer-time">{% now 'jS F ' %}</span>
+					<span class="footer-clock">{% now 'Y H:i:s ' %}</span>
+				</div>
+			</footer>
+	  </div>
+	</body>
+</html>

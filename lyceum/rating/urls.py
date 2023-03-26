@@ -10,7 +10,7 @@ app_name = 'rating'
 
 urlpatterns: List[resolvers.URLPattern] = [
     path(
-        'delete/<int:user_id>/<int:item_id>',
+        'delete/<int:item_id>/',
         views.delete_evaluation,
         name='delete_evaluation',
     ),

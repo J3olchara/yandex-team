@@ -5,7 +5,7 @@ import catalog.models
 import rating.models
 import rating.forms
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import HttpResponse, redirect, get_object_or_404
+from django.shortcuts import HttpResponse, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
 

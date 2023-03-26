@@ -60,8 +60,9 @@
 				{% endfor %}
 		  	{% endfor %}
 			<button type="submit" class="btn btn-primary">Отправить</button>
-			<a class="btn btn-danger" href={{ url_to_delete }}>Удалить</a>
+			<a class="btn btn-danger" href={% url 'rating:delete_evaluation' item_id=item.id %}>Удалить</a>
 		</form>
+		
 	</div>
 </div>
 {% endwith %}

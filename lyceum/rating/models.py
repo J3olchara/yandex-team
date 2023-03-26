@@ -21,7 +21,7 @@ class Evaluation(models.Model):
                 5, message='Максимальное значение оценки - 5'
             ),
             django.core.validators.MinValueValidator(
-                1, message='Минимальное значение оценки - 1ы'
+                1, message='Минимальное значение оценки - 1'
             ),
         ],
     )

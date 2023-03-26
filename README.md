@@ -22,15 +22,29 @@
 >
 > python -m pip install -r requirements\prod.txt
 
+ - install GNU tools from https://mlocati.github.io/articles/gettext-iconv-windows.html
+
 3. Get a secret variables for your application:
   > create .env file with example.env variables. 
 
 Prevent third parties from getting values of your .env variables
 
-4. finally run it by this command:
-> python lyceum\manage.py runserver localhost:80
+4. Migrate database:
+  > python lyceum\manage.py makemigrations
+  > 
+  > python lyceum\manage.py migrate
 
-Then the application will start on http://localhost:80
+5. Create your admin account:
+  > python lyceum\manage.py createsuperuser
+> - write your login
+> - write your email
+> - write your password
+> - confirm the password
+
+6. finally run it by this command:
+> python lyceum\manage.py runserver
+
+Then the application will start on http://localhost:8000
 
 
 # How to run in on Linux OS
@@ -53,12 +67,26 @@ Then the application will start on http://localhost:80
   >
   > python3 -m pip3 install -r requirements/prod.txt
 
+> sudo apt-get install gettext
+
 3. Get a secret variables for your application:
   > create .env file with example.env variables. 
 
 Prevent third parties from getting values of your .env variables
 
-4. finally run it by this command:
-  > python3 lyceum/manage.py runserver localhost:80
+4. Migrate database:
+  > python3 lyceum/manage.py makemigrations
+  > 
+  > python3 lyceum/manage.py migrate
 
-Then the application will start on http://localhost:80
+5. Create your admin account:
+  > python3 lyceum/manage.py createsuperuser
+> - write your login
+> - write your email
+> - write your password
+> - confirm the password
+
+6. finally run it by this command:
+> python3 lyceum/manage.py runserver
+
+Then the application will start on http://localhost:8000

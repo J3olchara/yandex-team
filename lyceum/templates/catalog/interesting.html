@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load support %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/item_cards.css' %}">
+{% endblock %}
+
+{% block content %}
+	{% with items=items_raw|group_items:'tags__name,id' %}
+		<div class="catalog-items">
+			{% for item in items %}
+				{% include "catalog/includes/item_card.html" %}
+			{% endfor %}
+		</div>
+	{% endwith %}
+{% endblock %}

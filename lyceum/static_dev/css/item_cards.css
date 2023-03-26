@@ -1,0 +1,129 @@
+.catalog-items {
+    display: flex;
+    justify-content: left;
+    grid-row-gap: 50px;
+    grid-column-gap: 150px;
+    padding-bottom: 50px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.catalog-item {
+    display: flex;
+    min-width: 300px;
+    min-height: 400px;
+    width: 300px;
+    height: 400px;
+    position: relative;
+    border-radius: 3px;
+    padding: 20px;
+    word-break: normal;
+    overflow: hidden;
+}
+.catalog-item-navigation {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 20px;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: left;
+    align-items: center;
+    width: 260px;
+    cursor: pointer;
+}
+.catalog-item-redirect-blur {
+    z-index: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 115px;
+    background: linear-gradient(0deg, rgba(256, 256, 256, 0.3), rgba(256, 256, 256, 0.3)), #000000;
+    filter: blur(62px);
+}
+.catalog-item-name {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    color: #FFFFFF;
+    z-index: 10;
+    text-align: center;
+}
+.catalog-header-blur::before {
+    content: ' ';
+    position: absolute;
+    width: 300px;
+    height: 50px;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.95);
+    filter: blur(39px);
+}
+.catalog-item-text {
+    z-index: 3;
+    width: 200px;
+    height: 60px;
+    color: #FFFFFF;
+}
+.catalog-go-to-item-btn {
+    background-color: #FFFFFF;
+    border-radius: 55px;
+    padding: 12px;
+    width: 55px;
+    height: 55px;
+    position: absolute;
+    right: 0;
+    z-index: 3;
+}
+.catalog-item-tags {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 60px;
+    display: flex;
+    grid-gap: 20px;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+.catalog-item-tag {
+    background: #FFFFFF;
+    z-index: 5;
+    border-radius: 15px;
+    width: fit-content;
+    min-width: 70px;
+    height: 15px;
+    text-align: center;
+    vertical-align: middle;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    padding: 0 2px;
+    font-size: 10px;
+    line-height: 15px;
+    overflow: hidden;
+}
+.catalog-item-header {
+    position: absolute;
+    text-align: center;
+    left: 0;
+    width: 100%;
+}
+.category-group-header {
+    height: fit-content;
+    font-family: 'Inter', sans-serif;
+    display: inline-block;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 36px;
+    color: #a10000;
+    margin: 0;
+    padding: 0 0 20px 0;
+}

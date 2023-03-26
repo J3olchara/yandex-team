@@ -5,7 +5,7 @@ import catalog.models
 import rating.models
 import rating.forms
 from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import HttpResponse, redirect
+from django.shortcuts import HttpResponse, redirect, get_object_or_404
 from django.template.response import TemplateResponse
 from django.urls import reverse
 
@@ -37,16 +37,21 @@ def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
         'images': images,
     }
     if request.user.is_authenticated:
-        evaluation: Any = rating.models.Evaluation.objects.filter(user=request.user.id, item=item_object).first()
-        if evaluation:
-            data['url_to_delete'] = reverse('rating:delete_evaluation', item_id, request.user.id)
-        form: Any = rating.forms.EvaluationForm(request.POST or None, instance=evaluation)
+        evaluation: Any = rating.models.Evaluation.objects.filter(
+            user=request.user.id, item=item_object
+        )
+        data['url_to_delete'] = reverse('rating:delete_evaluation', item_id)
+        form: Any = rating.forms.EvaluationForm(
+            request.POST or None, instance=evaluation
+        )
         if request.POST and form.is_valid():
             if evaluation:
                 form.save()
             else:
                 value = form.cleaned_data.get('value')
-                rating.models.Evaluation.objects.create(user=request.user, item=item_object, value=value)
+                rating.models.Evaluation.objects.create(
+                    user=request.user, item=item_object, value=value
+                )
             return redirect(reverse('catalog:catalog', item_id))
         data['evaluation_form'] = form
     return TemplateResponse(request, template, data)

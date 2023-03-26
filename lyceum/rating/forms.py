@@ -9,6 +9,4 @@ class EvaluationForm(forms.ModelForm):
     class Meta:
         model = models.Evaluation
         fields = ('value',)
-        widgets = {
-            'value': forms.NumberInput()
-        }
+        widgets = {'value': forms.NumberInput()}

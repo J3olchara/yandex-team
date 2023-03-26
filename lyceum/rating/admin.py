@@ -9,6 +9,4 @@ from . import models
 class TagAdmin(admin.ModelAdmin):  # type: ignore[type-arg]
     """Admin model tags table"""
 
-    list_display = (
-        models.Evaluation.value.field.name,
-    )
+    list_display = (models.Evaluation.value.field.name,)

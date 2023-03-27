@@ -1,7 +1,6 @@
 """CATALOG app pages views"""
 from typing import Any
 
-
 from catalog import models
 from catalog.models import Item as Catalog_Item
 from django.core.handlers.wsgi import WSGIRequest

@@ -1,14 +1,15 @@
 from typing import Any
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.conf import settings
 
 # isort: off
 from . import models  # noqa: I100
 import catalog.models  # noqa: I100
+
 # isort: on
 
 

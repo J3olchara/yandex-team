@@ -12,6 +12,7 @@ from . import models
 def save_profile(
     sender: Any, instance: models.UserProxy, created: bool, **kwargs: Any
 ) -> None:
+    """creates profile field to every registered user"""
     if created:
         profile = models.Profile(user=instance)
         profile.save()
@@ -23,6 +24,7 @@ def save_profile(
 def normalize_email(
     sender: Any, instance: models.UserProxy, **kwargs: Any
 ) -> None:
+    """normalizes user email every save"""
     if instance.email:
         instance.profile.normalize_email()
         instance.profile.save()

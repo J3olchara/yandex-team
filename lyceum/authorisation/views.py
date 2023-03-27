@@ -15,6 +15,12 @@ from . import forms, models
 
 
 class CustomLoginView(default_views.LoginView):
+    """
+    Custom login page view
+
+    Returns user auth form
+    """
+
     form_class = forms.LoginForm
     template_name = 'authorisation/login.html'
     success_url = reverse_lazy('home:home')
@@ -28,6 +34,12 @@ class CustomLoginView(default_views.LoginView):
 
 
 class CustomChangePasswordDone(default_views.PasswordChangeDoneView):
+    """
+    Custom password change form
+
+    Returns form that allows user change his password
+    """
+
     template_name = 'authorisation/done.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -41,6 +53,12 @@ class CustomChangePasswordDone(default_views.PasswordChangeDoneView):
 
 
 class CustomPasswordResetDone(default_views.PasswordResetDoneView):
+    """
+    Custom password reset page view
+
+    Send reset email notigication
+    """
+
     template_name = 'authorisation/done.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -66,6 +84,12 @@ class CustomPasswordResetDone(default_views.PasswordResetDoneView):
 
 
 class CustomPasswordResetComplete(default_views.PasswordResetCompleteView):
+    """
+    Custom password reset page view
+
+    Allows user change his password from received reset url.
+    """
+
     template_name = 'authorisation/done.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -79,6 +103,11 @@ class CustomPasswordResetComplete(default_views.PasswordResetCompleteView):
 
 
 def signup(request: WSGIRequest) -> HttpResponse:
+    """
+    Returns signup form
+
+    Allows guest sign up on the site
+    """
     template = 'authorisation/signup.html'
     form = forms.SignUpForm(request.POST or None)
     if form.is_valid():
@@ -103,9 +132,28 @@ def signup(request: WSGIRequest) -> HttpResponse:
     return TemplateResponse(request, template, {'form': form})
 
 
+def signup_done(request: WSGIRequest) -> HttpResponse:
+    """Sends confirmation url address"""
+    template = 'authorisation/done.html'
+    alerts = [
+        {
+            'type': 'success',
+            'text': _(
+                'На вашу электронную отправлена ссылка на активацию аккаунта.'
+            ),
+        }
+    ]
+    return TemplateResponse(request, template, {'alerts': alerts})
+
+
 def signup_confirm(
     request: WSGIRequest, user_id: int, token: models.ActivationToken
 ) -> HttpResponse:
+    """
+    Account activation page.
+
+    Allows user to activate his new account.
+    """
     template = 'authorisation/done.html'
     token = get_object_or_404(
         models.ActivationToken.objects,
@@ -131,16 +179,3 @@ def signup_confirm(
             }
         ]
     return TemplateResponse(request, template, data)
-
-
-def signup_done(request: WSGIRequest) -> HttpResponse:
-    template = 'authorisation/done.html'
-    alerts = [
-        {
-            'type': 'success',
-            'text': _(
-                'На вашу электронную отправлена ссылка на активацию аккаунта.'
-            ),
-        }
-    ]
-    return TemplateResponse(request, template, {'alerts': alerts})

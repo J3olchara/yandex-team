@@ -1,11 +1,9 @@
 # Pipeline status
 - ![Main branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=main) - main
-- ![Master branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=master) - master
-- ![q3 branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=q3) - q3
 
 # How to run it on windows
 1. Clone this repo and prepare workplace
-> - git clone https://github.com/J3olchara/yandex_django
+> - git clone https://github.com/J3olchara/yandex-team
 > - cd yandex_django
 > - python -m venv venv
 > - venv\scripts\activate
@@ -50,7 +48,7 @@ Then the application will start on http://localhost:8000
 # How to run in on Linux OS
 
 1. Clone this repo and prepare workplace
-  > - git clone https://github.com/J3olchara/yandex_django
+  > - git clone https://github.com/J3olchara/yandex-team
   > - cd yandex_django
   > - python3 -m venv venv
   > - venv/bin/activate

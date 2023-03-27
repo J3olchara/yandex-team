@@ -10,6 +10,14 @@ from . import models
 
 
 class LoginForm(default_forms.AuthenticationForm):
+    """
+    Login form to Login page
+
+    username: str.
+    password: str.
+    remember_me: bool. Remember user.
+    """
+
     remember_me = forms.BooleanField(
         label=_('Запомнить меня'),
         widget=forms.CheckboxInput(
@@ -38,6 +46,14 @@ class LoginForm(default_forms.AuthenticationForm):
 
 
 class PasswordChangeForm(default_forms.PasswordChangeForm):
+    """
+    Password reset form
+
+    old_password: str.
+    new_password1: str.
+    new_password2: str. Need to be equal to new_password1.
+    """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(PasswordChangeForm, self).__init__(*args, **kwargs)
         widget = forms.TextInput(
@@ -63,6 +79,13 @@ class PasswordResetForm(default_forms.PasswordResetForm):
 
 
 class PasswordResetConfirmForm(default_forms.SetPasswordForm):
+    """
+    Password reset form. Allows user change his password if he forgot it.
+
+    new_password1: str.
+    new_password2: str. Need to be equal to new_password1.
+    """
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(PasswordResetConfirmForm, self).__init__(*args, **kwargs)
         widget = forms.PasswordInput(
@@ -76,6 +99,15 @@ class PasswordResetConfirmForm(default_forms.SetPasswordForm):
 
 
 class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
+    """
+    Sign up form. Create new users.
+
+    username: str. Unique
+    email: str. bicycle unique
+    new_password1: str.
+    new_password2: str. Need to be equal to new_password1.
+    """
+
     email = forms.EmailField(
         label=_('Ваш email'),
         widget=forms.EmailInput(
@@ -93,12 +125,14 @@ class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
     def clean_email(self) -> Optional[str]:
+        """Checks email to unique"""
         email = self.cleaned_data.get('email')
         if default_models.User.objects.filter(email=email).exists():
             raise forms.ValidationError(_('Этот email уже используется'))
         return email
 
     def save(self, commit: bool = True) -> models.ActivationToken:
+        """set extra fields to user."""
         instance = super(SignUpForm, self).save(commit=commit)
         instance.is_active = settings.NEW_USERS_ACTIVATED
         token = models.ActivationToken.objects.create(

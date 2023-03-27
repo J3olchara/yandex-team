@@ -31,39 +31,6 @@ def item_list(request: WSGIRequest) -> HttpResponse:
     return TemplateResponse(request, template, data)
 
 
-# def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
-#     """returns item $item_id description"""
-#     template = 'catalog/item_page.html'
-#     item: Any = Catalog_Item.objects.item_detail(item_id)
-#     item_object: Any = Catalog_Item.objects.get(id=item_id)
-#     images: List[models.PhotoGallery] = models.PhotoGallery.objects.filter(
-#         item=item_id
-#     )
-#     data = {
-#         'item_raw': item,
-#         'images': images,
-#     }
-#     if request.user.is_authenticated:
-#         evaluation: Any = rating.models.Evaluation.objects.filter(
-#             user=request.user, item=item_object
-#         ).first()
-#         form: Any = rating.forms.EvaluationForm(
-#             request.POST or None, instance=evaluation
-#         )
-#         if request.POST and form.is_valid():
-#             if evaluation:
-#                 form.save()
-#             else:
-#                 value = form.cleaned_data.get('value')
-#                 rating.models.Evaluation.objects.create(
-#                     user=request.user, item=item_object, value=value
-#                 )
-#             return redirect(reverse('catalog:int_item_detail', kwargs={'item_id': item_id}))
-#         data['evaluation_form'] = form
-#     return TemplateResponse(request, template, data)
-
-
-
 class ItemDetailView(LoginRequiredMixin, TemplateView):
     template_name = 'catalog/item_page.html'
     model = Catalog_Item

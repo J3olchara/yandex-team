@@ -10,18 +10,12 @@ import catalog.models
 from . import models
 
 
-# @login_required(login_url=LOGIN_URL)
-# def delete_evaluation(request, item_id: int):
-#     item: Any = catalog_models.Item.objects.get(pk=item_id)
-#     evaluation = models.Evaluation.objects.filter(user=request.user, item=item).first()
-#     if evaluation:
-#         evaluation.delete()
-#     return redirect(reverse('catalog:int_item_detail', kwargs={'item_id': item_id}))
-
 class Delete_Evaluation(LoginRequiredMixin, View):
+    login_url = LOGIN_URL
+
     def get(self, request, item_id):
         item: Any = get_object_or_404(catalog.models.Item, pk=item_id)
         evaluation = models.Evaluation.objects.filter(user=request.user, item=item).first()
         if evaluation:
             evaluation.delete()
-        return redirect(reverse('catalog:int_item_detail', kwargs={'item_id': item_id}))
+        return redirect(reverse_lazy('catalog:int_item_detail', kwargs={'item_id': item_id}))

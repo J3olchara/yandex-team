@@ -5,7 +5,6 @@ from django.urls import path, resolvers
 
 from . import views
 
-
 app_name = 'rating'
 
 urlpatterns: List[resolvers.URLPattern] = [

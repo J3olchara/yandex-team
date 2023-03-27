@@ -1,14 +1,15 @@
 """RATING app database models"""
-from django.db import models
-from typing import Union, Any
-import catalog.models
+from typing import Any
+
 import authorisation.models
+import catalog.models
 import django.core.validators
+from django.db import models
 
 
 class Evaluation(models.Model):
     user: 'models.ForeignKey[Any, Any]' = models.ForeignKey(
-        authorisation.models.User, on_delete=models.CASCADE
+        authorisation.models.UserProxy, on_delete=models.CASCADE
     )
     item: 'models.ForeignKey[Any, Any]' = models.ForeignKey(
         catalog.models.Item, on_delete=models.CASCADE

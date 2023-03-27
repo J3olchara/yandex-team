@@ -1,22 +1,16 @@
 """CATALOG app pages views"""
-from typing import Any, List
+from typing import Any
 
-import rating.models
 import rating.forms
-from django.core.handlers.wsgi import WSGIRequest
-from django.shortcuts import HttpResponse, redirect, get_object_or_404
-from django.template.response import TemplateResponse
-from django.urls import reverse, reverse_lazy
-
-from django.views.generic import CreateView, UpdateView, TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from lyceum.settings import LOGIN_URL
-from django.db.models import Avg
-
-
+import rating.models
 from catalog import models
-
 from catalog.models import Item as Catalog_Item
+from django.core.handlers.wsgi import WSGIRequest
+from django.db.models import Avg
+from django.shortcuts import HttpResponse, get_object_or_404, redirect
+from django.template.response import TemplateResponse
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 
 
 def item_list(request: WSGIRequest) -> HttpResponse:
@@ -31,18 +25,19 @@ def item_list(request: WSGIRequest) -> HttpResponse:
     return TemplateResponse(request, template, data)
 
 
-class ItemDetailView(LoginRequiredMixin, TemplateView):
+class ItemDetailView(TemplateView):
     template_name = 'catalog/item_page.html'
     model = Catalog_Item
-    login_url = LOGIN_URL
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         item_id = self.kwargs.get('item_id')
         item = Catalog_Item.objects.item_detail(item_id)
-        item_object: Any = Catalog_Item.objects.get(id=item_id)
+        item_object: Any = get_object_or_404(Catalog_Item, pk=item_id)
         images = models.PhotoGallery.objects.filter(item=item_id)
-        item_evalution = rating.models.Evaluation.objects.filter(item=item_object)
+        item_evalution = rating.models.Evaluation.objects.filter(
+            item=item_object
+        )
         avg = item_evalution.aggregate(Avg('value'))['value__avg']
         context['average'] = 0
         if avg:
@@ -50,7 +45,6 @@ class ItemDetailView(LoginRequiredMixin, TemplateView):
         context['item_raw'] = item
         context['images'] = images
         context['count'] = item_evalution.count()
-
         evaluation = rating.models.Evaluation.objects.filter(
             user=self.request.user.id, item=item_object
         ).first()
@@ -70,20 +64,23 @@ class ItemDetailView(LoginRequiredMixin, TemplateView):
             rating.models.Evaluation.objects.update_or_create(
                 user=request.user, item=item, defaults={'value': value}
             )
-            return redirect(reverse_lazy('catalog:int_item_detail', kwargs={'item_id': item_id}))
+            return redirect(
+                reverse_lazy(
+                    'catalog:int_item_detail', kwargs={'item_id': item_id}
+                )
+            )
 
         return self.render_to_response(self.get_context_data(form=form))
 
 
-
 def regular_item(request: WSGIRequest, item_id: str) -> HttpResponse:
     """returns item $item_id description that was got from regexp"""
-    return item_detail(request, int(item_id))
+    return ItemDetailView.as_view()(request, item_id=int(item_id))
 
 
 def converter_item(request: WSGIRequest, item_id: int) -> HttpResponse:
     """returns item $item_id description that was got"""
-    return item_detail(request, item_id)
+    return ItemDetailView.as_view()(request, item_id=item_id)
 
 
 def news(request: WSGIRequest) -> HttpResponse:

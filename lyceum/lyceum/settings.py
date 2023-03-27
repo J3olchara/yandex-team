@@ -59,6 +59,7 @@ INSTALLED_APPS: List[str] = [
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
     'feedback.apps.FeedbackConfig',
+    'rating.apps.RatingConfig',
     'authorisation.apps.AuthorisationConfig',
     'django_cleanup.apps.CleanupConfig',
 ]

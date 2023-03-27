@@ -11,7 +11,7 @@ app_name = 'catalog'
 
 urlpatterns: List[resolvers.URLPattern] = [
     path('', views.item_list, name='catalog'),
-    path('<int:item_id>/', views.item_detail, name='int_item_detail'),
+    path('<int:item_id>/', views.ItemDetailView.as_view(), name='int_item_detail'),
     re_path(
         r'^re/(?P<item_id>[1-9]\d*)/$',
         views.regular_item,

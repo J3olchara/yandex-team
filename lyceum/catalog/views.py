@@ -8,17 +8,25 @@ from django.template.response import TemplateResponse
 
 from . import models
 
+"""CATALOG app pages views"""
+from typing import Any, List, Dict
 
-def item_list(request: WSGIRequest) -> HttpResponse:
-    """returns item list page"""
-    template = 'catalog/catalog.html'
-    items: Any = models.Item.objects.published(
+import catalog.models
+from django.core.handlers.wsgi import WSGIRequest
+from django.shortcuts import HttpResponse, reverse
+from django.template.response import TemplateResponse
+from django.views import generic
+
+from . import models
+
+
+class ItemList(generic.ListView):
+    template_name = 'catalog/catalog.html'
+    model = models.Item
+    queryset = models.Item.objects.published(
         order_by=('category__name', 'id'), is_published=True
     )
-    data = {
-        'items_raw': items,
-    }
-    return TemplateResponse(request, template, data)
+    context_object_name = 'items_raw'
 
 
 def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
@@ -35,33 +43,35 @@ def item_detail(request: WSGIRequest, item_id: int) -> HttpResponse:
     return TemplateResponse(request, template, data)
 
 
-def regular_item(request: WSGIRequest, item_id: str) -> HttpResponse:
-    """returns item $item_id description that was got from regexp"""
-    return item_detail(request, int(item_id))
+class RegularItem(generic.RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args: Any, **kwargs: Any):
+        return reverse('catalog:int_item_detail', kwargs={'item_id': self.kwargs['item_id']})
 
 
-def converter_item(request: WSGIRequest, item_id: int) -> HttpResponse:
-    """returns item $item_id description that was got"""
-    return item_detail(request, item_id)
+class ConverterItem(generic.RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args: Any, **kwargs: Any):
+        return reverse('catalog:int_item_detail', kwargs={'item_id': self.kwargs['item_id']})
 
 
-def news(request: WSGIRequest) -> HttpResponse:
-    """returns page with random 5 new items"""
-    template = 'catalog/interesting.html'
-    items = catalog.models.Item.objects.random_news()
-    data = {'items_raw': items}
-    return TemplateResponse(request, template, data)
+class News(generic.ListView):
+    template_name = 'catalog/interesting.html'
+    context_object_name = 'items_raw'
+
+    def get_queryset(self):
+        return catalog.models.Item.objects.random_news()
 
 
-def friday(request: WSGIRequest) -> HttpResponse:
-    template = 'catalog/interesting.html'
-    items = catalog.models.Item.objects.get_friday()
-    data = {'items_raw': items}
-    return TemplateResponse(request, template, data)
+class Friday(generic.ListView):
+    template_name = 'catalog/interesting.html'
+    queryset = catalog.models.Item.objects.get_friday()
+    context_object_name = 'items_raw'
 
 
-def unchecked(request: WSGIRequest) -> HttpResponse:
-    template = 'catalog/interesting.html'
-    items = catalog.models.Item.objects.get_unchecked()
-    data = {'items_raw': items}
-    return TemplateResponse(request, template, data)
+class Unchecked(generic.ListView):
+    template_name = 'catalog/interesting.html'
+    queryset = catalog.models.Item.objects.get_unchecked()
+    context_object_name = 'items_raw'

@@ -5,12 +5,14 @@ from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import mail
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from django.views import generic
 
+import authorisation.forms as auth_forms
 from . import forms, models
 
 
@@ -102,25 +104,27 @@ class CustomPasswordResetComplete(default_views.PasswordResetCompleteView):
         return context
 
 
-def signup(request: WSGIRequest) -> HttpResponse:
+class SignUp(generic.FormView):
     """
     Returns signup form
 
     Allows guest sign up on the site
     """
-    template = 'authorisation/signup.html'
-    form = forms.SignUpForm(request.POST or None)
-    if form.is_valid():
+    template_name = 'authorisation/signup.html'
+    form_class = auth_forms.SignUpForm
+    success_url = reverse_lazy('authorisation:signup_done')
+
+    def form_valid(self, form: Any) -> HttpResponse:
         token = form.save()
-        url = token.get_url(f'http://{get_current_site(request)}')
+        url = token.get_url(f'http://{get_current_site(self.request)}')
         username = form.data['username']
         message = (
-            _(
-                f'Благодарим за регистрацию на нашем сайте!\n\n'
-                f'Ваш логин: {username}\n'
-                f'Для активации аккаунта перейдите по ссылке\n'
-            )
-            + url
+                _(
+                    f'Благодарим за регистрацию на нашем сайте!\n\n'
+                    f'Ваш логин: {username}\n'
+                    f'Для активации аккаунта перейдите по ссылке\n'
+                )
+                + url
         )
         mail.send_mail(
             subject=str(_('Активация аккаунта')),
@@ -128,54 +132,56 @@ def signup(request: WSGIRequest) -> HttpResponse:
             from_email=settings.SITE_EMAIL,
             recipient_list=[form.data['email']],
         )
-        return redirect(reverse('authorisation:signup_done'))
-    return TemplateResponse(request, template, {'form': form})
+        return super(SignUp, self).form_valid(form)
 
 
-def signup_done(request: WSGIRequest) -> HttpResponse:
+class SignUpDone(generic.TemplateView):
     """Sends confirmation url address"""
-    template = 'authorisation/done.html'
-    alerts = [
-        {
-            'type': 'success',
-            'text': _(
-                'На вашу электронную отправлена ссылка на активацию аккаунта.'
-            ),
-        }
-    ]
-    return TemplateResponse(request, template, {'alerts': alerts})
+    template_name = 'authorisation/done.html'
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super(SignUpDone, self).get_context_data(**kwargs)
+        context['alerts'] = [
+            {
+                'type': 'success',
+                'text': _(
+                    'На вашу электронную отправлена ссылка на активацию аккаунта.'
+                ),
+            }
+        ]
+        return context
 
 
-def signup_confirm(
-    request: WSGIRequest, user_id: int, token: models.ActivationToken
-) -> HttpResponse:
+class SignUpConfirm(generic.TemplateView):
     """
     Account activation page.
 
     Allows user to activate his new account.
     """
-    template = 'authorisation/done.html'
-    token = get_object_or_404(
-        models.ActivationToken.objects,
-        user=user_id,
-        token=token,
-    )
-    data = {}
-    if not token.expired():
-        token.user.is_active = True
-        token.user.save()
-        token.delete()
-        data['alerts'] = [
-            {'type': 'success', 'text': _('Ваш аккаунт успешно активирован!')}
-        ]
-    else:
-        data['alerts'] = [
-            {
-                'type': 'danger',
-                'text': _(
-                    'Ссылка на активацию аккаунта истекла. '
-                    'Обратитесь к администрации'
-                ),
-            }
-        ]
-    return TemplateResponse(request, template, data)
+    template_name = 'authorisation/done.html'
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super(SignUpConfirm, self).get_context_data(**kwargs)
+        token = get_object_or_404(
+            models.ActivationToken.objects,
+            user=self.kwargs.get('user_id'),
+            token=self.kwargs.get('token'),
+        )
+        if not token.expired():
+            token.user.is_active = True
+            token.user.save()
+            token.delete()
+            context['alerts'] = [
+                {'type': 'success', 'text': _('Ваш аккаунт успешно активирован!')}
+            ]
+        else:
+            context['alerts'] = [
+                {
+                    'type': 'danger',
+                    'text': _(
+                        'Ссылка на активацию аккаунта истекла. '
+                        'Обратитесь к администрации'
+                    ),
+                }
+            ]
+        return context

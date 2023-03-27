@@ -4,6 +4,7 @@ from django.core import mail
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import HttpResponse, redirect
 from django.template.response import TemplateResponse
+from django.views import generic
 
 from . import forms
 
@@ -38,3 +39,6 @@ def feedback(
         feedback_form.save(files=request.FILES.getlist('files'))
         return redirect('feedback:feedback', feedback_status=1)
     return TemplateResponse(request, template, data)
+
+
+class Feedback(generic.FormView)

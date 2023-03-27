@@ -144,7 +144,7 @@ class ItemManager(models.Manager['Item']):
             ),
         )
         now = datetime.now(tz=timezone(settings.TIME_ZONE))
-        count = self.aggregate(count=Count('id'))['count']
+        count = self.filter(creation_date__range=(now - timedelta(days=7), now)).aggregate(count=Count('id'))['count']
         rand: Set[int] = set()
         while len(rand) < 5 and len(rand) < count:
             qs = (

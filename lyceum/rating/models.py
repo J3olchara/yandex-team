@@ -2,9 +2,13 @@
 from typing import Any
 
 import authorisation.models
-import catalog.models
 import django.core.validators
 from django.db import models
+
+# isort: off
+import catalog.models  # noqa: I100
+
+# isort: on
 
 
 class Evaluation(models.Model):

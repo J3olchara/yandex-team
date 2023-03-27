@@ -1,8 +1,7 @@
 """CATALOG app pages views"""
 from typing import Any
 
-import rating.forms
-import rating.models
+
 from catalog import models
 from catalog.models import Item as Catalog_Item
 from django.core.handlers.wsgi import WSGIRequest
@@ -11,6 +10,12 @@ from django.shortcuts import HttpResponse, get_object_or_404, redirect
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView
+
+# isort: off
+import rating.forms  # noqa: I100
+import rating.models  # noqa: I100
+
+# isort: on
 
 
 def item_list(request: WSGIRequest) -> HttpResponse:

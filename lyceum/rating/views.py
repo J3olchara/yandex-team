@@ -1,18 +1,19 @@
 from typing import Any
 
-import catalog.models
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
+from django.conf import settings
 
-from lyceum.settings import LOGIN_URL
+# isort: off
+from . import models  # noqa: I100
+import catalog.models  # noqa: I100
+# isort: on
 
-from . import models
 
-
-class Delete_Evaluation(LoginRequiredMixin, View):
-    login_url = LOGIN_URL
+class DeleteEvaluation(LoginRequiredMixin, View):
+    login_url = settings.LOGIN_URL
 
     def get(self, request, item_id):
         item: Any = get_object_or_404(catalog.models.Item, pk=item_id)

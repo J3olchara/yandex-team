@@ -15,7 +15,7 @@ import django.urls  # noqa: I100
 import feedback.urls  # noqa: I100
 import homepage.urls  # noqa: I100
 import users.urls  # noqa: I100
-import rating.urls
+import rating.urls  # noqa: I100
 
 # isort: on
 

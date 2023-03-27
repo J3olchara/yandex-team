@@ -5,9 +5,9 @@ name: Codestyle check
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "glebs_week8_ex1" ]
   pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "main", "glebs_week8_ex1" ]
 
 jobs:
   code-style:

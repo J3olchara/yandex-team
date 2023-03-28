@@ -8,7 +8,7 @@ from . import views
 app_name = 'home'
 
 urlpatterns: List[resolvers.URLPattern] = [
-    path('', views.home, name='home'),
-    path('coffee/', views.coffee, name='coffee'),
-    path('test/', views.test, name='test'),
+    path('', views.Home.as_view(), name='home'),
+    path('coffee/', views.Coffee.as_view(), name='coffee'),
+    path('test/', views.Test.as_view(), name='test'),
 ]

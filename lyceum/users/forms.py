@@ -37,12 +37,12 @@ class EditProfile(UserChangeForm):  # type: ignore[type-arg]
         self, commit: bool = True, user: Union[UserProxy, Any] = None
     ) -> None:
         user.first_name = self.cleaned_data.get('first_name')
-        # print(self.fields['birthday'].widget.__dict__)
         user.last_name = self.cleaned_data.get('last_name')
         user.email = self.cleaned_data.get('email')
         if self.cleaned_data.get('birthday'):
             user.profile.birthday = self.cleaned_data['birthday']
-            user.profile.avatar = self.cleaned_data['avatar']
+            if self.cleaned_data.get('avatar'):
+                user.profile.avatar = self.cleaned_data['avatar']
             user.profile.save()
         user.save()
 

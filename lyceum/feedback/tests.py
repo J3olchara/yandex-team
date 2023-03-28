@@ -51,12 +51,12 @@ class FeedbackFormTests(TestCase):
             response,
             reverse('feedback:feedback', kwargs={'feedback_status': 1}),
         )
-        self.assertIn('feedback_form', response.context)
+        self.assertIn('form', response.context)
 
         empty_form = forms.FeedbackForm({'email': '123.123'})
         self.assertTrue(empty_form.has_error('email'))
 
-        form: forms.FeedbackForm = response.context['feedback_form']
+        form: forms.FeedbackForm = response.context['form']
         self.assertEqual(len(form.visible_fields()), 4)
         for field in form.visible_fields():
             if field.name == 'email':

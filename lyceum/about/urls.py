@@ -8,5 +8,5 @@ from . import views
 app_name = 'about'
 
 urlpatterns: List[resolvers.URLPattern] = [
-    path('', views.description, name='about'),
+    path('', views.Description.as_view(), name='about'),
 ]

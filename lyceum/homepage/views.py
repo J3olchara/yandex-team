@@ -8,7 +8,7 @@ from django.template.response import TemplateResponse
 from django.views import generic
 
 # isort: off
-from catalog import models # noqa: I100
+import catalog  # noqa: I100
 
 # isort: on
 

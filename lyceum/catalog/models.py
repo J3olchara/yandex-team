@@ -104,6 +104,7 @@ class ItemManager(models.Manager['Item']):
                 'name',
             ),
         )
+        print(self.model.tags)
         return (
             self.get_queryset()
             .filter(**kwargs)

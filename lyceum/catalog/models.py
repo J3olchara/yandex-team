@@ -16,7 +16,7 @@ from django_cleanup import cleanup
 from pytz import timezone
 
 # isort: off
-import core  # noqa: I100
+import core.models  # noqa: I100
 
 # isort: on
 

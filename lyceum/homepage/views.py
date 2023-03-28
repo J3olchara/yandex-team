@@ -8,7 +8,7 @@ from django.template.response import TemplateResponse
 from django.views import generic
 
 # isort: off
-import catalog  # noqa: I100
+from catalog import models # noqa: I100
 
 # isort: on
 
@@ -41,5 +41,5 @@ class Test(generic.TemplateView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super(Test, self).get_context_data(**kwargs)
-        context['test'] = self.request.GET.get('test')
+        context['test'] = self.request.GET().get('test')
         return context

@@ -45,16 +45,18 @@ REVERSER_MIDDLEWARE = os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
 # ----------------------------Apps Section----------------------------
 # --------------------------------------------------------------------
 
+
 INSTALLED_APPS: List[str] = [
-    'core.apps.CoreConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'sorl.thumbnail',
-    'ckeditor',
+]
+
+CUSTOM_APPS = [
+    'core.apps.CoreConfig',
     'about.apps.AboutConfig',
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
@@ -63,6 +65,15 @@ INSTALLED_APPS: List[str] = [
     'authorisation.apps.AuthorisationConfig',
     'django_cleanup.apps.CleanupConfig',
 ]
+
+FOREIGN_APPS = [
+    'sorl.thumbnail',
+    'ckeditor',
+]
+
+INSTALLED_APPS += CUSTOM_APPS
+INSTALLED_APPS += FOREIGN_APPS
+
 
 # --------------------------------------------------------------------
 # --------------------------Middleware Section------------------------

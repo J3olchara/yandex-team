@@ -16,7 +16,7 @@ from django_cleanup import cleanup
 from pytz import timezone
 
 # isort: off
-import core.models  # noqa: I100
+import core  # noqa: I100
 
 # isort: on
 
@@ -104,7 +104,6 @@ class ItemManager(models.Manager['Item']):
                 'name',
             ),
         )
-        print(self.model.tags)
         return (
             self.get_queryset()
             .filter(**kwargs)
@@ -145,7 +144,9 @@ class ItemManager(models.Manager['Item']):
             ),
         )
         now = datetime.now(tz=timezone(settings.TIME_ZONE))
-        count = self.filter(creation_date__range=(now - timedelta(days=7), now)).aggregate(count=Count('id'))['count']
+        count = self.filter(
+            creation_date__range=(now - timedelta(days=7), now)
+        ).aggregate(count=Count('id'))['count']
         rand: Set[int] = set()
         while len(rand) < 5 and len(rand) < count:
             qs = (

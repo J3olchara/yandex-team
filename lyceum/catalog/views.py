@@ -1,9 +1,11 @@
 """CATALOG app pages views"""
-from typing import Any
+from typing import Any, Dict
 
 from catalog import models
 from catalog.models import Item as Catalog_Item
 from django.db.models import Avg
+from django.db.models.query import QuerySet
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
@@ -16,7 +18,7 @@ import rating.models  # noqa: I100
 # isort: on
 
 
-class ItemList(generic.ListView):
+class ItemList(generic.ListView):  # type: ignore[type-arg]
     template_name = 'catalog/catalog.html'
     model = models.Item
     queryset = models.Item.objects.published(
@@ -29,7 +31,7 @@ class ItemDetailView(generic.TemplateView):
     template_name = 'catalog/item_page.html'
     model = Catalog_Item
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         item_id = self.kwargs.get('item_id')
         item = Catalog_Item.objects.item_detail(item_id)
@@ -54,7 +56,9 @@ class ItemDetailView(generic.TemplateView):
         context['evaluation_form'] = form
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(
+        self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> HttpResponse:
         item_id = self.kwargs.get('item_id')
         item = get_object_or_404(self.model, id=item_id)
         form = rating.forms.EvaluationForm(request.POST or None)
@@ -76,32 +80,38 @@ class ItemDetailView(generic.TemplateView):
 class RegularItem(generic.RedirectView):
     permanent = False
 
-    def get_redirect_url(self, *args: Any, **kwargs: Any):
-        return reverse('catalog:int_item_detail', kwargs={'item_id': self.kwargs['item_id']})
+    def get_redirect_url(self, *args: Any, **kwargs: Any) -> str:
+        return reverse(
+            'catalog:int_item_detail',
+            kwargs={'item_id': self.kwargs['item_id']},
+        )
 
 
 class ConverterItem(generic.RedirectView):
     permanent = False
 
-    def get_redirect_url(self, *args: Any, **kwargs: Any):
-        return reverse('catalog:int_item_detail', kwargs={'item_id': self.kwargs['item_id']})
+    def get_redirect_url(self, *args: Any, **kwargs: Any) -> str:
+        return reverse(
+            'catalog:int_item_detail',
+            kwargs={'item_id': self.kwargs['item_id']},
+        )
 
 
-class News(generic.ListView):
+class News(generic.ListView):  # type: ignore[type-arg]
     template_name = 'catalog/interesting.html'
     context_object_name = 'items_raw'
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[catalog.models.Item]:
         return catalog.models.Item.objects.random_news()
 
 
-class Friday(generic.ListView):
+class Friday(generic.ListView):  # type: ignore[type-arg]
     template_name = 'catalog/interesting.html'
     queryset = catalog.models.Item.objects.get_friday()
     context_object_name = 'items_raw'
 
 
-class Unchecked(generic.ListView):
+class Unchecked(generic.ListView):  # type: ignore[type-arg]
     template_name = 'catalog/interesting.html'
     queryset = catalog.models.Item.objects.get_unchecked()
     context_object_name = 'items_raw'

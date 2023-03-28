@@ -13,7 +13,10 @@ register = template.Library()
 
 @register.simple_tag()
 def get_image_px(
-    image: core.models.Image, px: str, crop: str, quality: int
+    image: core.models.Image,  # type: ignore[name-defined]
+    px: str,
+    crop: str,
+    quality: int,
 ) -> str:
     return str(image.get_image_px(px=px, crop=crop, quality=quality).url)
 

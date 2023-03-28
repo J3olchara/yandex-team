@@ -102,12 +102,13 @@ class CustomPasswordResetComplete(default_views.PasswordResetCompleteView):
         return context
 
 
-class SignUp(generic.FormView):
+class SignUp(generic.FormView):  # type: ignore[type-arg]
     """
     Returns signup form
 
     Allows guest sign up on the site
     """
+
     template_name = 'authorisation/signup.html'
     form_class = auth_forms.SignUpForm
     success_url = reverse_lazy('authorisation:signup_done')
@@ -117,12 +118,12 @@ class SignUp(generic.FormView):
         url = token.get_url(f'http://{get_current_site(self.request)}')
         username = form.data['username']
         message = (
-                _(
-                    f'Благодарим за регистрацию на нашем сайте!\n\n'
-                    f'Ваш логин: {username}\n'
-                    f'Для активации аккаунта перейдите по ссылке\n'
-                )
-                + url
+            _(
+                f'Благодарим за регистрацию на нашем сайте!\n\n'
+                f'Ваш логин: {username}\n'
+                f'Для активации аккаунта перейдите по ссылке\n'
+            )
+            + url
         )
         mail.send_mail(
             subject=str(_('Активация аккаунта')),
@@ -135,6 +136,7 @@ class SignUp(generic.FormView):
 
 class SignUpDone(generic.TemplateView):
     """Sends confirmation url address"""
+
     template_name = 'authorisation/done.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -143,7 +145,8 @@ class SignUpDone(generic.TemplateView):
             {
                 'type': 'success',
                 'text': _(
-                    'На вашу электронную отправлена ссылка на активацию аккаунта.'
+                    'На вашу электронную отправлена ссылка '
+                    'на активацию аккаунта.'
                 ),
             }
         ]
@@ -156,6 +159,7 @@ class SignUpConfirm(generic.TemplateView):
 
     Allows user to activate his new account.
     """
+
     template_name = 'authorisation/done.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -170,7 +174,10 @@ class SignUpConfirm(generic.TemplateView):
             token.user.save()
             token.delete()
             context['alerts'] = [
-                {'type': 'success', 'text': _('Ваш аккаунт успешно активирован!')}
+                {
+                    'type': 'success',
+                    'text': _('Ваш аккаунт успешно активирован!'),
+                }
             ]
         else:
             context['alerts'] = [

@@ -62,7 +62,9 @@ urlpatterns = [
         auth_views.SignUp.as_view(),
         name='signup',
     ),
-    django.urls.path('signup/done/', auth_views.SignUpDone.as_view(), name='signup_done'),
+    django.urls.path(
+        'signup/done/', auth_views.SignUpDone.as_view(), name='signup_done'
+    ),
     django.urls.path(
         'signup/<int:user_id>/<uuid:token>/',
         auth_views.SignUpConfirm.as_view(),

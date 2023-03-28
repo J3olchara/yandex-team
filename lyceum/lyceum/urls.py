@@ -15,6 +15,7 @@ import django.urls  # noqa: I100
 import feedback.urls  # noqa: I100
 import homepage.urls  # noqa: I100
 import users.urls  # noqa: I100
+import rating.urls  # noqa: I100
 
 # isort: on
 
@@ -34,6 +35,7 @@ urlpatterns += i18n_patterns(
     django.urls.path('auth/', django.urls.include(authorisation.urls)),
     django.urls.path('auth/', django.urls.include(django.contrib.auth.urls)),
     django.urls.path('users/', django.urls.include(users.urls)),
+    django.urls.path('rating/', django.urls.include(rating.urls)),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

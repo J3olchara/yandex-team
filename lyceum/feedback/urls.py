@@ -7,6 +7,6 @@ register_converter(converters.BooleanConverter, 'bool')
 app_name = 'feedback'
 
 urlpatterns = [
-    path('<bool:feedback_status>', views.feedback, name='feedback'),
-    path('', views.feedback, name='feedback'),
+    path('<bool:feedback_status>', views.Feedback.as_view(), name='feedback'),
+    path('', views.Feedback.as_view(), name='feedback'),
 ]

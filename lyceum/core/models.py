@@ -21,7 +21,6 @@ class Base(models.Model):
 
     is_published: Bool = True. Explains that post/item was published
     name: char[150]. Explains name of this post/item
-
     """
 
     is_published: Union[

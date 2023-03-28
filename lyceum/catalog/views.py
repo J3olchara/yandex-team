@@ -56,6 +56,7 @@ class ItemDetailView(TemplateView):
             self.request.POST or None, instance=evaluation
         )
         context['evaluation_form'] = form
+        context['evaluation'] = evaluation
         return context
 
     def post(self, request, *args, **kwargs):

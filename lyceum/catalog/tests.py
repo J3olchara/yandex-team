@@ -42,7 +42,7 @@ class CatalogURLTests(core.tests.SetupData):
             'catalog:re_item_detail', kwargs={'item_id': test_200}
         )
         response = Client().get(dir_200)
-        self.assertEqual(response.status_code, 200, test_200)
+        self.assertEqual(response.status_code, 302, test_200)
         with self.assertRaises(NoReverseMatch):
             reverse('catalog:re_item_detail', kwargs={'item_id': test_404})
 
@@ -53,7 +53,7 @@ class CatalogURLTests(core.tests.SetupData):
             'catalog:conv_item_detail', kwargs={'item_id': test_200}
         )
         response = Client().get(dir_200)
-        self.assertEqual(response.status_code, 200, test_200)
+        self.assertEqual(response.status_code, 302, test_200)
         with self.assertRaises(NoReverseMatch):
             reverse('catalog:conv_item_detail', kwargs={'item_id': test_404})
 

@@ -1,8 +1,7 @@
-import django.contrib.auth.views as default_views
-import django.urls
-
 import authorisation.forms as auth_forms
 import authorisation.views as auth_views
+import django.contrib.auth.views as default_views
+import django.urls
 
 app_name = 'authorisation'
 

@@ -3,10 +3,9 @@ from typing import Any
 
 from catalog import models
 from catalog.models import Item as Catalog_Item
-from django.urls import reverse
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 # isort: off

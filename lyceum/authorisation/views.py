@@ -1,18 +1,16 @@
 from typing import Any, Dict
 
+import authorisation.forms as auth_forms
 import django.contrib.auth.views as default_views
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import mail
-from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse, HttpRequest
-from django.shortcuts import get_object_or_404, redirect
-from django.template.response import TemplateResponse
-from django.urls import reverse, reverse_lazy
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-import authorisation.forms as auth_forms
 from . import forms, models
 
 

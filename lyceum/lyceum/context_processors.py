@@ -12,7 +12,6 @@ from django.utils.timezone import datetime
 
 def today_birthday_processor(request: HttpRequest) -> Dict[str, Any]:
     today = datetime.today()
-    print(today)
     return {
         'today_birthdays': auth_models.Profile.objects.filter(
             birthday__day=today.day, birthday__month=today.month

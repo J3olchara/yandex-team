@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.utils.timezone import datetime, timedelta
 from parameterized import parameterized
 
-import lyceum.middlewares as lyceum_middlewares
+import lyceum.middlewares as lyceum_middlewares  # noqa: I100
 
 
 @modify_settings(

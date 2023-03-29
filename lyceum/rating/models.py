@@ -13,14 +13,21 @@ import catalog.models  # noqa: I100
 
 class Evaluation(models.Model):
     user: 'models.ForeignKey[Any, Any]' = models.ForeignKey(
-        authorisation.models.UserProxy, on_delete=models.CASCADE
+        authorisation.models.UserProxy,
+        verbose_name='пользователь',
+        help_text='Пользователь оставивший отзыв',
+        on_delete=models.CASCADE,
     )
     item: 'models.ForeignKey[Any, Any]' = models.ForeignKey(
-        catalog.models.Item, on_delete=models.CASCADE
+        catalog.models.Item,
+        verbose_name='товар',
+        help_text='товар, которому оставили отзыв',
+        on_delete=models.CASCADE,
     )
 
     value = models.PositiveSmallIntegerField(
-        'оценка',
+        verbose_name='оценка',
+        help_text='значение оценки',
         validators=[
             django.core.validators.MaxValueValidator(
                 5, message='Максимальное значение оценки - 5'

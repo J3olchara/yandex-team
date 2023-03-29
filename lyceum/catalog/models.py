@@ -106,7 +106,7 @@ class ItemManager(models.Manager['Item']):
         )
         return (
             self.get_queryset()
-            .filter(**kwargs)
+            .filter(is_published=True, **kwargs)
             .select_related('category')
             .prefetch_related(prefetch)
             .order_by(*order_by)

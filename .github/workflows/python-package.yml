@@ -5,7 +5,7 @@ name: Codestyle check
 
 on:
   push:
-    branches: [ "main", "develop", "lead", "glebs_week8_ex1", "matvey_week8_ex1" ]
+    branches: [ "main", "develop", "lead", "glebs_develop", "matvey_week8_ex1" ]
   pull_request:
     branches: [ "main", "develop", "lead", "glebs_week8_ex1", "matvey_week8_ex1" ]
 

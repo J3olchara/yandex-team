@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load support %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/item_page.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<p>Среднее: {{ avg }} </p>
+<p>Общее количество {{ count }}</p>
+{% if not max_user and not min_user %}
+	<p>Никто пока не отсавил отзыв</p>
+{% else %}
+	<p>Пользователь потсавивший максимальную оценку <a href={% url 'users:details' user_id=max_user.id %}> {{ max_user.username }} </a></p>
+	<p>Пользователь потсавивший минимальную оценку <a href={% url 'users:details' user_id=min_user.id %}> {{ min_user.username }} </a></p>
+{% endif %}
+{% endblock %}

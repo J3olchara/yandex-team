@@ -31,6 +31,11 @@ class Evaluation(models.Model):
         ],
     )
 
+    change_datetime = models.DateTimeField(
+        'дата и время изменения или создания',
+        auto_now=True,
+    )
+
     class Meta:
         verbose_name = 'оценка'
         verbose_name_plural = 'оценки'

@@ -62,6 +62,7 @@ CUSTOM_APPS = [
     'homepage.apps.HomepageConfig',
     'feedback.apps.FeedbackConfig',
     'rating.apps.RatingConfig',
+    'statistic.apps.StatisticConfig',
     'authorisation.apps.AuthorisationConfig',
     'django_cleanup.apps.CleanupConfig',
 ]

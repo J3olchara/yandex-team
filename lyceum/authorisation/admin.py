@@ -2,10 +2,7 @@ import django.contrib.auth.admin
 import django.contrib.auth.models
 from django.contrib import admin
 
-# isort: off
 from authorisation.models import Profile  # noqa: I100
-
-# isort: on
 
 
 class ProfileInline(admin.TabularInline):  # type: ignore[type-arg]

@@ -2,10 +2,11 @@
 
 import uuid
 
-import authorisation.utils
 import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
+
+import authorisation.utils
 
 
 class Migration(migrations.Migration):

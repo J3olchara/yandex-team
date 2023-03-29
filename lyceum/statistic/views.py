@@ -2,10 +2,7 @@ from typing import Any, Dict
 
 from django.views import generic
 
-# isort: off
 import authorisation.models  # noqa: I100
-
-# isort: on
 
 
 class UsersStatistics(generic.ListView):

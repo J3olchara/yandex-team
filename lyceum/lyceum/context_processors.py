@@ -5,9 +5,10 @@ creates some variables for all templates
 """
 from typing import Any, Dict
 
-import authorisation.models as auth_models
 from django.http import HttpRequest
 from django.utils.timezone import datetime
+
+import authorisation.models as auth_models
 
 
 def today_birthday_processor(request: HttpRequest) -> Dict[str, Any]:

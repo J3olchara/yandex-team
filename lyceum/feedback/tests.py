@@ -11,10 +11,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import reverse
 from django.test import Client, TestCase, override_settings
 
-# isort: off
 from feedback import forms, models  # noqa: I100
-
-# isort: on
 
 
 @override_settings(

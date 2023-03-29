@@ -1,8 +1,6 @@
 """CATALOG app pages views"""
 from typing import Any, Dict
 
-from catalog import models
-from catalog.models import Item as Catalog_Item
 from django.db.models import Avg
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
@@ -10,12 +8,11 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-# isort: off
 import catalog.models  # noqa: I100
 import rating.forms  # noqa: I100
 import rating.models  # noqa: I100
-
-# isort: on
+from catalog import models
+from catalog.models import Item as Catalog_Item
 
 
 class ItemList(generic.ListView):  # type: ignore[type-arg]

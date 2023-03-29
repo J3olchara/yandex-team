@@ -1,39 +1,37 @@
 """CATALOG app pages views"""
-from typing import Any
+from typing import Any, Dict
 
 from catalog import models
 from catalog.models import Item as Catalog_Item
-from django.core.handlers.wsgi import WSGIRequest
 from django.db.models import Avg
-from django.shortcuts import HttpResponse, get_object_or_404, redirect
-from django.template.response import TemplateResponse
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView
+from django.db.models.query import QuerySet
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.views import generic
 
 # isort: off
+import catalog  # noqa: I100
 import rating.forms  # noqa: I100
 import rating.models  # noqa: I100
 
 # isort: on
 
 
-def item_list(request: WSGIRequest) -> HttpResponse:
-    """returns item list page"""
-    template = 'catalog/catalog.html'
-    items: Any = models.Item.objects.published(
+class ItemList(generic.ListView):  # type: ignore[type-arg]
+    template_name = 'catalog/catalog.html'
+    model = models.Item
+    queryset = models.Item.objects.published(
         order_by=('category__name', 'id'), is_published=True
     )
-    data = {
-        'items_raw': items,
-    }
-    return TemplateResponse(request, template, data)
+    context_object_name = 'items_raw'
 
 
-class ItemDetailView(TemplateView):
+class ItemDetailView(generic.TemplateView):
     template_name = 'catalog/item_page.html'
     model = Catalog_Item
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         item_id = self.kwargs.get('item_id')
         item = Catalog_Item.objects.item_detail(item_id)
@@ -59,7 +57,9 @@ class ItemDetailView(TemplateView):
         context['evaluation'] = evaluation
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(
+        self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> HttpResponse:
         item_id = self.kwargs.get('item_id')
         item = get_object_or_404(self.model, id=item_id)
         form = rating.forms.EvaluationForm(request.POST or None)
@@ -78,33 +78,41 @@ class ItemDetailView(TemplateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-def regular_item(request: WSGIRequest, item_id: str) -> HttpResponse:
-    """returns item $item_id description that was got from regexp"""
-    return ItemDetailView.as_view()(request, item_id=int(item_id))
+class RegularItem(generic.RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args: Any, **kwargs: Any) -> str:
+        return reverse(
+            'catalog:int_item_detail',
+            kwargs={'item_id': self.kwargs['item_id']},
+        )
 
 
-def converter_item(request: WSGIRequest, item_id: int) -> HttpResponse:
-    """returns item $item_id description that was got"""
-    return ItemDetailView.as_view()(request, item_id=item_id)
+class ConverterItem(generic.RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args: Any, **kwargs: Any) -> str:
+        return reverse(
+            'catalog:int_item_detail',
+            kwargs={'item_id': self.kwargs['item_id']},
+        )
 
 
-def news(request: WSGIRequest) -> HttpResponse:
-    """returns page with random 5 new items"""
-    template = 'catalog/interesting.html'
-    items = models.Item.objects.random_news()
-    data = {'items_raw': items}
-    return TemplateResponse(request, template, data)
+class News(generic.ListView):  # type: ignore[type-arg]
+    template_name = 'catalog/interesting.html'
+    context_object_name = 'items_raw'
+
+    def get_queryset(self) -> QuerySet[catalog.models.Item]:
+        return catalog.models.Item.objects.random_news()
 
 
-def friday(request: WSGIRequest) -> HttpResponse:
-    template = 'catalog/interesting.html'
-    items = models.Item.objects.get_friday()
-    data = {'items_raw': items}
-    return TemplateResponse(request, template, data)
+class Friday(generic.ListView):  # type: ignore[type-arg]
+    template_name = 'catalog/interesting.html'
+    queryset = catalog.models.Item.objects.get_friday()
+    context_object_name = 'items_raw'
 
 
-def unchecked(request: WSGIRequest) -> HttpResponse:
-    template = 'catalog/interesting.html'
-    items = models.Item.objects.get_unchecked()
-    data = {'items_raw': items}
-    return TemplateResponse(request, template, data)
+class Unchecked(generic.ListView):  # type: ignore[type-arg]
+    template_name = 'catalog/interesting.html'
+    queryset = catalog.models.Item.objects.get_unchecked()
+    context_object_name = 'items_raw'

@@ -1,13 +1,16 @@
 """MIDDLEWARE tests"""
 
 from typing import List
+from unittest import mock
 
+import authorisation.models
 from django.conf import settings
-from django.test import TestCase, modify_settings, override_settings
+from django.test import Client, TestCase, modify_settings, override_settings
 from django.urls import reverse
+from django.utils.timezone import datetime, timedelta
 from parameterized import parameterized
 
-from . import middlewares
+import lyceum.middlewares as lyceum_middlewares  # noqa: I100
 
 
 @modify_settings(
@@ -32,7 +35,9 @@ class ReverseMiddlewareTests(TestCase):
     )
     def test_reverser(self, test: str, answer: str) -> None:
         """test reversing function work"""
-        content: bytes = middlewares.CoffeeTime.reverse_words(test.encode())
+        content: bytes = lyceum_middlewares.CoffeeTime.reverse_words(
+            test.encode()
+        )
         self.assertIn(answer, content.decode())
 
     def test_work(self) -> None:
@@ -40,7 +45,7 @@ class ReverseMiddlewareTests(TestCase):
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
         content: List[str] = []
-        for _ in range(middlewares.CoffeeTime.times_to_on):
+        for _ in range(lyceum_middlewares.CoffeeTime.times_to_on):
             request = self.client.get(
                 reverse('home:test'), data={'test': test_string}
             )
@@ -53,7 +58,7 @@ class ReverseMiddlewareTests(TestCase):
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
         contents: List[str] = []
-        for _ in range(middlewares.CoffeeTime.times_to_on - 1):
+        for _ in range(lyceum_middlewares.CoffeeTime.times_to_on - 1):
             request = self.client.get(
                 reverse('home:test'), data={'test': test_string}
             )
@@ -61,21 +66,21 @@ class ReverseMiddlewareTests(TestCase):
         self.client.get(reverse('home:test'), data={'test': test_string})
         self.assertEqual(len(set(contents)), 1)
         contents.clear()
-        for _ in range(middlewares.CoffeeTime.times_to_on * 2 - 1):
+        for _ in range(lyceum_middlewares.CoffeeTime.times_to_on * 2 - 1):
             request = self.client.get(
                 reverse('home:test'), data={'test': test_string}
             )
             contents.append(request.content.decode())
         self.assertEqual(
             contents.count(test_string),
-            middlewares.CoffeeTime.times_to_on * 2 - 2,
+            lyceum_middlewares.CoffeeTime.times_to_on * 2 - 2,
         )
         self.assertEqual(contents.count(rev_string), 1)
 
     def test_switcher_environ(self) -> None:
         """tests correct working of switcher"""
-        tmp_times_to_on = middlewares.CoffeeTime.times_to_on
-        middlewares.CoffeeTime.times_to_on = 1
+        tmp_times_to_on = lyceum_middlewares.CoffeeTime.times_to_on
+        lyceum_middlewares.CoffeeTime.times_to_on = 1
         test_string = 'Привет мир'
         rev_string = 'тевирП рим'
 
@@ -98,4 +103,45 @@ class ReverseMiddlewareTests(TestCase):
                 rev_string,
                 settings.REVERSER_MIDDLEWARE,
             )
-        middlewares.CoffeeTime.times_to_on = tmp_times_to_on
+        lyceum_middlewares.CoffeeTime.times_to_on = tmp_times_to_on
+
+
+class TestContextProcessors(TestCase):
+    def setUp(self) -> None:
+        self.user = authorisation.models.UserProxy.objects.create_user(
+            username='some_unique_username',
+            email='danilaeremin_test@google.com',
+            password='some_super_secret_password',
+        )
+
+    @parameterized.expand(
+        (
+            ['home:home'],
+            ['catalog:catalog'],
+        )
+    )
+    @mock.patch('lyceum.context_processors.datetime')
+    def test_birthdays_cp(self, template_name, mocked):
+        path = reverse(template_name)
+        td = timedelta(days=1)
+        today = datetime.today()
+        self.user.profile.birthday = today
+        self.user.profile.save()
+        client = Client()
+
+        mocked.today.return_value = today
+        resp_good = client.get(path)
+        self.assertIn('today_birthdays', resp_good.context.keys())
+        self.assertIn(self.user.profile, resp_good.context['today_birthdays'])
+
+        mocked.today.return_value = today - td
+        resp_bad = client.get(path)
+        self.assertNotIn(
+            self.user.profile, resp_bad.context['today_birthdays']
+        )
+
+        mocked.today.return_value = today + td
+        resp_bad = client.get(path)
+        self.assertNotIn(
+            self.user.profile, resp_bad.context['today_birthdays']
+        )

@@ -1,5 +1,6 @@
 # Pipeline status
-- ![Main branch status](https://github.com/J3olchara/yandex_django/actions/workflows/python-package.yml/badge.svg?branch=main) - main
+- ![Main branch status](https://github.com/J3olchara/yandex-team/actions/workflows/python-package.yml/badge.svg?branch=main) - main
+- ![Main branch status](https://github.com/J3olchara/yandex-team/actions/workflows/python-package.yml/badge.svg?branch=develop) - develop
 
 # How to run it on windows
 1. Clone this repo and prepare workplace

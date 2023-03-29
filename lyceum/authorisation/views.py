@@ -1,6 +1,5 @@
 from typing import Any, Dict
 
-import authorisation.forms as auth_forms
 import django.contrib.auth.views as default_views
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
@@ -11,7 +10,11 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-from . import forms, models
+# isort: off
+import authorisation.forms as auth_forms  # noqa: I100
+import authorisation.models  # noqa: I100
+
+# isort: on
 
 
 class CustomLoginView(default_views.LoginView):
@@ -21,7 +24,7 @@ class CustomLoginView(default_views.LoginView):
     Returns user auth form
     """
 
-    form_class = forms.LoginForm
+    form_class = authorisation.forms.LoginForm
     template_name = 'authorisation/login.html'
     success_url = reverse_lazy('home:home')
 
@@ -165,7 +168,7 @@ class SignUpConfirm(generic.TemplateView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super(SignUpConfirm, self).get_context_data(**kwargs)
         token = get_object_or_404(
-            models.ActivationToken.objects,
+            authorisation.models.ActivationToken.objects,
             user=self.kwargs.get('user_id'),
             token=self.kwargs.get('token'),
         )

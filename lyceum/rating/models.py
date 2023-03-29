@@ -1,11 +1,11 @@
 """RATING app database models"""
 from typing import Any
 
-import authorisation.models
 import django.core.validators
 from django.db import models
 
 # isort: off
+import authorisation.models  # noqa: I100
 import catalog.models  # noqa: I100
 
 # isort: on

@@ -11,7 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 # isort: off
-import catalog  # noqa: I100
+import catalog.models  # noqa: I100
 import rating.forms  # noqa: I100
 import rating.models  # noqa: I100
 

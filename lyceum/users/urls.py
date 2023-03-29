@@ -1,6 +1,9 @@
 from django.urls import path
 
-from . import views
+# isort: off
+from users import views  # noqa: I100
+
+# isort: on
 
 app_name = 'users'
 

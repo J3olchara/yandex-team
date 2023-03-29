@@ -3,14 +3,17 @@
 from typing import List
 from unittest import mock
 
-import authorisation.models
 from django.conf import settings
 from django.test import Client, TestCase, modify_settings, override_settings
 from django.urls import reverse
 from django.utils.timezone import datetime, timedelta
 from parameterized import parameterized
 
+# isort: off
 import lyceum.middlewares as lyceum_middlewares  # noqa: I100
+import authorisation.models  # noqa: I100
+
+# isort: on
 
 
 @modify_settings(

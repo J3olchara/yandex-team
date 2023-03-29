@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 # isort: off
-from . import forms  # noqa: I100
+from users import forms  # noqa: I100
 from authorisation.models import UserProxy  # noqa: I100
 
 # isort: on

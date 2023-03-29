@@ -16,7 +16,7 @@ from django_cleanup import cleanup
 from pytz import timezone
 
 # isort: off
-import core  # noqa: I100
+import core.models  # noqa: I100
 
 # isort: on
 
@@ -99,9 +99,9 @@ class ItemManager(models.Manager['Item']):
         if order_by is None:
             order_by = []
         prefetch = models.Prefetch(
-            'tags',
+            self.model.tags.field.name,
             queryset=Tag.objects.filter(is_published=True).only(
-                'name',
+                Tag.name.field.name,
             ),
         )
         return (
@@ -111,36 +111,55 @@ class ItemManager(models.Manager['Item']):
             .prefetch_related(prefetch)
             .order_by(*order_by)
             .values(
-                'name', 'text', 'id', 'category__name', 'image', 'tags__name'
+                self.model.name.field.name,
+                self.model.text.field.name,
+                self.model.id.field.name,
+                (
+                    f'{self.model.category.field.name}'
+                    f'__{Category.name.field.name}'
+                ),
+                self.model.image.field.name,
+                f'{self.model.tags.field.name}__{Tag.name.field.name}',
             )
         )
 
     def item_detail(self, item_id: int) -> Union[QuerySet[Any], Any]:
         prefetch_tags = models.Prefetch(
-            'tags',
+            self.model.tags.field.name,
             queryset=Tag.objects.filter(is_published=True).only(
-                'name',
+                Tag.name.field.name,
             ),
         )
         prefetch_images = models.Prefetch(
-            'PhotoGallery', queryset=PhotoGallery.objects.all().only('image')
+            'PhotoGallery',
+            queryset=PhotoGallery.objects.all().only(
+                PhotoGallery.image.field.name
+            ),
         )
         return (
             self.get_queryset()
             .filter(id=item_id)
-            .select_related('category')
+            .select_related(self.model.category.field.name)
             .prefetch_related(prefetch_tags)
             .prefetch_related(prefetch_images)
             .values(
-                'name', 'text', 'category__name', 'image', 'tags__name', 'id'
+                self.model.name.field.name,
+                self.model.text.field.name,
+                self.model.id.field.name,
+                (
+                    f'{self.model.category.field.name}'
+                    f'__{Category.name.field.name}'
+                ),
+                self.model.image.field.name,
+                f'{self.model.tags.field.name}__{Tag.name.field.name}',
             )
         )
 
     def random_news(self) -> Union[QuerySet[Any], Any]:
         prefetch_tags = models.Prefetch(
-            'tags',
+            self.model.tags.field.name,
             queryset=Tag.objects.filter(is_published=True).only(
-                'name',
+                Tag.name.field.name,
             ),
         )
         now = datetime.now(tz=timezone(settings.TIME_ZONE))
@@ -166,15 +185,23 @@ class ItemManager(models.Manager['Item']):
             )
             .prefetch_related(prefetch_tags)
             .values(
-                'name', 'text', 'id', 'category__name', 'image', 'tags__name'
+                self.model.name.field.name,
+                self.model.text.field.name,
+                self.model.id.field.name,
+                (
+                    f'{self.model.category.field.name}'
+                    f'__{Category.name.field.name}'
+                ),
+                self.model.image.field.name,
+                f'{self.model.tags.field.name}__{Tag.name.field.name}',
             )
         )
 
     def get_friday(self) -> Union[QuerySet[Any], Any]:
         prefetch_tags = models.Prefetch(
-            'tags',
+            self.model.tags.field.name,
             queryset=Tag.objects.filter(is_published=True).only(
-                'name',
+                Tag.name.field.name,
             ),
         )
         return (
@@ -183,27 +210,43 @@ class ItemManager(models.Manager['Item']):
             .prefetch_related(prefetch_tags)
             .order_by('-last_edit_date')[:5]
             .values(
-                'name', 'text', 'id', 'category__name', 'image', 'tags__name'
+                self.model.name.field.name,
+                self.model.text.field.name,
+                self.model.id.field.name,
+                (
+                    f'{self.model.category.field.name}'
+                    f'__{Category.name.field.name}'
+                ),
+                self.model.image.field.name,
+                f'{self.model.tags.field.name}__{Tag.name.field.name}',
             )
         )
 
     def get_unchecked(self) -> Union[QuerySet[Any], Any]:
         prefetch_tags = models.Prefetch(
-            'tags',
+            self.model.tags.field.name,
             queryset=Tag.objects.filter(is_published=True).only(
-                'name',
+                Tag.name.field.name,
             ),
         )
         return (
             self.get_queryset()
             .filter(
-                last_edit_date__date=F('last_edit_date'),
-                last_edit_date__hour=F('last_edit_date'),
-                last_edit_date__minute=F('last_edit_date'),
+                last_edit_date__date=F(self.model.last_edit_date.field.name),
+                last_edit_date__hour=F(self.model.last_edit_date.field.name),
+                last_edit_date__minute=F(self.model.last_edit_date.field.name),
             )
             .prefetch_related(prefetch_tags)
             .values(
-                'name', 'text', 'id', 'category__name', 'image', 'tags__name'
+                self.model.name.field.name,
+                self.model.text.field.name,
+                self.model.id.field.name,
+                (
+                    f'{self.model.category.field.name}'
+                    f'__{Category.name.field.name}'
+                ),
+                self.model.image.field.name,
+                f'{self.model.tags.field.name}__{Tag.name.field.name}',
             )
         )
 

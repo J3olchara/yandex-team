@@ -21,9 +21,7 @@ import rating.models  # noqa: I100
 class ItemList(generic.ListView):  # type: ignore[type-arg]
     template_name = 'catalog/catalog.html'
     model = models.Item
-    queryset = models.Item.objects.published(
-        order_by=('category__name', 'id')
-    )
+    queryset = models.Item.objects.published(order_by=('category__name', 'id'))
     context_object_name = 'items_raw'
 
 

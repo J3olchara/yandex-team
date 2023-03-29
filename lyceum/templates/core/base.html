@@ -11,6 +11,11 @@
 	<body>
 	  <div class=" container">
 	    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <marquee direction="right" scrollamount="7">
+          {% for name in today_birthdays %}
+            <span class="mx-1">{{ name.user }}</span>
+          {% endfor %}
+        </marquee>
 	      <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
 	        <img src="{% static 'img/cats/nya.jpg' %}" width="60" height="60" alt="">
 	        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>

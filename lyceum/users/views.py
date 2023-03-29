@@ -6,8 +6,8 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import generic
 
-from authorisation.models import UserProxy
-from users import forms
+from authorisation.models import UserProxy  # noqa: I100
+from users import forms  # noqa: I100
 
 
 class UserList(generic.ListView):  # type: ignore[type-arg]

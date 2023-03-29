@@ -11,8 +11,8 @@ from django.views import generic
 import catalog.models  # noqa: I100
 import rating.forms  # noqa: I100
 import rating.models  # noqa: I100
-from catalog import models
-from catalog.models import Item as Catalog_Item
+from catalog import models  # noqa: I100
+from catalog.models import Item as Catalog_Item  # noqa: I100
 
 
 class ItemList(generic.ListView):  # type: ignore[type-arg]

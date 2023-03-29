@@ -5,7 +5,7 @@
 # How to run it on windows
 1. Clone this repo and prepare workplace
 > - git clone https://github.com/J3olchara/yandex-team
-> - cd yandex_django
+> - cd yandex-team
 > - python -m venv venv
 > - venv\scripts\activate
 
@@ -50,7 +50,7 @@ Then the application will start on http://localhost:8000
 
 1. Clone this repo and prepare workplace
   > - git clone https://github.com/J3olchara/yandex-team
-  > - cd yandex_django
+  > - cd yandex-team
   > - python3 -m venv venv
   > - venv/bin/activate
 

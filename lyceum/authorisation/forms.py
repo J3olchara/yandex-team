@@ -143,4 +143,9 @@ class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
 
     class Meta:
         model = models.UserProxy
-        fields = ['email', 'username', 'password1', 'password2']
+        fields = [
+            models.UserProxy.email.field.name,
+            models.UserProxy.username.field.name,
+            f'{models.UserProxy.password.field.name}1',
+            f'{models.UserProxy.password.field.name}2',
+        ]

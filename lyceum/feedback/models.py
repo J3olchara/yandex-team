@@ -10,7 +10,10 @@ from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django_cleanup import cleanup
 
-from . import support
+# isort: off
+from feedback import support  # noqa: I100
+
+# isort: on
 
 
 class Sender(models.Model):

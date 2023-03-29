@@ -1,6 +1,9 @@
 from django.urls import path, register_converter
 
-from . import converters, views
+# isort: off
+from feedback import converters, views  # noqa: I100
+
+# isort: on
 
 register_converter(converters.BooleanConverter, 'bool')
 

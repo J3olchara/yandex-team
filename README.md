@@ -2,6 +2,11 @@
 - ![Main branch status](https://github.com/J3olchara/yandex-team/actions/workflows/python-package.yml/badge.svg?branch=main) - main
 - ![Main branch status](https://github.com/J3olchara/yandex-team/actions/workflows/python-package.yml/badge.svg?branch=develop) - develop
 
+
+# Database
+
+![image description](information/db_diagram.png)
+
 # How to run it on windows
 1. Clone this repo and prepare workplace
 > - git clone https://github.com/J3olchara/yandex-team

@@ -15,9 +15,15 @@ BASE_DIR: Path = Path(__file__).resolve().parent.parent
 if not load_dotenv(BASE_DIR.parent / '.env'):
     load_dotenv(BASE_DIR.parent / 'example.env')
 
+
+def is_true_str(string):
+    return string.lower() in ('true', '1', 't', 'y')
+
+
 # --------------------------------------------------------------------
 # ------------------------Site info Section---------------------------
 # --------------------------------------------------------------------
+
 
 SITE_EMAIL = os.getenv('SITE_EMAIL')
 
@@ -27,19 +33,11 @@ SITE_EMAIL = os.getenv('SITE_EMAIL')
 
 SECRET_KEY: str = os.getenv('SECRET_KEY', 'not_secret_key')
 
-DEBUG: Optional[bool] = os.getenv('DJANGO_DEBUG', 'False').lower() in (
-    'true',
-    '1',
-    't',
-)
+DEBUG: Optional[bool] = is_true_str(os.getenv('DJANGO_DEBUG', 'False'))
 
 ALLOWED_HOSTS: List[str] = str(os.getenv('DJANGO_HOSTS', '*')).split()
 
-REVERSER_MIDDLEWARE = os.getenv('MIDDLEWARE_REVERSE', 'False').lower() in (
-    'true',
-    '1',
-    't',
-)
+REVERSER_MIDDLEWARE = is_true_str(os.getenv('MIDDLEWARE_REVERSE', 'False'))
 
 # --------------------------------------------------------------------
 # ----------------------------Apps Section----------------------------
@@ -53,35 +51,24 @@ INSTALLED_APPS: List[str] = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
-
-CUSTOM_APPS = [
-    'core.apps.CoreConfig',
     'about.apps.AboutConfig',
+    'authorisation.apps.AuthorisationConfig',
     'catalog.apps.CatalogConfig',
-    'homepage.apps.HomepageConfig',
+    'core.apps.CoreConfig',
     'feedback.apps.FeedbackConfig',
     'rating.apps.RatingConfig',
-    'authorisation.apps.AuthorisationConfig',
-    'django_cleanup.apps.CleanupConfig',
-]
-
-FOREIGN_APPS = [
-    'sorl.thumbnail',
+    'homepage.apps.HomepageConfig',
     'ckeditor',
+    'django_cleanup.apps.CleanupConfig',
+    'sorl.thumbnail',
 ]
-
-INSTALLED_APPS += CUSTOM_APPS
-INSTALLED_APPS += FOREIGN_APPS
 
 
 # --------------------------------------------------------------------
 # --------------------------Middleware Section------------------------
 # --------------------------------------------------------------------
 
-MIDDLEWARE: List[str] = []
-
-COMMON_MIDDLEWARES: List[str] = [
+MIDDLEWARE: List[str] = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -89,27 +76,20 @@ COMMON_MIDDLEWARES: List[str] = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
-
-OTHER_MIDDLEWARES: List[str] = [
-    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
 
 if DEBUG:
-    OTHER_MIDDLEWARES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+    MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
     INSTALLED_APPS += ('debug_toolbar',)
     INTERNAL_IPS = [
         '127.0.0.1',
     ]
 
 if REVERSER_MIDDLEWARE:
-    OTHER_MIDDLEWARES += ('lyceum.middlewares.CoffeeTime',)
+    MIDDLEWARE += ('lyceum.middlewares.CoffeeTime',)
 
 REVERSER_MIDDLEWARE_ENABLE = 10
-
-MIDDLEWARE += COMMON_MIDDLEWARES
-MIDDLEWARE += OTHER_MIDDLEWARES
 
 ROOT_URLCONF: str = 'lyceum.urls'
 
@@ -117,11 +97,13 @@ ROOT_URLCONF: str = 'lyceum.urls'
 # ---------------------------Templates Section---------------------------
 # -----------------------------------------------------------------------
 
+TEMPLATES_DIR = BASE_DIR / 'templates'
+
 TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates',
+            TEMPLATES_DIR,
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -155,20 +137,27 @@ DATABASES: Dict[str, Dict[str, Union[str, Path]]] = {
 
 AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
     {
-        'NAME': 'django.contrib.auth.password_validation.'
-        + 'UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.'
-        + 'MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.' 'MinimumLengthValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.'
-        + 'CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.'
-        + 'NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator'
+        ),
     },
 ]
 
@@ -180,12 +169,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/auth/login/'
 LOGOUT_REDIRECT_URL = '/auth/login/'
 
-NEW_USERS_ACTIVATED = DEBUG or os.getenv(
-    'NEW_USERS_ACTIVATED', 'False'
-).lower() in (
-    'true',
-    '1',
-    't',
+NEW_USERS_ACTIVATED = DEBUG or is_true_str(
+    os.getenv('NEW_USERS_ACTIVATED', 'False')
 )
 
 ACTIVATION_URL_EXPIRE_TIME = os.getenv(

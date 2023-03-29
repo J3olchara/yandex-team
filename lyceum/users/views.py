@@ -3,7 +3,6 @@ from typing import Any, Dict
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -22,9 +21,8 @@ class UserList(generic.ListView):  # type: ignore[type-arg]
 
 class UserDetail(generic.DetailView):  # type: ignore[type-arg]
     template_name = 'users/user_detail.html'
-
-    def get_queryset(self) -> Any:
-        return get_object_or_404(UserProxy.objects, id=self.kwargs['user_id'])
+    context_object_name = 'current_user'
+    queryset = UserProxy.objects
 
 
 class Profile(LoginRequiredMixin, generic.FormView):  # type: ignore[type-arg]

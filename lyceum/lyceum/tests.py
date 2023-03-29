@@ -19,7 +19,15 @@ import authorisation.models  # noqa: I100
 @modify_settings(
     MIDDLEWARE={
         'append': 'lyceum.middlewares.CoffeeTime',
-        'remove': settings.COMMON_MIDDLEWARES,
+        'remove': [
+            'django.middleware.security.SecurityMiddleware',
+            'django.contrib.sessions.middleware.SessionMiddleware',
+            'django.middleware.common.CommonMiddleware',
+            'django.middleware.csrf.CsrfViewMiddleware',
+            'django.contrib.auth.middleware.AuthenticationMiddleware',
+            'django.contrib.messages.middleware.MessageMiddleware',
+            'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        ],
     }
 )
 @override_settings(REVERSER_MIDDLEWARE=True)

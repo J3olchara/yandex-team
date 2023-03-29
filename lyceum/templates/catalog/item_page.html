@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block content %}
-
   {% with item=item_raw|group_items:'tags__name,id,1' %}
     <div class="item-content">
     <div id="carouselExampleControls" class="item-gallery carousel slide" data-bs-ride="carousel">
@@ -66,14 +65,14 @@
               <p class='text-danger'> {{ error|escape }} </p>
             {% endfor %}
           {% endfor %}
-        <div class="d-inline-block w-75">
-          <div class="d-flex justify-content-end gap-1">
-          <button type="submit" class="btn btn-primary">Отправить</button>
-          {% if 1 <= evaluation.value and evaluation.value <= 5 %}
-            <a class="btn btn-danger" href={% url 'rating:delete_evaluation' item_id=item.id %}>Удалить</a>
-          {% endif %}
+          <div class="d-inline-block w-75">
+            <div class="d-flex justify-content-end gap-1">
+              <button type="submit" class="btn btn-primary">Отправить</button>
+              {% if 1 <= evaluation.value and evaluation.value <= 5 %}
+                <a class="btn btn-danger" href={% url 'rating:delete_evaluation' item_id=item.id %}>Удалить</a>
+              {% endif %}
+            </div>
           </div>
-        </div>
           <script src="{% static 'js/item_page.js' %}"></script>
         </form>
       {% else %}

@@ -5,7 +5,10 @@ from django.shortcuts import HttpResponse
 from django.urls import reverse_lazy
 from django.views import generic
 
-from . import forms
+# isort: off
+from feedback import forms  # noqa: I100
+
+# isort: on
 
 
 class Feedback(generic.FormView):  # type: ignore[type-arg]

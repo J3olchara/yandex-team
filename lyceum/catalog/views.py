@@ -11,7 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 # isort: off
-import catalog  # noqa: I100
+import catalog.models  # noqa: I100
 import rating.forms  # noqa: I100
 import rating.models  # noqa: I100
 
@@ -22,7 +22,7 @@ class ItemList(generic.ListView):  # type: ignore[type-arg]
     template_name = 'catalog/catalog.html'
     model = models.Item
     queryset = models.Item.objects.published(
-        order_by=('category__name', 'id'), is_published=True
+        order_by=('category__name', 'id')
     )
     context_object_name = 'items_raw'
 

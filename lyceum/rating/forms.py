@@ -1,6 +1,9 @@
 from django import forms
 
-from . import models
+# isort: off
+from rating import models  # noqa: I100
+
+# isort: on
 
 
 class EvaluationForm(forms.ModelForm):  # type: ignore[type-arg]

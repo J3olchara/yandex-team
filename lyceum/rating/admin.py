@@ -1,7 +1,10 @@
 """RATING app admin settings module"""
 from django.contrib import admin
 
-from . import models
+# isort: off
+from rating import models  # noqa: I100
+
+# isort: on
 
 
 # mypy: disable-error-code="attr-defined"

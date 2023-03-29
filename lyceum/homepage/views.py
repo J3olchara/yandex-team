@@ -20,7 +20,7 @@ class Home(generic.ListView):  # type: ignore[type-arg]
 
     def get_queryset(self) -> QuerySet['catalog.models.Item']:
         return catalog.models.Item.objects.published(
-            order_by=('name', 'id'), is_published=True, is_on_main=True
+            order_by=('name', 'id'), is_on_main=True
         )
 
 

@@ -7,11 +7,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
 
-# isort: off
-from rating import models  # noqa: I100
 import catalog.models  # noqa: I100
-
-# isort: on
+from rating import models  # noqa: I100
 
 
 class DeleteEvaluation(LoginRequiredMixin, View):

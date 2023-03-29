@@ -7,10 +7,7 @@ from uuid import uuid4
 
 from django.conf import settings
 
-# isort: off
 from feedback import models  # noqa: I100
-
-# isort: on
 
 
 def make_feedback_files_path(

@@ -8,10 +8,7 @@ from django.db.models import QuerySet
 from django.test import TestCase
 from parameterized import parameterized
 
-# isort: off
 from core import validators  # noqa: I100
-
-# isort: on
 
 
 class SetupData(TestCase):

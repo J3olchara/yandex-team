@@ -6,10 +6,7 @@ from django.http import HttpRequest
 from django.shortcuts import HttpResponse
 from django.views import generic
 
-# isort: off
 import catalog  # noqa: I100
-
-# isort: on
 
 
 class Home(generic.ListView):  # type: ignore[type-arg]

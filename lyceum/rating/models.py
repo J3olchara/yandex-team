@@ -4,11 +4,8 @@ from typing import Any
 import django.core.validators
 from django.db import models
 
-# isort: off
 import authorisation.models  # noqa: I100
 import catalog.models  # noqa: I100
-
-# isort: on
 
 
 class Evaluation(models.Model):

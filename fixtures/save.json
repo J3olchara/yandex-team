@@ -1231,7 +1231,7 @@
     "fields": {
         "user": 1,
         "birthday": "2023-03-02",
-        "avatar": "uploads/avatars/7b5101df-5e99-403c-91c2-6eec3c8165f2.солнышко.jpg",
+        "avatar": "uploads/cat.jpg",
         "coffee_count": 2,
         "about": null,
         "normalized_email": "senya.borodulin@mail.ru",

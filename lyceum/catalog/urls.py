@@ -3,10 +3,7 @@ from typing import List
 
 from django.urls import path, re_path, register_converter, resolvers
 
-# isort: off
 from catalog import converters, views  # noqa: I100
-
-# isort: on
 
 register_converter(converters.NaturalNumber, 'nat')
 

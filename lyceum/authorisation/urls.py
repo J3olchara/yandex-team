@@ -1,11 +1,8 @@
 import django.contrib.auth.views as default_views
 import django.urls
 
-# isort: off
 import authorisation.forms as auth_forms  # noqa: I100
 import authorisation.views as auth_views  # noqa: I100
-
-# isort: on
 
 app_name = 'authorisation'
 

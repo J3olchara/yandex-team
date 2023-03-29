@@ -9,11 +9,8 @@ from django.urls import reverse
 from django.utils.timezone import datetime, timedelta
 from parameterized import parameterized
 
-# isort: off
-import lyceum.middlewares as lyceum_middlewares  # noqa: I100
 import authorisation.models  # noqa: I100
-
-# isort: on
+import lyceum.middlewares as lyceum_middlewares  # noqa: I100
 
 
 @modify_settings(

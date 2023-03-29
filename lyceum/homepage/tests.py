@@ -2,10 +2,7 @@
 from django.test import Client, TestCase
 from django.urls import reverse
 
-# isort: off
 import core.models  # noqa: I100
-
-# isort: on
 
 
 class HomepageURLTests(TestCase):

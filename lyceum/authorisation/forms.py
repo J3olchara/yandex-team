@@ -6,10 +6,7 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-# isort: off
 from authorisation import models  # noqa: I100
-
-# isort: on
 
 
 class LoginForm(default_forms.AuthenticationForm):

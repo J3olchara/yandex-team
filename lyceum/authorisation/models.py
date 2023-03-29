@@ -11,10 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from django_cleanup import cleanup
 from pytz import timezone, utc
 
-# isort: off
 import authorisation.utils  # noqa: I100
-
-# isort: on
 
 
 @cleanup.cleanup_select

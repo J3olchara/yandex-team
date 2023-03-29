@@ -3,10 +3,7 @@ from typing import List
 
 from django.urls import path, resolvers
 
-# isort: off
 import about.views  # noqa: I100
-
-# isort: on
 
 app_name = 'about'
 

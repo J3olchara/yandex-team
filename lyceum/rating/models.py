@@ -6,7 +6,6 @@ from django.db import models
 
 import authorisation.models  # noqa: I100
 import catalog.models  # noqa: I100
-import authorisation.models
 
 
 class Evaluation(models.Model):

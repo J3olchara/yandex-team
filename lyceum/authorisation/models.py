@@ -117,7 +117,7 @@ class UserManagerExtended(UserManager['UserProxy']):
 
         order_by = ['-value', 'created']
         if reverse_order:
-            order_by[0] = order_by[0].replace('-')
+            order_by[0] = order_by[0].replace('-', '')
         prefetch_evaluations = models.Prefetch(
             'evaluations',
             queryset=rating.models.Evaluation.objects.all().order_by(
@@ -129,6 +129,14 @@ class UserManagerExtended(UserManager['UserProxy']):
             .filter()
             .prefetch_related(prefetch_evaluations)
             .all()
+        )
+
+    def user_with_rated_items(self):
+        return (
+            super(UserManagerExtended, self)
+            .get_queryset()
+            .prefetch_related('evaluations')
+            .filter(is_active=True)
         )
 
 

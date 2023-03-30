@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
 
+import authorisation.validators
 from authorisation.models import UserProxy
 
 
@@ -18,6 +19,9 @@ class EditProfile(UserChangeForm):  # type: ignore[type-arg]
         label='День рождения',
         widget=DateInput(format='%Y-%m-%d'),
         input_formats=['%Y-%m-%d'],
+        validators=[
+            authorisation.validators.no_future,
+        ],
     )
 
     def __init__(

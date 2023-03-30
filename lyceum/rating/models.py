@@ -10,10 +10,11 @@ import catalog.models  # noqa: I100
 
 class EvaluationManager(models.Manager):
     def get_top_by_user(
-            self,
-            user: authorisation.models.UserProxy,
-            count: int,
-            reverse: bool = False):
+        self,
+        user: authorisation.models.UserProxy,
+        count: int,
+        reverse: bool = False,
+    ):
         order_by = ['value', 'created']
         if reverse:
             order_by[0] = f'-{order_by[0]}'
@@ -36,6 +37,7 @@ class Evaluation(models.Model):
     value: int [1;5].
                     the rating given by the user.
     """
+
     user: 'models.ForeignKey[Any, Any]' = models.ForeignKey(
         authorisation.models.UserProxy,
         verbose_name='пользователь',

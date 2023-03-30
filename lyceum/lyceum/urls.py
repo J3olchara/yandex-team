@@ -8,7 +8,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 
-import about.urls  # noqa: I100
+import about.urls
 import authorisation.urls  # noqa: I100
 import catalog.urls  # noqa: I100
 import feedback.urls  # noqa: I100

@@ -6,6 +6,8 @@ exclude = "migrations|venv"
 [tool.isort]
 profile = "black"
 known_local_folder=['about', 'authorisation', 'catalog', 'core', 'feedback', 'homepage', 'lyceum', 'rating', 'statistic', 'users']
+skip = [".gitignore", "README.md", "requirements", "example.env", "information", ".github"]
+skip_glob = ["*/migrations", "*/venv", "*/requirements", "*/templates"]
 
 [tool.mypy]
 mypy_path = "./lyceum"

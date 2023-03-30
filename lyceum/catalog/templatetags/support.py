@@ -1,12 +1,10 @@
 from typing import Any, Collection, Iterable, List, Optional, Union
 
 from django import template
+from django.db.models import Avg
 from sorl.thumbnail import get_thumbnail
 
-# isort: off
-import core  # noqa: I100
-
-# isort: on
+import core.models
 
 register = template.Library()
 
@@ -19,6 +17,32 @@ def get_image_px(
     quality: int,
 ) -> str:
     return str(image.get_image_px(px=px, crop=crop, quality=quality).url)
+
+
+@register.filter()
+def get_avg_evaluation(user):
+    avg = user.evaluations.aggregate(avg_evaluations=Avg('value'))[
+        'avg_evaluations'
+    ]
+    if avg is not None:
+        return avg
+    return 0
+
+
+@register.filter()
+def get_worth_evaluation(user):
+    if user.evaluations.count():
+        print(user)
+        return user.evaluations.last()
+    return 0
+
+
+@register.filter()
+def get_best_evaluation(value, **kwargs):
+    if value.evaluations.count():
+        print(value)
+        return value.evaluations.first()
+    return 0
 
 
 @register.simple_tag()

@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from authorisation.models import ActivationToken, UserProxy  # noqa: I100, I101
+from authorisation.models import ActivationToken, UserProxy
 
 
 class LoginBackend(ModelBackend):

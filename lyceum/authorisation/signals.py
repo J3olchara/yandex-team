@@ -3,7 +3,7 @@ from typing import Any
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from . import models
+from authorisation import models
 
 
 @receiver(

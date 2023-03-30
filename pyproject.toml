@@ -6,6 +6,8 @@ exclude = "migrations|venv"
 [tool.isort]
 profile = "black"
 known_local_folder=['about', 'authorisation', 'catalog', 'core', 'feedback', 'homepage', 'lyceum', 'rating', 'statistic', 'users']
+skip = [".gitignore", "README.md", "requirements", "example.env", "information", ".github"]
+skip_glob = ["*/migrations", "*/venv", "*/requirements", "*/templates"]
 
 [tool.mypy]
 mypy_path = "./lyceum"
@@ -21,15 +23,6 @@ disallow_any_decorated = false
 
 [tool.django-stubs]
 django_settings_module = "lyceum.settings"
-
-[tool.flake8]
-max-line-length = "79"
-plugins = "pep8-naming flake8-import-order flake8-quotes"
-ignore= "I100"
-exclude = "venv"
-count = true
-show-source = true
-statistics = true
 
 [tool.pylint]
 disable = ["C0415"]

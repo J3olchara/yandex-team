@@ -14,7 +14,7 @@ class UsersStatistics(generic.ListView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super(UsersStatistics, self).get_context_data(**kwargs)
-
+        return context
 
 class ItemStatistic(generic.TemplateView):
     template_name = 'statistic/item_statistic.html'

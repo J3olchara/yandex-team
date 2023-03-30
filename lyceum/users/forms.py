@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserChangeForm
 
 # isort: off
 from authorisation.models import UserProxy  # noqa: I100
+import authorisation.validators
 
 # isort: on
 
@@ -21,6 +22,9 @@ class EditProfile(UserChangeForm):  # type: ignore[type-arg]
         label='День рождения',
         widget=DateInput(format='%Y-%m-%d'),
         input_formats=['%Y-%m-%d'],
+        validators=[
+            authorisation.validators.no_future,
+        ],
     )
 
     def __init__(

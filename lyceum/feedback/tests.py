@@ -11,7 +11,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.shortcuts import reverse
 from django.test import Client, TestCase, override_settings
 
-from feedback import forms, models  # noqa: I100
+from feedback import forms, models
 
 
 @override_settings(

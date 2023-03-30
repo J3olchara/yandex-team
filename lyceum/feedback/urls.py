@@ -1,6 +1,6 @@
 from django.urls import path, register_converter
 
-from feedback import converters, views  # noqa: I100
+from feedback import converters, views
 
 register_converter(converters.BooleanConverter, 'bool')
 

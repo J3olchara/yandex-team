@@ -8,11 +8,11 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-import catalog.models  # noqa: I100
-import rating.forms  # noqa: I100
-import rating.models  # noqa: I100
-from catalog import models  # noqa: I100
-from catalog.models import Item as Catalog_Item  # noqa: I100
+import catalog.models
+import rating.forms
+import rating.models
+from catalog import models
+from catalog.models import Item as Catalog_Item
 
 
 class ItemList(generic.ListView):  # type: ignore[type-arg]

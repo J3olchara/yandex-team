@@ -3,8 +3,8 @@ from typing import Any, Dict
 from django.db.models import Avg
 from django.views import generic
 
-import authorisation.models  # noqa: I100
-import rating.models  # noqa: I100
+import authorisation.models
+import rating.models
 
 
 class UsersStatistics(generic.ListView):

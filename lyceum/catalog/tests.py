@@ -6,9 +6,9 @@ from django.test import Client
 from django.urls import NoReverseMatch, reverse
 from parameterized import parameterized
 
-import catalog.models  # noqa: I100
-import core.models  # noqa: I100
-from catalog import models  # noqa: I100
+import catalog.models
+import core.models
+from catalog import models
 
 
 class CatalogURLTests(core.tests.SetupData):

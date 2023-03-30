@@ -15,7 +15,7 @@ from django.db.models.aggregates import Count
 from django_cleanup import cleanup
 from pytz import timezone
 
-import core.models  # noqa: I100
+import core.models
 
 
 class Tag(core.models.BaseSlug):  # type: ignore[name-defined, misc]

@@ -7,7 +7,7 @@ from uuid import uuid4
 
 from django.conf import settings
 
-from feedback import models  # noqa: I100
+from feedback import models
 
 
 def make_feedback_files_path(

@@ -9,13 +9,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 import about.urls
-import authorisation.urls  # noqa: I100
-import catalog.urls  # noqa: I100
-import feedback.urls  # noqa: I100
-import homepage.urls  # noqa: I100
-import rating.urls  # noqa: I100
-import statistic.urls  # noqa: I100
-import users.urls  # noqa: I100
+import authorisation.urls
+import catalog.urls
+import feedback.urls
+import homepage.urls
+import rating.urls
+import statistic.urls
+import users.urls
 
 urlpatterns: Any = [
     django.urls.path('admin/', admin.site.urls, name='admin'),

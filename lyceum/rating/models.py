@@ -4,8 +4,8 @@ from typing import Any
 import django.core.validators
 from django.db import models
 
-import authorisation.models  # noqa: I100
-import catalog.models  # noqa: I100
+import authorisation.models
+import catalog.models
 
 
 class EvaluationManager(models.Manager):

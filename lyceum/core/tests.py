@@ -8,7 +8,7 @@ from django.db.models import QuerySet
 from django.test import TestCase
 from parameterized import parameterized
 
-from core import validators  # noqa: I100
+from core import validators
 
 
 class SetupData(TestCase):

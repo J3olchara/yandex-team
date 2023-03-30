@@ -8,7 +8,7 @@ from typing import Any, List, Optional
 from django import forms
 from django.core.files.uploadedfile import UploadedFile
 
-from feedback import models  # noqa: I100
+from feedback import models
 
 
 class FeedbackForm(forms.ModelForm):  # type: ignore[type-arg]

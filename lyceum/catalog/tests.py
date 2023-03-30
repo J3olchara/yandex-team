@@ -142,7 +142,8 @@ class CatalogShowTests(core.tests.SetupData):
         response = Client().get(test_path)
         items = self.group_query_set(
             response.context['items'],
-            f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )
         self.assertEqual(
@@ -158,7 +159,8 @@ class CatalogShowTests(core.tests.SetupData):
         response = Client().get(test_path)
         grouped_item = self.group_query_set(
             response.context['item_raw'],
-            f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )[0]
         self.assertEqual(
@@ -172,14 +174,16 @@ class CatalogShowTests(core.tests.SetupData):
                     f'{catalog.models.Category.name.field.name}'
                 ),
                 catalog.models.Item.image.field.name,
-                f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+                f'{catalog.models.Item.tags.field.name}__'
+                f'{catalog.models.Tag.name.field.name}',
             },
         )
 
     def test_sql_fields(self):
         items = self.group_query_set(
             catalog.models.Item.objects.published(),
-            f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )
         self.assertEqual(
@@ -193,7 +197,8 @@ class CatalogShowTests(core.tests.SetupData):
                     f'{catalog.models.Category.name.field.name}'
                 ),
                 catalog.models.Item.image.field.name,
-                f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+                f'{catalog.models.Item.tags.field.name}__'
+                f'{catalog.models.Tag.name.field.name}',
             },
         )
 
@@ -201,7 +206,8 @@ class CatalogShowTests(core.tests.SetupData):
         response = Client().get(reverse('catalog:catalog'))
         item = self.group_query_set(
             response.context['items'],
-            f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )[0]
         self.assertEqual(
@@ -215,7 +221,8 @@ class CatalogShowTests(core.tests.SetupData):
                     f'{catalog.models.Category.name.field.name}'
                 ),
                 catalog.models.Item.image.field.name,
-                f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+                f'{catalog.models.Item.tags.field.name}__'
+                f'{catalog.models.Tag.name.field.name}',
             },
         )
 
@@ -228,7 +235,8 @@ class CatalogShowTests(core.tests.SetupData):
         )
         item = self.group_query_set(
             response.context['item_raw'],
-            f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )[0]
         self.assertEqual(
@@ -242,6 +250,7 @@ class CatalogShowTests(core.tests.SetupData):
                     f'{catalog.models.Category.name.field.name}'
                 ),
                 catalog.models.Item.image.field.name,
-                f'{catalog.models.Item.tags.field.name}__{catalog.models.Tag.name.field.name}',
+                f'{catalog.models.Item.tags.field.name}__'
+                f'{catalog.models.Tag.name.field.name}',
             },
         )

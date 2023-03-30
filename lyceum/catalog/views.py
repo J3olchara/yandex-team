@@ -11,14 +11,15 @@ from django.views import generic
 import catalog.models
 import rating.forms
 import rating.models
-from catalog import models
 from catalog.models import Item as Catalog_Item
 
 
 class ItemList(generic.ListView):  # type: ignore[type-arg]
     template_name = 'catalog/catalog.html'
-    model = models.Item
-    queryset = models.Item.objects.published(order_by=('category__name', 'id'))
+    model = catalog.models.Item
+    queryset = catalog.models.Item.objects.published(
+        order_by=('category__name', 'id')
+    )
     context_object_name = 'items_raw'
 
 
@@ -31,7 +32,7 @@ class ItemDetailView(generic.TemplateView):
         item_id = self.kwargs.get('item_id')
         item = Catalog_Item.objects.item_detail(item_id)
         item_object: Any = get_object_or_404(Catalog_Item, pk=item_id)
-        images = models.PhotoGallery.objects.filter(item=item_id)
+        images = catalog.models.PhotoGallery.objects.filter(item=item_id)
         item_evalution = rating.models.Evaluation.objects.filter(
             item=item_object
         )

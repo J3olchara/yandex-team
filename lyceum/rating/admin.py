@@ -1,7 +1,7 @@
 """RATING app admin settings module"""
 from django.contrib import admin
 
-from rating import models  # noqa: I100
+from rating import models
 
 
 @admin.register(models.Evaluation)

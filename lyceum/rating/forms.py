@@ -1,6 +1,6 @@
 from django import forms
 
-from rating import models  # noqa: I100
+from rating import models
 
 
 class EvaluationForm(forms.ModelForm):  # type: ignore[type-arg]

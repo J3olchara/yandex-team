@@ -10,8 +10,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 
-import authorisation.forms as auth_forms  # noqa: I100
-import authorisation.models  # noqa: I100
+import authorisation.forms as auth_forms
+import authorisation.models
 
 
 class CustomLoginView(default_views.LoginView):

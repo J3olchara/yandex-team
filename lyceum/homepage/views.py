@@ -6,7 +6,7 @@ from django.http import HttpRequest
 from django.shortcuts import HttpResponse
 from django.views import generic
 
-import catalog  # noqa: I100
+import catalog
 
 
 class Home(generic.ListView):  # type: ignore[type-arg]

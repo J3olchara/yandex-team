@@ -1,8 +1,8 @@
 import django.contrib.auth.views as default_views
 import django.urls
 
-import authorisation.forms as auth_forms  # noqa: I100
-import authorisation.views as auth_views  # noqa: I100
+import authorisation.forms as auth_forms
+import authorisation.views as auth_views
 
 app_name = 'authorisation'
 

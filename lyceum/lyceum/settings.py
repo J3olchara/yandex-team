@@ -58,6 +58,7 @@ INSTALLED_APPS: List[str] = [
     'feedback.apps.FeedbackConfig',
     'rating.apps.RatingConfig',
     'homepage.apps.HomepageConfig',
+    'statistic.apps.StatisticConfig',
     'ckeditor',
     'django_cleanup.apps.CleanupConfig',
     'sorl.thumbnail',

@@ -2,7 +2,7 @@ import django.contrib.auth.admin
 import django.contrib.auth.models
 from django.contrib import admin
 
-from authorisation.models import Profile  # noqa: I100
+from authorisation.models import Profile
 
 
 class ProfileInline(admin.TabularInline):  # type: ignore[type-arg]

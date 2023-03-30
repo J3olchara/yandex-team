@@ -4,11 +4,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
 
-# isort: off
 import authorisation.validators
-from authorisation.models import UserProxy  # noqa: I100
-
-# isort: on
+from authorisation.models import UserProxy
 
 
 class DateInput(forms.DateInput):

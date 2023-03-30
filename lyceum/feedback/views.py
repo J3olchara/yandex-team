@@ -5,7 +5,7 @@ from django.shortcuts import HttpResponse
 from django.urls import reverse_lazy
 from django.views import generic
 
-from feedback import forms  # noqa: I100
+from feedback import forms
 
 
 class Feedback(generic.FormView):  # type: ignore[type-arg]

@@ -3,7 +3,7 @@ from typing import List
 
 from django.urls import path, resolvers
 
-from rating import views  # noqa: I100
+from rating import views
 
 app_name = 'rating'
 

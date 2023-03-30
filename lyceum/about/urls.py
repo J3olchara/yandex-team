@@ -3,7 +3,7 @@ from typing import List
 
 from django.urls import path, resolvers
 
-import about.views  # noqa: I100
+import about.views
 
 app_name = 'about'
 

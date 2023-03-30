@@ -3,7 +3,7 @@ from typing import List
 
 from django.urls import path, resolvers
 
-from . import views
+from statistic import views
 
 app_name = 'statistic'
 

@@ -1,12 +1,12 @@
 """RATING app database models"""
 from typing import Any
 
-import authorisation.models
 import django.core.validators
 from django.db import models
 
 # isort: off
 import catalog.models  # noqa: I100
+import authorisation.models
 
 # isort: on
 
@@ -32,8 +32,16 @@ class Evaluation(models.Model):
     )
 
     change_datetime = models.DateTimeField(
-        'дата и время изменения или создания',
+        verbose_name='дата и время изменения',
+        help_text='значение обновляется каждый раз, '
+        'когда пользователь меняет свою оценку',
         auto_now=True,
+    )
+
+    creation_datetime = models.DateTimeField(
+        verbose_name='дата и время создания',
+        help_text='дата и время создания отзыва',
+        auto_now_add=True,
     )
 
     class Meta:

@@ -1,7 +1,7 @@
 """RATING app admin settings module"""
 from django.contrib import admin
 
-from . import models
+from rating import models
 
 
 # mypy: disable-error-code="attr-defined"

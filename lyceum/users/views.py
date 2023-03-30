@@ -12,8 +12,8 @@ from users import forms  # noqa: I100
 
 class UserList(generic.ListView):  # type: ignore[type-arg]
     template_name = 'users/user_list.html'
-    queryset = UserProxy.objects.all()
     context_object_name = 'users'
+    queryset = UserProxy.objects.all()
 
 
 class UserDetail(generic.DetailView):  # type: ignore[type-arg]

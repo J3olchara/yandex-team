@@ -1,1 +1,0 @@
-"""RATING app tests"""

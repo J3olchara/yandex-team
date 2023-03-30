@@ -1,8 +1,8 @@
 """lyceum URL Configuration"""
 from typing import Any
 
-import django.contrib.auth.urls  # noqa: I100
-import django.urls  # noqa: I100
+import django.contrib.auth.urls
+import django.urls
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
@@ -14,6 +14,7 @@ import catalog.urls  # noqa: I100
 import feedback.urls  # noqa: I100
 import homepage.urls  # noqa: I100
 import rating.urls  # noqa: I100
+import statistic.urls  # noqa: I100
 import users.urls  # noqa: I100
 
 urlpatterns: Any = [
@@ -33,6 +34,7 @@ urlpatterns += i18n_patterns(
     django.urls.path('auth/', django.urls.include(django.contrib.auth.urls)),
     django.urls.path('users/', django.urls.include(users.urls)),
     django.urls.path('rating/', django.urls.include(rating.urls)),
+    django.urls.path('statistic/', django.urls.include(statistic.urls)),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

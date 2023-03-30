@@ -22,15 +22,5 @@ disallow_any_decorated = false
 [tool.django-stubs]
 django_settings_module = "lyceum.settings"
 
-[tool.flake8]
-max-line-length = "79"
-plugins = "pep8-naming flake8-import-order flake8-quotes"
-ignore= "I100"
-application-import-names = ['about', 'authorisation', 'catalog', 'core', 'feedback', 'homepage', 'lyceum', 'rating', 'statistic', 'users']
-exclude = "venv"
-count = true
-show-source = true
-statistics = true
-
 [tool.pylint]
 disable = ["C0415"]

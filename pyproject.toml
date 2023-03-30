@@ -5,6 +5,7 @@ exclude = "migrations|venv"
 
 [tool.isort]
 profile = "black"
+known_local_folder=['about', 'authorisation', 'catalog', 'core', 'feedback', 'homepage', 'lyceum', 'rating', 'statistic', 'users']
 
 [tool.mypy]
 mypy_path = "./lyceum"

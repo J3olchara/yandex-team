@@ -1,7 +1,7 @@
 """CATALOG app admin settings"""
 from django.contrib import admin
 
-import catalog.models  # noqa: I100
+import catalog.models
 
 
 @admin.register(catalog.models.Tag)

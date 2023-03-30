@@ -10,7 +10,7 @@ from django.core.files.uploadedfile import UploadedFile
 from django.db import models
 from django_cleanup import cleanup
 
-from feedback import support  # noqa: I100
+from feedback import support
 
 
 class Sender(models.Model):

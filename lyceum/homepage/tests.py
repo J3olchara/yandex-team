@@ -2,7 +2,7 @@
 from django.test import Client, TestCase
 from django.urls import reverse
 
-import core.models  # noqa: I100
+import core.models
 
 
 class HomepageURLTests(TestCase):

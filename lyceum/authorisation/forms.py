@@ -6,7 +6,7 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from authorisation import models  # noqa: I100
+from authorisation import models
 
 
 class LoginForm(default_forms.AuthenticationForm):

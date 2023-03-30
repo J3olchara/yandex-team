@@ -8,30 +8,30 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-import catalog.models  # noqa: I100
-import rating.forms  # noqa: I100
-import rating.models  # noqa: I100
-from catalog import models  # noqa: I100
-from catalog.models import Item as Catalog_Item  # noqa: I100
+import catalog.models
+import rating.forms
+import rating.models
 
 
 class ItemList(generic.ListView):  # type: ignore[type-arg]
     template_name = 'catalog/catalog.html'
-    model = models.Item
-    queryset = models.Item.objects.published(order_by=('category__name', 'id'))
+    model = catalog.models.Item
+    queryset = catalog.models.Item.objects.published(
+        order_by=('category__name', 'id')
+    )
     context_object_name = 'items_raw'
 
 
 class ItemDetailView(generic.TemplateView):
     template_name = 'catalog/item_page.html'
-    model = Catalog_Item
+    model = catalog.models.Item
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         item_id = self.kwargs.get('item_id')
-        item = Catalog_Item.objects.item_detail(item_id)
-        item_object: Any = get_object_or_404(Catalog_Item, pk=item_id)
-        images = models.PhotoGallery.objects.filter(item=item_id)
+        item = catalog.models.Item.objects.item_detail(item_id)
+        item_object: Any = get_object_or_404(catalog.models.Item, pk=item_id)
+        images = catalog.models.PhotoGallery.objects.filter(item=item_id)
         item_evalution = rating.models.Evaluation.objects.filter(
             item=item_object
         )

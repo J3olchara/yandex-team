@@ -8,7 +8,7 @@ from typing import Any, Dict
 from django.http import HttpRequest
 from django.utils.timezone import datetime
 
-import authorisation.models as auth_models  # noqa: I100
+import authorisation.models as auth_models
 
 
 def today_birthday_processor(request: HttpRequest) -> Dict[str, Any]:

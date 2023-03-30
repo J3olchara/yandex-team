@@ -283,6 +283,7 @@ class Item(
         help_text='Выберите категорию',
         on_delete=models.SET_NULL,
         null=True,
+        related_name='category',
     )
 
     tags: Union[

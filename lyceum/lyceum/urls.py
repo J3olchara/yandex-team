@@ -1,8 +1,8 @@
 """lyceum URL Configuration"""
 from typing import Any
 
-import django.contrib.auth.urls  # noqa: I100
-import django.urls  # noqa: I100
+import django.contrib.auth.urls
+import django.urls
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static

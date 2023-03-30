@@ -13,4 +13,5 @@ urlpatterns: List[resolvers.URLPattern] = [
         views.ItemStatistic.as_view(),
         name='item_statistic',
     ),
+    path('users', views.UsersStatistics.as_view(), name='users'),
 ]

@@ -8,24 +8,6 @@ import authorisation.models
 import catalog.models
 
 
-class EvaluationManager(models.Manager):
-    def get_top_by_user(
-        self,
-        user: authorisation.models.UserProxy,
-        count: int,
-        reverse: bool = False,
-    ):
-        order_by = ['value', 'created']
-        if reverse:
-            order_by[0] = f'-{order_by[0]}'
-        return (
-            self.get_queryset()
-            .filter(user=user)
-            .order_by(*order_by)[:count]
-            .select_related()
-        )
-
-
 class Evaluation(models.Model):
     """
     Evaluation model to rate items
@@ -42,14 +24,14 @@ class Evaluation(models.Model):
         authorisation.models.UserProxy,
         verbose_name='пользователь',
         help_text='Пользователь оставивший отзыв',
-        related_name='user',
+        related_name='evaluations',
         on_delete=models.CASCADE,
     )
     item: 'models.ForeignKey[Any, Any]' = models.ForeignKey(
         catalog.models.Item,
         verbose_name='товар',
         help_text='Товар, которому оставили отзыв',
-        related_name='item',
+        related_name='rating_item',
         on_delete=models.CASCADE,
     )
 

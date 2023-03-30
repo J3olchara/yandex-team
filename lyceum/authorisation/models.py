@@ -109,6 +109,28 @@ class UserManagerExtended(UserManager['UserProxy']):
             .filter(is_active=True)
         )
 
+    def with_evaluations(
+        self,
+        reverse_order: bool = False,
+    ):
+        import rating.models  # fix circular import
+
+        order_by = ['-value', 'created']
+        if reverse_order:
+            order_by[0] = order_by[0].replace('-')
+        prefetch_evaluations = models.Prefetch(
+            'evaluations',
+            queryset=rating.models.Evaluation.objects.all().order_by(
+                *order_by
+            ),
+        )
+        return (
+            self.get_queryset()
+            .filter()
+            .prefetch_related(prefetch_evaluations)
+            .all()
+        )
+
 
 class InactiveUserManagerExtended(UserManager['UserProxy']):
     """extends base qs to select related profile"""

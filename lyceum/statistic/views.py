@@ -24,14 +24,10 @@ class ItemStatistic(generic.TemplateView):
             avg = 0
         count = evaluations.count()
         max_evaluation_user = None
-        max_evaluation = evaluations.order_by(
-            'value', 'change_datetime'
-        ).first()
+        max_evaluation = evaluations.order_by('value', 'changed').first()
         if max_evaluation:
             max_evaluation_user = max_evaluation.user
-        min_evaluation = evaluations.order_by(
-            '-value', 'change_datetime'
-        ).first()
+        min_evaluation = evaluations.order_by('-value', 'changed').first()
         min_evaluation_user = None
         if min_evaluation:
             min_evaluation_user = min_evaluation.user

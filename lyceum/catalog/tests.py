@@ -3,15 +3,13 @@
 import catalog.models
 from django.core import exceptions
 from django.db import transaction, utils
-from django.db.models.query import QuerySet
 from django.test import Client
 from django.urls import NoReverseMatch, reverse
 from parameterized import parameterized
 
-from . import models
-
 # isort: off
-import core  # noqa: I100
+import core.models  # noqa: I100
+from catalog import models  # noqa: I100
 
 # isort: on
 
@@ -147,7 +145,9 @@ class CatalogShowTests(core.tests.SetupData):
         test_path = reverse('catalog:catalog')
         response = Client().get(test_path)
         items = self.group_query_set(
-            response.context['items'], 'tags__name', 'id'
+            response.context['items'],
+            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            'id',
         )
         self.assertEqual(
             len(items), 3
@@ -161,30 +161,66 @@ class CatalogShowTests(core.tests.SetupData):
         )
         response = Client().get(test_path)
         grouped_item = self.group_query_set(
-            response.context['item_raw'], 'tags__name', 'id'
+            response.context['item_raw'],
+            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            'id',
         )[0]
         self.assertEqual(
             grouped_item.keys(),
-            {'name', 'text', 'category__name', 'image', 'tags__name', 'id'},
+            {
+                models.Item.name.field.name,
+                models.Item.text.field.name,
+                models.Item.id.field.name,
+                (
+                    f'{models.Item.category.field.name}__'
+                    f'{models.Category.name.field.name}'
+                ),
+                models.Item.image.field.name,
+                f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            },
         )
 
     def test_sql_fields(self):
-        items: QuerySet = self.group_query_set(
-            catalog.models.Item.objects.published(), 'tags__name', 'id'
+        items = self.group_query_set(
+            catalog.models.Item.objects.published(),
+            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            'id',
         )
         self.assertEqual(
             items[0].keys(),
-            {'name', 'text', 'id', 'category__name', 'image', 'tags__name'},
+            {
+                models.Item.name.field.name,
+                models.Item.text.field.name,
+                models.Item.id.field.name,
+                (
+                    f'{models.Item.category.field.name}__'
+                    f'{models.Category.name.field.name}'
+                ),
+                models.Item.image.field.name,
+                f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            },
         )
 
     def test_sql_fields_item_list(self):
         response = Client().get(reverse('catalog:catalog'))
         item = self.group_query_set(
-            response.context['items'], 'tags__name', 'id'
+            response.context['items'],
+            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            'id',
         )[0]
         self.assertEqual(
             set(item.keys()),
-            {'name', 'text', 'id', 'category__name', 'image', 'tags__name'},
+            {
+                models.Item.name.field.name,
+                models.Item.text.field.name,
+                models.Item.id.field.name,
+                (
+                    f'{models.Item.category.field.name}__'
+                    f'{models.Category.name.field.name}'
+                ),
+                models.Item.image.field.name,
+                f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            },
         )
 
     def test_sql_field_item_detail(self):
@@ -195,9 +231,21 @@ class CatalogShowTests(core.tests.SetupData):
             )
         )
         item = self.group_query_set(
-            response.context['item_raw'], 'tags__name', 'id'
+            response.context['item_raw'],
+            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            'id',
         )[0]
         self.assertEqual(
             set(item.keys()),
-            {'name', 'text', 'category__name', 'image', 'tags__name', 'id'},
+            {
+                models.Item.name.field.name,
+                models.Item.text.field.name,
+                models.Item.id.field.name,
+                (
+                    f'{models.Item.category.field.name}__'
+                    f'{models.Category.name.field.name}'
+                ),
+                models.Item.image.field.name,
+                f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            },
         )

@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views import View
 
 # isort: off
-from . import models  # noqa: I100
+from rating import models  # noqa: I100
 import catalog.models  # noqa: I100
 
 # isort: on

@@ -11,7 +11,10 @@ from django.utils.translation import gettext_lazy as _
 from django_cleanup import cleanup
 from pytz import timezone, utc
 
-from . import utils
+# isort: off
+import authorisation.utils  # noqa: I100
+
+# isort: on
 
 
 @cleanup.cleanup_select
@@ -43,7 +46,7 @@ class Profile(models.Model):
     avatar: Any = models.ImageField(
         verbose_name=_('аватар'),
         default='uploads/cat.jpg',
-        upload_to=utils.get_avatar_path,
+        upload_to=authorisation.utils.get_avatar_path,
         null=True,
         blank=True,
     )
@@ -158,7 +161,7 @@ class ActivationToken(models.Model):
 
     expire: Union[datetime, Any] = models.DateTimeField(
         verbose_name=_('Дата и время истечения'),
-        default=utils.get_token_expire,
+        default=authorisation.utils.get_token_expire,
     )
 
     def get_url(self, site: str) -> Any:

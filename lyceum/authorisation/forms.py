@@ -6,7 +6,10 @@ from django import forms
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-from . import models
+# isort: off
+from authorisation import models  # noqa: I100
+
+# isort: on
 
 
 class LoginForm(default_forms.AuthenticationForm):
@@ -143,4 +146,9 @@ class SignUpForm(default_forms.UserCreationForm):  # type: ignore[type-arg]
 
     class Meta:
         model = models.UserProxy
-        fields = ['email', 'username', 'password1', 'password2']
+        fields = [
+            models.UserProxy.email.field.name,
+            models.UserProxy.username.field.name,
+            f'{models.UserProxy.password.field.name}1',
+            f'{models.UserProxy.password.field.name}2',
+        ]

@@ -12,8 +12,8 @@
 	  <div class=" container">
 	    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
         <marquee direction="right" scrollamount="7">
-          {% for name in today_birthdays %}
-            <span class="mx-1">{{ name.user }}</span>
+          {% for current_user in today_birthdays %}
+            ,<span class="mx-1">{{ current_user.user.username }} ({{ current_user.user.email }})</span>
           {% endfor %}
         </marquee>
 	      <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">
@@ -58,9 +58,6 @@
 						  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 						    <a href="{% url 'users:profile' %}" class="dropdown-item" aria-current="page">
 						      {% trans 'Профиль' %}
-						    </a>
-						    <a href="#" class="dropdown-item" aria-current="page">
-						      {% trans 'Настройки' %}
 						    </a>
 							  <!-- todo: rebase this to settings -->
 						    <a href="{% url 'authorisation:password_change' %}" class="dropdown-item" aria-current="page">

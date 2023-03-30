@@ -11,11 +11,8 @@ from django.utils.html import SafeString  # type: ignore[attr-defined]
 from django.utils.html import mark_safe  # type: ignore[attr-defined]
 from sorl.thumbnail import get_thumbnail
 
-# isort: off
 from core import support  # noqa: I100
 from core import validators as custom_validators  # noqa: I100
-
-# isort: on
 
 
 class Base(models.Model):

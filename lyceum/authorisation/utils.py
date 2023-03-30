@@ -21,4 +21,4 @@ def get_token_expire() -> datetime:
 
 def get_avatar_path(instance: 'models.Profile', filename: str) -> str:
     """returns path to upload user avatar"""
-    return f'uploads/avatars/{uuid4()}.{filename.split(maxsplit=1)[-1]}'
+    return f'uploads/avatars/{uuid4()}.{filename.split()[-1]}'

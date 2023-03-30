@@ -1,17 +1,14 @@
 """CATALOG app tests"""
 
-import catalog.models
 from django.core import exceptions
 from django.db import transaction, utils
 from django.test import Client
 from django.urls import NoReverseMatch, reverse
 from parameterized import parameterized
 
-# isort: off
+import catalog.models  # noqa: I100
 import core.models  # noqa: I100
 from catalog import models  # noqa: I100
-
-# isort: on
 
 
 class CatalogURLTests(core.tests.SetupData):

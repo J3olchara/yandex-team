@@ -1,10 +1,7 @@
 """CATALOG app admin settings"""
 from django.contrib import admin
 
-# isort: off
 import catalog.models  # noqa: I100
-
-# isort: on
 
 
 @admin.register(catalog.models.Tag)

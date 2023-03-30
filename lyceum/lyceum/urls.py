@@ -1,24 +1,21 @@
 """lyceum URL Configuration"""
 from typing import Any
 
+import django.contrib.auth.urls
+import django.urls
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 
-# isort: off
 import about.urls  # noqa: I100
 import authorisation.urls  # noqa: I100
 import catalog.urls  # noqa: I100
-import django.contrib.auth.urls  # noqa: I100
-import django.urls  # noqa: I100
 import feedback.urls  # noqa: I100
 import homepage.urls  # noqa: I100
-import users.urls  # noqa: I100
 import rating.urls  # noqa: I100
 import statistic.urls  # noqa: I100
-
-# isort: on
+import users.urls  # noqa: I100
 
 urlpatterns: Any = [
     django.urls.path('admin/', admin.site.urls, name='admin'),

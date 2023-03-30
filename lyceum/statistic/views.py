@@ -16,6 +16,7 @@ class UsersStatistics(generic.ListView):
         context = super(UsersStatistics, self).get_context_data(**kwargs)
         return context
 
+
 class ItemStatistic(generic.TemplateView):
     template_name = 'statistic/item_statistic.html'
 

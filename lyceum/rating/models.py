@@ -6,8 +6,7 @@ from django.db import models
 
 import authorisation.models
 import catalog.models
-
-from catalog.models import Tag, Category
+from catalog.models import Tag
 
 
 class EvaluationManager(models.Manager['Evaluation']):
@@ -15,7 +14,7 @@ class EvaluationManager(models.Manager['Evaluation']):
         prefetch = models.Prefetch(
             "item__tags",
             queryset=Tag.objects.filter(is_published=True).only(
-                Tag.name.field.name,
+                'name',
             ),
         )
         return (
@@ -29,7 +28,7 @@ class EvaluationManager(models.Manager['Evaluation']):
                 'item__text',
                 'item__category__name',
                 'item__image',
-                f'item__tags__name',
+                'item__tags__name',
             )
         )
 
@@ -45,6 +44,7 @@ class Evaluation(models.Model):
     value: int [1;5].
                     the rating given by the user.
     """
+
     objects = EvaluationManager()
 
     user: 'models.ForeignKey[Any, Any]' = models.ForeignKey(

@@ -46,4 +46,6 @@ class RatedStatistic(LoginRequiredMixin, generic.ListView):
     context_object_name = 'rated_items'
 
     def get_queryset(self):
-        return rating.models.Evaluation.objects.get_item(user=self.request.user.id)
+        return rating.models.Evaluation.objects.get_item(
+            user=self.request.user.id
+        )

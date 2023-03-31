@@ -6,7 +6,7 @@ from django.shortcuts import reverse
 from django.test import Client, TestCase, override_settings
 from parameterized import parameterized
 
-from . import forms, models
+from authorisation import forms, models
 
 
 class SignUpTests(TestCase):

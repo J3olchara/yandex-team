@@ -1,16 +1,36 @@
 {% extends 'core/base.html' %}
+{% load support i18n %}
 
 {% block content %}
-	<div class="container">
+	<div class="container w-100">
 		<div class="list-group">
-		  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
-		    <div class="d-flex w-100 justify-content-between">
-		      <h5 class="mb-1">List group item heading</h5>
-		      <small>3 days ago</small>
-		    </div>
-		    <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-		    <small>Donec id elit non mi porta.</small>
-		  </a>
+			{% for cur_user in users %}
+				<div class="user_stat">
+				  <a href="{% url 'users:details' cur_user.id %}" class="list-group-item list-group-item-action flex-column align-items-start">
+				    <div class="d-flex w-100 justify-content-between">
+				      <h5 class="mb-1">{{ cur_user.username }} ({{ cur_user.email }})</h5>
+				      <small>{{ cur_user.evaluations.count }} {% trans 'Отзывов' %}. {{ cur_user|get_avg_evaluation }}☆</small>
+				    </div>
+				  </a>
+			    {% with best_evaluation=cur_user|get_best_evaluation %}
+				    {% if best_evaluation %}
+					    <a href="{% url 'catalog:int_item_detail' best_evaluation.item.id %}" class="mb-1 list-group-item list-group-item-action">{% trans 'Лучшая оценка' %}
+				        {{ best_evaluation.item.name }} {{ best_evaluation.value }} ☆
+			        </a>
+				    {% endif %}
+		      {% endwith %}
+				{% if cur_user.evaluations.count > 1 %}
+			    {% with worth_evaluation=cur_user|get_worth_evaluation %}
+				    {% if worth_evaluation %}
+					    <a href="{% url 'catalog:int_item_detail' worth_evaluation.item.id %}" class="mb-1 list-group-item list-group-item-action">{% trans 'Худшая оценка' %}
+						      {{ worth_evaluation.item.name }} {{ worth_evaluation.value }} ☆
+					    </a>
+				    {% endif %}
+		      {% endwith %}
+				{% endif %}
+				</div>
+				<hr>
+			{% endfor %}
 		</div>
 	</div>
 {% endblock %}

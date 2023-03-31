@@ -6,9 +6,8 @@ from django.test import Client
 from django.urls import NoReverseMatch, reverse
 from parameterized import parameterized
 
-import catalog.models  # noqa: I100
-import core.models  # noqa: I100
-from catalog import models  # noqa: I100
+import catalog.models
+import core.models
 
 
 class CatalogURLTests(core.tests.SetupData):
@@ -59,22 +58,22 @@ class CatalogModelTests(core.tests.SetupData):
     def test_base_slug_abstract_class(self) -> None:
         """test field validators"""
         with self.assertRaises(exceptions.ValidationError):
-            tag = models.Tag(name='1' * 151, slug='test')
+            tag = catalog.models.Tag(name='1' * 151, slug='test')
             tag.full_clean()
             tag.save()
-            tag = models.Tag(name='test', slug='1' * 201)
+            tag = catalog.models.Tag(name='test', slug='1' * 201)
             tag.full_clean()
             tag.save()
         self.assertEqual(self.tag_published.is_published, True)
         with transaction.atomic():
             with self.assertRaises(utils.IntegrityError):
-                models.Tag.objects.create(
+                catalog.models.Tag.objects.create(
                     name=self.tag_published.name,
                     slug=self.tag_published.slug,
                 )
 
     def test_category(self) -> None:
-        category = models.Category(
+        category = catalog.models.Category(
             name='test',
             slug='test',
         )
@@ -92,14 +91,14 @@ class CatalogModelTests(core.tests.SetupData):
     )
     def test_item(self, bad_test: str, good_test: str) -> None:
         with self.assertRaises(exceptions.ValidationError):
-            item = models.Item(
+            item = catalog.models.Item(
                 name='test',
                 text=bad_test,
                 category=self.category_published,
                 image='test.jpg',
             )
             item.full_clean()
-        item = models.Item(
+        item = catalog.models.Item(
             name='test',
             text=good_test,
             category=self.category_published,
@@ -118,11 +117,11 @@ class CatalogModelTests(core.tests.SetupData):
         ]
     )
     def test_abstract_base_slug_normalized_name(self, name: str) -> None:
-        models.Tag.objects.create(name='test', slug='test')
+        catalog.models.Tag.objects.create(name='test', slug='test')
         with transaction.atomic():
             with self.assertRaises(utils.IntegrityError):
-                models.Tag.objects.create(name=name, slug='testslug')
-        models.Tag.objects.create(name='test name', slug='testslug')
+                catalog.models.Tag.objects.create(name=name, slug='testslug')
+        catalog.models.Tag.objects.create(name='test name', slug='testslug')
 
 
 class CatalogShowTests(core.tests.SetupData):
@@ -143,7 +142,8 @@ class CatalogShowTests(core.tests.SetupData):
         response = Client().get(test_path)
         items = self.group_query_set(
             response.context['items'],
-            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )
         self.assertEqual(
@@ -159,42 +159,46 @@ class CatalogShowTests(core.tests.SetupData):
         response = Client().get(test_path)
         grouped_item = self.group_query_set(
             response.context['item_raw'],
-            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )[0]
         self.assertEqual(
             grouped_item.keys(),
             {
-                models.Item.name.field.name,
-                models.Item.text.field.name,
-                models.Item.id.field.name,
+                catalog.models.Item.name.field.name,
+                catalog.models.Item.text.field.name,
+                catalog.models.Item.id.field.name,
                 (
-                    f'{models.Item.category.field.name}__'
-                    f'{models.Category.name.field.name}'
+                    f'{catalog.models.Item.category.field.name}__'
+                    f'{catalog.models.Category.name.field.name}'
                 ),
-                models.Item.image.field.name,
-                f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+                catalog.models.Item.image.field.name,
+                f'{catalog.models.Item.tags.field.name}__'
+                f'{catalog.models.Tag.name.field.name}',
             },
         )
 
     def test_sql_fields(self):
         items = self.group_query_set(
             catalog.models.Item.objects.published(),
-            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )
         self.assertEqual(
             items[0].keys(),
             {
-                models.Item.name.field.name,
-                models.Item.text.field.name,
-                models.Item.id.field.name,
+                catalog.models.Item.name.field.name,
+                catalog.models.Item.text.field.name,
+                catalog.models.Item.id.field.name,
                 (
-                    f'{models.Item.category.field.name}__'
-                    f'{models.Category.name.field.name}'
+                    f'{catalog.models.Item.category.field.name}__'
+                    f'{catalog.models.Category.name.field.name}'
                 ),
-                models.Item.image.field.name,
-                f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+                catalog.models.Item.image.field.name,
+                f'{catalog.models.Item.tags.field.name}__'
+                f'{catalog.models.Tag.name.field.name}',
             },
         )
 
@@ -202,21 +206,23 @@ class CatalogShowTests(core.tests.SetupData):
         response = Client().get(reverse('catalog:catalog'))
         item = self.group_query_set(
             response.context['items'],
-            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )[0]
         self.assertEqual(
             set(item.keys()),
             {
-                models.Item.name.field.name,
-                models.Item.text.field.name,
-                models.Item.id.field.name,
+                catalog.models.Item.name.field.name,
+                catalog.models.Item.text.field.name,
+                catalog.models.Item.id.field.name,
                 (
-                    f'{models.Item.category.field.name}__'
-                    f'{models.Category.name.field.name}'
+                    f'{catalog.models.Item.category.field.name}__'
+                    f'{catalog.models.Category.name.field.name}'
                 ),
-                models.Item.image.field.name,
-                f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+                catalog.models.Item.image.field.name,
+                f'{catalog.models.Item.tags.field.name}__'
+                f'{catalog.models.Tag.name.field.name}',
             },
         )
 
@@ -229,20 +235,22 @@ class CatalogShowTests(core.tests.SetupData):
         )
         item = self.group_query_set(
             response.context['item_raw'],
-            f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+            f'{catalog.models.Item.tags.field.name}__'
+            f'{catalog.models.Tag.name.field.name}',
             'id',
         )[0]
         self.assertEqual(
             set(item.keys()),
             {
-                models.Item.name.field.name,
-                models.Item.text.field.name,
-                models.Item.id.field.name,
+                catalog.models.Item.name.field.name,
+                catalog.models.Item.text.field.name,
+                catalog.models.Item.id.field.name,
                 (
-                    f'{models.Item.category.field.name}__'
-                    f'{models.Category.name.field.name}'
+                    f'{catalog.models.Item.category.field.name}__'
+                    f'{catalog.models.Category.name.field.name}'
                 ),
-                models.Item.image.field.name,
-                f'{models.Item.tags.field.name}__{models.Tag.name.field.name}',
+                catalog.models.Item.image.field.name,
+                f'{catalog.models.Item.tags.field.name}__'
+                f'{catalog.models.Tag.name.field.name}',
             },
         )

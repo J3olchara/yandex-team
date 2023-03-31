@@ -11,14 +11,13 @@ from django.utils.translation import gettext_lazy as _
 from django_cleanup import cleanup
 from pytz import timezone, utc
 
-import authorisation.utils  # noqa: I100
+import authorisation.utils
 
 
 @cleanup.cleanup_select
 class Profile(models.Model):
     """
     Profile models that extends User django model
-
     user: int FK -> User.
     birthday: date. User`s birthday date. not required
     avatar: ImageFile. User`s profile photo.
@@ -74,7 +73,6 @@ class Profile(models.Model):
     def normalize_email(self) -> str:
         """
         Normalizes email address
-
         Cuts out email tags and leads it to canonical name
         """
         name, domain = strip_tags(self.user.email).lower().split('@')
@@ -109,6 +107,28 @@ class UserManagerExtended(UserManager['UserProxy']):
             .filter(is_active=True)
         )
 
+    def with_evaluations(
+        self,
+        reverse_order: bool = False,
+    ):
+        import rating.models  # fix circular import
+
+        order_by = ['-value', 'created']
+        if reverse_order:
+            order_by[0] = order_by[0].replace('-')
+        prefetch_evaluations = models.Prefetch(
+            'evaluations',
+            queryset=rating.models.Evaluation.objects.all().order_by(
+                *order_by
+            ),
+        )
+        return (
+            self.get_queryset()
+            .filter()
+            .prefetch_related(prefetch_evaluations)
+            .all()
+        )
+
 
 class InactiveUserManagerExtended(UserManager['UserProxy']):
     """extends base qs to select related profile"""
@@ -134,7 +154,6 @@ class UserProxy(User):
 class ActivationToken(models.Model):
     """
     Activation token model.
-
     Stores activation tokens that allows new accounts to be activated.
     user: int FK -> User. User that attached to token.
     token: uuid.UUID. Unique token.

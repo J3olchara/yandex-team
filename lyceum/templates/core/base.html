@@ -11,9 +11,11 @@
 	<body>
 	  <div class=" container">
 	    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-        <marquee direction="right" scrollamount="7">
+        <marquee direction="left" scrollamount="7">
           {% for current_user in today_birthdays %}
-            ,<span class="mx-1">{{ current_user.user.username }} ({{ current_user.user.email }})</span>
+            {% if current_user.user.is_active %}
+              <span class="mx-3">{{ current_user.user.username }} ({{ current_user.user.email }})</span>
+            {% endif %}
           {% endfor %}
         </marquee>
 	      <a href="/" class="d-flex align-items-center mb-2 mb-md-0 me-md-auto text-dark text-decoration-none">

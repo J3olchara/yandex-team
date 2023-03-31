@@ -4,7 +4,7 @@ from uuid import uuid4
 from django.conf import settings
 from pytz import timezone
 
-from . import models
+from authorisation import models
 
 
 def get_token_expire() -> datetime:

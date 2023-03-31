@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.aggregates import Avg
 from django.views import generic
 
@@ -38,3 +39,13 @@ class ItemStatistic(generic.TemplateView):
         context['min_user'] = min_evaluation_user
 
         return context
+
+
+class RatedStatistic(LoginRequiredMixin, generic.ListView):
+    template_name = 'statistic/rated_statistic.html'
+    context_object_name = 'rated_items'
+
+    def get_queryset(self):
+        return rating.models.Evaluation.objects.get_item(
+            user=self.request.user.id
+        )

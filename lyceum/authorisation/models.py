@@ -18,7 +18,6 @@ import authorisation.utils
 class Profile(models.Model):
     """
     Profile models that extends User django model
-
     user: int FK -> User.
     birthday: date. User`s birthday date. not required
     avatar: ImageFile. User`s profile photo.
@@ -74,7 +73,6 @@ class Profile(models.Model):
     def normalize_email(self) -> str:
         """
         Normalizes email address
-
         Cuts out email tags and leads it to canonical name
         """
         name, domain = strip_tags(self.user.email).lower().split('@')
@@ -156,7 +154,6 @@ class UserProxy(User):
 class ActivationToken(models.Model):
     """
     Activation token model.
-
     Stores activation tokens that allows new accounts to be activated.
     user: int FK -> User. User that attached to token.
     token: uuid.UUID. Unique token.

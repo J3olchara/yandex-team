@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load support %}
+
+{% block head %}
+  <link rel="stylesheet" href="{% static 'css/item_cards.css' %}">
+{% endblock %}
+
+{% block content %}
+  <h1 class="mb-5 text-center">Оценённые товары</h1>
+  {% if rated_items %}
+    <div class="catalog-items">
+      {% for evaluation in rated_items %}
+        {% with item=evaluation.item %}
+          {% include "catalog/includes/item_card.html" %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <h4>Вы не оценили не одного товара</h4>
+  {% endif %}
+{% endblock %}

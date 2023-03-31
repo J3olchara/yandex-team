@@ -3,18 +3,20 @@
 {% load support %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/item_page.css' %}">
+  <link rel="stylesheet" href="{% static 'css/item_cards.css' %}">
 {% endblock %}
 
 {% block content %}
-
-<p>Среднее: {{ avg }} </p>
-<p>Общее количество {{ count }}</p>
-  {{ rated_items }}
-{% if not max_user and not min_user %}
-	<p>Никто пока не отсавил отзыв</p>
-{% else %}
-	<p>Пользователь поставивший максимальную оценку <a href={% url 'users:details' pk=max_user.id %}> {{ max_user.username }} </a></p>
-	<p>Пользователь поставивший минимальную оценку <a href={% url 'users:details' pk=min_user.id %}> {{ min_user.username }} </a></p>
-{% endif %}
+  <h1 class="mb-5 text-center">Оценённые товары</h1>
+  {% if rated_items %}
+    <div class="catalog-items">
+      {% for evaluation in rated_items %}
+        {% with item=evaluation.item %}
+          {% include "catalog/includes/item_card.html" %}
+        {% endwith %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <h4>Вы не оценили не одного товара</h4>
+  {% endif %}
 {% endblock %}

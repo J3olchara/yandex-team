@@ -18,7 +18,6 @@ import authorisation.utils
 class Profile(models.Model):
     """
     Profile models that extends User django model
-
     user: int FK -> User.
     birthday: date. User`s birthday date. not required
     avatar: ImageFile. User`s profile photo.
@@ -74,7 +73,6 @@ class Profile(models.Model):
     def normalize_email(self) -> str:
         """
         Normalizes email address
-
         Cuts out email tags and leads it to canonical name
         """
         name, domain = strip_tags(self.user.email).lower().split('@')
@@ -117,7 +115,7 @@ class UserManagerExtended(UserManager['UserProxy']):
 
         order_by = ['-value', 'created']
         if reverse_order:
-            order_by[0] = order_by[0].replace('-', '')
+            order_by[0] = order_by[0].replace('-')
         prefetch_evaluations = models.Prefetch(
             'evaluations',
             queryset=rating.models.Evaluation.objects.all().order_by(
@@ -129,14 +127,6 @@ class UserManagerExtended(UserManager['UserProxy']):
             .filter()
             .prefetch_related(prefetch_evaluations)
             .all()
-        )
-
-    def user_with_rated_items(self):
-        return (
-            super(UserManagerExtended, self)
-            .get_queryset()
-            .prefetch_related('evaluations')
-            .filter(is_active=True)
         )
 
 
@@ -164,7 +154,6 @@ class UserProxy(User):
 class ActivationToken(models.Model):
     """
     Activation token model.
-
     Stores activation tokens that allows new accounts to be activated.
     user: int FK -> User. User that attached to token.
     token: uuid.UUID. Unique token.

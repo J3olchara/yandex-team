@@ -44,4 +44,8 @@ class ItemStatistic(generic.TemplateView):
 class RatedStatistic(LoginRequiredMixin, generic.ListView):
     template_name = 'statistic/rated_statistic.html'
     context_object_name = 'rated_items'
-    queryset = authorisation.models.UserProxy.objects.user_with_rated_items()
+
+    def get_queryset(self):
+        return (
+            rating.models.Evaluation.objects.filter(user__id=self.request.user.id)
+        )

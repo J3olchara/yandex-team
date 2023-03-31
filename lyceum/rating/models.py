@@ -6,29 +6,38 @@ from django.db import models
 
 import authorisation.models
 import catalog.models
-from catalog.models import Tag
+from catalog.models import Category, Item, Tag
 
 
 class EvaluationManager(models.Manager['Evaluation']):
     def get_item(self, **kwargs):
         prefetch = models.Prefetch(
-            'item__tags',
+            f'{Evaluation.item.field.name}__{Item.tags.field.name}',
             queryset=Tag.objects.filter(is_published=True).only(
-                'name',
+                Tag.name.field.name,
             ),
         )
         return (
             self.get_queryset()
             .filter(**kwargs)
-            .select_related('item__category')
+            .select_related(
+                f'{Evaluation.item.field.name}__{Item.category.field.name}'
+            )
             .prefetch_related(prefetch)
             .only(
-                'item__id',
-                'item__name',
-                'item__text',
-                'item__category__name',
-                'item__image',
-                'item__tags__name',
+                f'{Evaluation.item.field.name}__{Item.id.field.name}',
+                f'{Evaluation.item.field.name}__{Item.name.field.name}',
+                f'{Evaluation.item.field.name}__{Item.text.field.name}',
+                (
+                    f'{Evaluation.item.field.name}'
+                    f'__{Item.category.field.name}'
+                    f'__{Category.name.field.name}'
+                ),
+                f'{Evaluation.item.field.name}__{Item.image.field.name}',
+                (
+                    f'{Evaluation.item.field.name}__{Item.tags.field.name}'
+                    f'__{Tag.name.field.name}'
+                ),
             )
         )
 

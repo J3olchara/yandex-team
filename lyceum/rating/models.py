@@ -12,7 +12,7 @@ from catalog.models import Tag
 class EvaluationManager(models.Manager['Evaluation']):
     def get_item(self, **kwargs):
         prefetch = models.Prefetch(
-            "item__tags",
+            'item__tags',
             queryset=Tag.objects.filter(is_published=True).only(
                 'name',
             ),

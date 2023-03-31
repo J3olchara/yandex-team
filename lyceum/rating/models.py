@@ -7,6 +7,32 @@ from django.db import models
 import authorisation.models
 import catalog.models
 
+from catalog.models import Tag, Category
+
+
+class EvaluationManager(models.Manager['Evaluation']):
+    def get_item(self, **kwargs):
+        prefetch = models.Prefetch(
+            "item__tags",
+            queryset=Tag.objects.filter(is_published=True).only(
+                Tag.name.field.name,
+            ),
+        )
+        return (
+            self.get_queryset()
+            .filter(**kwargs)
+            .select_related('item__category')
+            .prefetch_related(prefetch)
+            .only(
+                'item__id',
+                'item__name',
+                'item__text',
+                'item__category__name',
+                'item__image',
+                f'item__tags__name',
+            )
+        )
+
 
 class Evaluation(models.Model):
     """
@@ -19,6 +45,7 @@ class Evaluation(models.Model):
     value: int [1;5].
                     the rating given by the user.
     """
+    objects = EvaluationManager()
 
     user: 'models.ForeignKey[Any, Any]' = models.ForeignKey(
         authorisation.models.UserProxy,

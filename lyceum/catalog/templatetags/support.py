@@ -32,7 +32,6 @@ def get_avg_evaluation(user):
 @register.filter()
 def get_worth_evaluation(user):
     if user.evaluations.count():
-        print(user)
         return user.evaluations.last()
     return 0
 
@@ -40,7 +39,6 @@ def get_worth_evaluation(user):
 @register.filter()
 def get_best_evaluation(value, **kwargs):
     if value.evaluations.count():
-        print(value)
         return value.evaluations.first()
     return 0
 

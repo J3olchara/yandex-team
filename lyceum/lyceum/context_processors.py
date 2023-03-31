@@ -15,6 +15,8 @@ def today_birthday_processor(request: HttpRequest) -> Dict[str, Any]:
     today = datetime.today()
     return {
         'today_birthdays': auth_models.Profile.objects.filter(
-            birthday__day=today.day, birthday__month=today.month
+            birthday__day=today.day,
+            birthday__month=today.month,
+            birthday__year__lte=today.year,
         )
     }
